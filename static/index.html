@@ -13,149 +13,129 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#27272a;border-radius:3px}
 ::selection{background:#22c55e33;color:#22c55e}
 .layout{display:flex;height:100vh}
-
-/* Sidebar */
-.sidebar{width:240px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
-.sidebar-header{padding:16px 16px 12px;display:flex;align-items:center;gap:10px}
-.sidebar-logo{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem}
-.sidebar-title{font-weight:700;font-size:.95rem}
-.sidebar-ver{font-size:.6rem;color:var(--dim2);margin-top:1px}
-.sidebar-search{padding:0 12px 12px}
-.sidebar-search input{width:100%;padding:8px 10px 8px 32px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem;outline:none;font-family:'Inter',sans-serif}
+.sidebar{width:230px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-header{padding:14px 14px 10px;display:flex;align-items:center;gap:10px}
+.sidebar-logo{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem}
+.sidebar-title{font-weight:700;font-size:.9rem}
+.sidebar-ver{font-size:.55rem;color:var(--dim2);margin-top:1px}
+.sidebar-search{padding:0 10px 10px;position:relative}
+.sidebar-search input{width:100%;padding:7px 8px 7px 28px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.75rem;outline:none;font-family:'Inter',sans-serif}
 .sidebar-search input:focus{border-color:var(--accent)}
-.sidebar-search{position:relative}
-.sidebar-search i{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--dim2);font-size:.7rem}
-
-.sidebar-section{padding:4px 12px}
-.sidebar-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);padding:8px 8px 4px}
-.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--dim);font-size:.8rem;cursor:pointer;transition:all .12s;border:1px solid transparent}
+.sidebar-search i{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--dim2);font-size:.65rem}
+.sidebar-section{padding:2px 10px}
+.sidebar-label{font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);padding:6px 8px 3px}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;color:var(--dim);font-size:.75rem;cursor:pointer;transition:all .12s;border:1px solid transparent}
 .sidebar-item:hover{background:var(--card);color:var(--text)}
 .sidebar-item.active{background:var(--accent);color:#000;font-weight:600;border-color:var(--accent)}
 .sidebar-item.active i{color:#000}
-.sidebar-item i{width:18px;text-align:center;font-size:.8rem;flex-shrink:0}
-
-.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
-.sidebar-footer a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:var(--dim2);font-size:.7rem;text-decoration:none;transition:color .12s}
+.sidebar-item i{width:16px;text-align:center;font-size:.75rem;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding:10px;border-top:1px solid var(--border)}
+.sidebar-footer a{display:flex;align-items:center;gap:6px;padding:5px 6px;border-radius:5px;color:var(--dim2);font-size:.65rem;text-decoration:none}
 .sidebar-footer a:hover{color:var(--text)}
-
-/* Main */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
-.topbar-title{font-weight:700;font-size:.9rem}
-.topbar-badge{padding:2px 8px;border-radius:6px;font-size:.65rem;font-weight:600;background:var(--accent);color:#000}
-.topbar-right{margin-left:auto;display:flex;gap:8px}
-.topbar-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.75rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif}
+.topbar{height:48px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:10px;flex-shrink:0}
+.topbar-title{font-weight:700;font-size:.85rem}
+.topbar-badge{padding:2px 7px;border-radius:5px;font-size:.6rem;font-weight:600;background:var(--accent);color:#000}
+.topbar-right{margin-left:auto;display:flex;gap:6px}
+.topbar-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.7rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif}
 .topbar-btn:hover{border-color:var(--border2);color:var(--text)}
 .topbar-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
-
-.content{flex:1;overflow-y:auto;padding:20px}
-
-/* Search */
-.search-section{margin-bottom:24px}
-.search-wrap{display:flex;gap:8px;padding:6px;border-radius:12px;border:1px solid var(--border);background:var(--card);transition:border .2s;max-width:700px}
+.content{flex:1;overflow-y:auto;padding:18px}
+.search-section{margin-bottom:20px}
+.search-wrap{display:flex;gap:6px;padding:5px;border-radius:10px;border:1px solid var(--border);background:var(--card);transition:border .2s;max-width:700px}
 .search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px #22c55e0a}
-.search-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.9rem;padding:8px 10px;font-family:'Inter',sans-serif}
+.search-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.85rem;padding:7px 8px;font-family:'Inter',sans-serif}
 .search-wrap input::placeholder{color:var(--dim2)}
-.search-wrap button{padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:#000;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.search-wrap button{padding:7px 18px;border-radius:7px;border:none;background:var(--accent);color:#000;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
 .search-wrap button:hover{background:#16a34a}
 .search-wrap button:disabled{opacity:.4;cursor:not-allowed}
-.quick-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.quick-tag{padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--dim2);font-size:.7rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif}
+.quick-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.quick-tag{padding:2px 8px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--dim2);font-size:.65rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif}
 .quick-tag:hover{border-color:var(--accent);color:var(--accent)}
-
-/* Progress */
-.progress{display:none;margin-bottom:20px}
-.progress.active{display:block}
+.progress{display:none;margin-bottom:16px}.progress.active{display:block}
 .progress-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden}
 .progress-fill{height:100%;background:var(--accent);border-radius:1px;transition:width .3s;width:0}
-.progress-info{display:flex;justify-content:space-between;font-size:.7rem;color:var(--dim2);margin-top:5px}
-
-/* Loading */
-.loading{display:none;text-align:center;padding:50px 20px}
-.loading.active{display:block}
-.loader{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{color:var(--dim);font-size:.8rem}
-
-/* Results */
-.results{display:none}
-.results.active{display:block}
-.results-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
-.results-header h2{font-size:1rem;font-weight:700}
-.results-header .uname{color:var(--accent);font-family:monospace;background:#22c55e10;padding:2px 8px;border-radius:4px}
-.pills{display:flex;gap:6px;flex-wrap:wrap}
-.pill{padding:3px 10px;border-radius:6px;font-size:.7rem;font-weight:600}
+.progress-info{display:flex;justify-content:space-between;font-size:.65rem;color:var(--dim2);margin-top:4px}
+.results{display:none}.results.active{display:block}
+.results-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.results-header h2{font-size:.95rem;font-weight:700}
+.results-header .uname{color:var(--accent);font-family:monospace;background:#22c55e10;padding:2px 7px;border-radius:4px;font-size:.85rem}
+.pills{display:flex;gap:5px;flex-wrap:wrap}
+.pill{padding:2px 8px;border-radius:5px;font-size:.65rem;font-weight:600}
 .pill.g{background:#22c55e12;color:var(--accent);border:1px solid #22c55e25}
 .pill.r{background:#71717a12;color:var(--dim);border:1px solid #71717a25}
 .pill.e{background:#ef444412;color:var(--red);border:1px solid #ef444425}
-
-.cat{margin-bottom:20px}
-.cat-title{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);padding:0 2px 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
-.card{padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);transition:all .12s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.pill.b{background:#3b82f612;color:var(--accent2);border:1px solid #3b82f625}
+.cat{margin-bottom:16px}
+.cat-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);padding:0 2px 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:5px}
+.card{padding:9px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);transition:all .12s;cursor:pointer;text-decoration:none;color:inherit;display:block}
 .card:hover{border-color:var(--border2);background:var(--card2);transform:translateY(-1px)}
-.card.found{border-color:#22c55e20}
-.card.found:hover{border-color:#22c55e35}
-.card-top{display:flex;align-items:center;gap:8px}
-.card-icon{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex-shrink:0}
+.card.found{border-color:#22c55e20}.card.found:hover{border-color:#22c55e35}
+.card-top{display:flex;align-items:center;gap:7px}
+.card-icon{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;flex-shrink:0}
 .card.found .card-icon{background:#22c55e15;color:var(--accent)}
 .card.nf .card-icon{background:#52525b15;color:#52525b}
-.card.err .card-icon{background:#ef444415;color:var(--red)}
-.card-name{font-size:.75rem;font-weight:600}
-.card-url{font-size:.6rem;color:var(--dim2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace}
-.card-status{font-size:.6rem;margin-top:4px;font-weight:600}
+.card-name{font-size:.7rem;font-weight:600}
+.card-url{font-size:.55rem;color:var(--dim2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace}
+.card-status{font-size:.55rem;margin-top:3px;font-weight:600}
 .card.found .card-status{color:var(--accent)}
 .card.nf .card-status{color:#52525b}
-
-.nf-section{margin-top:16px}
-.nf-title{font-size:.65rem;font-weight:600;color:#3f3f46;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;padding-left:2px}
-.nf-grid{display:flex;flex-wrap:wrap;gap:4px}
-.nf-chip{padding:4px 8px;border-radius:4px;border:1px solid #1a1a1f;background:#0e0e11;font-size:.65rem;color:#3f3f46;font-family:monospace}
-
-/* Tool pages */
-.tool-page{display:none}
-.tool-page.active{display:block}
-.tool-desc{color:var(--dim);font-size:.8rem;margin-bottom:16px}
-.tool-result{margin-top:16px}
-.tool-card{padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--card);margin-bottom:8px}
-.tool-card h3{font-size:.85rem;font-weight:700;margin-bottom:8px}
-.tool-row{display:flex;justify-content:space-between;padding:4px 0;font-size:.75rem;border-bottom:1px solid #1a1a1f}
+.nf-section{margin-top:14px}
+.nf-title{font-size:.6rem;font-weight:600;color:#3f3f46;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.nf-grid{display:flex;flex-wrap:wrap;gap:3px}
+.nf-chip{padding:3px 7px;border-radius:4px;border:1px solid #1a1a1f;background:#0e0e11;font-size:.6rem;color:#3f3f46;font-family:monospace}
+.tool-card{padding:11px;border-radius:8px;border:1px solid var(--border);background:var(--card);margin-bottom:7px}
+.tool-card h3{font-size:.8rem;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.tool-row{display:flex;justify-content:space-between;padding:3px 0;font-size:.7rem;border-bottom:1px solid #1a1a1f}
 .tool-row:last-child{border:none}
 .tool-label{color:var(--dim2)}
 .tool-value{color:var(--text);font-family:monospace;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.65rem;font-weight:600}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.6rem;font-weight:600}
 .badge-green{background:#22c55e15;color:var(--accent)}
 .badge-red{background:#ef444415;color:var(--red)}
 .badge-yellow{background:#eab30815;color:var(--yellow)}
 .badge-blue{background:#3b82f615;color:var(--accent2)}
-.empty-state{text-align:center;padding:60px 20px;color:var(--dim)}
-.empty-state i{font-size:2rem;color:var(--dim2);margin-bottom:12px}
-.empty-state h3{color:var(--text);font-size:.9rem}
-.empty-state p{font-size:.75rem;margin-top:4px;color:var(--dim2)}
-
-@media(max-width:768px){.sidebar{display:none}.layout{flex-direction:column}}
+.empty-state{text-align:center;padding:50px 20px;color:var(--dim)}
+.empty-state i{font-size:1.8rem;color:var(--dim2);margin-bottom:10px}
+.empty-state h3{color:var(--text);font-size:.85rem}
+.empty-state p{font-size:.7rem;margin-top:3px;color:var(--dim2)}
+@media(max-width:768px){.sidebar{display:none}}
 </style>
 </head>
 <body>
 <div class="layout">
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">OS</div>
-      <div><div class="sidebar-title">OSINT Hub</div><div class="sidebar-ver">v2.0 — No API Keys</div></div>
+      <div><div class="sidebar-title">OSINT Hub</div><div class="sidebar-ver">v2.1 — No API Keys</div></div>
     </div>
-    <div class="sidebar-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search anything..." /></div>
+    <div class="sidebar-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search anything..."/></div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Overview</div>
-      <div class="sidebar-item active" data-page="username"><i class="fa-solid fa-grid-2"></i>Username Search</div>
+      <div class="sidebar-item active" data-page="username"><i class="fa-solid fa-user-secret"></i>Username Search</div>
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label">Investigation</div>
+      <div class="sidebar-label">Email Intel</div>
       <div class="sidebar-item" data-page="email"><i class="fa-solid fa-envelope"></i>Email Lookup</div>
+      <div class="sidebar-item" data-page="emailholehe"><i class="fa-solid fa-magnifying-glass"></i>Email → Accounts</div>
+      <div class="sidebar-item" data-page="breach"><i class="fa-solid fa-triangle-exclamation"></i>Breach Check</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Network</div>
       <div class="sidebar-item" data-page="ip"><i class="fa-solid fa-location-dot"></i>IP Lookup</div>
       <div class="sidebar-item" data-page="domain"><i class="fa-solid fa-globe"></i>Domain Lookup</div>
+      <div class="sidebar-item" data-page="url"><i class="fa-solid fa-link"></i>URL Unfurl</div>
+      <div class="sidebar-item" data-page="wayback"><i class="fa-solid fa-clock-rotate-left"></i>Wayback Machine</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">People</div>
+      <div class="sidebar-item" data-page="phone"><i class="fa-solid fa-phone"></i>Phone Lookup</div>
+      <div class="sidebar-item" data-page="social"><i class="fa-solid fa-share-nodes"></i>Social Scan</div>
     </div>
 
     <div class="sidebar-section">
@@ -167,17 +147,16 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label">Social</div>
-      <div class="sidebar-item" data-page="social"><i class="fa-solid fa-share-nodes"></i>Social Scan</div>
+      <div class="sidebar-label">Crypto</div>
+      <div class="sidebar-item" data-page="crypto"><i class="fa-brands fa-bitcoin"></i>Wallet Lookup</div>
     </div>
 
     <div class="sidebar-footer">
       <a href="/docs" target="_blank"><i class="fa-solid fa-book"></i>API Docs</a>
-      <a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i>GitHub</a>
+      <a href="https://github.com/megadose/holehe" target="_blank"><i class="fa-solid fa-cube"></i>Holehe Engine</a>
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="pageTitle">Username Search</div>
@@ -186,9 +165,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
         <button class="topbar-btn" id="jsonToggle" onclick="toggleJSON()">{ } JSON</button>
       </div>
     </div>
-    <div class="content" id="content">
-      <!-- Dynamic content injected here -->
-    </div>
+    <div class="content" id="content"></div>
   </div>
 </div>
 
@@ -196,7 +173,6 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
 const content=document.getElementById('content'),pageTitle=document.getElementById('pageTitle'),pageBadge=document.getElementById('pageBadge');
 let currentPage='username',showJSON=false,lastData=null;
 
-// Sidebar nav
 document.querySelectorAll('.sidebar-item').forEach(item=>{
   item.onclick=()=>{
     document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
@@ -209,20 +185,26 @@ document.querySelectorAll('.sidebar-item').forEach(item=>{
 
 function toggleJSON(){showJSON=!showJSON;document.getElementById('jsonToggle').classList.toggle('active',showJSON);if(lastData)renderResult(lastData)}
 
-const PAGES={
-  username:{title:'Username Search',badge:'50+ Platforms',placeholder:'Enter username...',btn:'Scan',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame','cristiano'],api:'/api/scan/'},
-  email:{title:'Email Lookup',badge:'Breach Check',placeholder:'user@example.com',btn:'Lookup',examples:['test@gmail.com','admin@github.com'],api:'/api/email/'},
-  ip:{title:'IP Lookup',badge:'Geo + ASN',placeholder:'8.8.8.8',btn:'Lookup',examples:['8.8.8.8','1.1.1.1','192.168.1.1'],api:'/api/ip/'},
-  domain:{title:'Domain Lookup',badge:'DNS + SSL',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
-  steam:{title:'Steam Lookup',badge:'Gaming',placeholder:'Steam username',btn:'Lookup',examples:['gaben','sirhewlettpackard'],api:'/api/gaming/steam/'},
-  roblox:{title:'Roblox Lookup',badge:'Gaming',placeholder:'Roblox username',btn:'Lookup',examples:['Roblox','RobloxDev'],api:'/api/gaming/roblox/'},
+const P={
+  username:{title:'Username Search',badge:'80+ Platforms',placeholder:'Enter username...',btn:'Scan',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame'],api:'/api/scan/'},
+  email:{title:'Email Lookup',badge:'Full Intel',placeholder:'user@example.com',btn:'Lookup',examples:['test@gmail.com','admin@github.com','john@protonmail.com'],api:'/api/email/',holehe:false},
+  emailholehe:{title:'Email → Accounts',badge:'Holehe Engine',placeholder:'user@example.com',btn:'Find Accounts',examples:['test@gmail.com','user@outlook.com','info@protonmail.com'],api:'/api/email/',holehe:true},
+  breach:{title:'Breach Check',badge:'HIBP',placeholder:'user@example.com',btn:'Check Breaches',examples:['test@gmail.com','admin@company.com'],api:'/api/email/'},
+  ip:{title:'IP Lookup',badge:'Geo + ASN + Blacklists',placeholder:'8.8.8.8',btn:'Lookup',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/'},
+  domain:{title:'Domain Lookup',badge:'DNS + SSL + Tech',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
+  url:{title:'URL Unfurl',badge:'Metadata',placeholder:'https://example.com',btn:'Unfurl',examples:['https://github.com','https://google.com'],api:'/api/url/'},
+  wayback:{title:'Wayback Machine',badge:'Archive',placeholder:'example.com',btn:'Check Archive',examples:['google.com','myspace.com','twitter.com'],api:'/api/wayback/'},
+  phone:{title:'Phone Lookup',badge:'Carrier + Location',placeholder:'+1234567890',btn:'Lookup',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
+  social:{title:'Social Scan',badge:'80+ Platforms',placeholder:'Enter username...',btn:'Scan all',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
+  steam:{title:'Steam Lookup',badge:'Gaming',placeholder:'Steam username',btn:'Lookup',examples:['gaben'],api:'/api/gaming/steam/'},
+  roblox:{title:'Roblox Lookup',badge:'Gaming',placeholder:'Roblox username',btn:'Lookup',examples:['Roblox'],api:'/api/gaming/roblox/'},
   xbox:{title:'Xbox Lookup',badge:'Gaming',placeholder:'Gamertag',btn:'Lookup',examples:['Major Nelson'],api:'/api/gaming/xbox/'},
   playstation:{title:'PlayStation Lookup',badge:'Gaming',placeholder:'PSN ID',btn:'Lookup',examples:['PlayStation'],api:'/api/gaming/playstation/'},
-  social:{title:'Social Scan',badge:'50+ Platforms',placeholder:'Enter username...',btn:'Scan all',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
+  crypto:{title:'Crypto Wallet Lookup',badge:'Blockchain',placeholder:'Wallet address',btn:'Lookup',examples:['0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe','1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'],api:'/api/crypto/'},
 };
 
 function renderPage(){
-  const p=PAGES[currentPage]||PAGES.username;
+  const p=P[currentPage]||P.username;
   pageTitle.textContent=p.title;
   pageBadge.textContent=p.badge;
   content.innerHTML=`
@@ -231,7 +213,7 @@ function renderPage(){
         <input id="q" placeholder="${p.placeholder}" autocomplete="off"/>
         <button id="scanBtn" onclick="doLookup()">${p.btn}</button>
       </div>
-      <div class="quick-tags">${p.examples.map(e=>`<button class="quick-tag" onclick="document.getElementById('q').value='${e}';doLookup()">${e}</button>`).join('')}</div>
+      <div class="quick-tags">${p.examples.map(e=>`<button class="quick-tag" onclick="document.getElementById('q').value=\`${e}\`;doLookup()">${e}</button>`).join('')}</div>
     </div>
     <div class="progress" id="progress"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-info"><span id="progressLabel">Scanning...</span><span id="progressCount">0/0</span></div></div>
     <div id="resultArea"></div>`;
@@ -243,22 +225,19 @@ let animInt;
 async function doLookup(){
   const val=document.getElementById('q')?.value?.trim();
   if(!val)return;
-  const p=PAGES[currentPage]||PAGES.username;
+  const p=P[currentPage]||P.username;
   const btn=document.getElementById('scanBtn');
-  const resultArea=document.getElementById('resultArea');
-  const progress=document.getElementById('progress');
-  const progressFill=document.getElementById('progressFill');
-  const progressLabel=document.getElementById('progressLabel');
-  const progressCount=document.getElementById('progressCount');
-
-  btn.disabled=true;
-  resultArea.innerHTML='';
+  const ra=document.getElementById('resultArea');
+  const prog=document.getElementById('progress');
+  const pf=document.getElementById('progressFill');
+  const pl=document.getElementById('progressLabel');
+  const pc=document.getElementById('progressCount');
+  btn.disabled=true;ra.innerHTML='';
 
   if(currentPage==='username'||currentPage==='social'){
-    progress.classList.add('active');
-    let c=0;const total=50;
-    animInt=setInterval(()=>{c=Math.min(c+Math.random()*10,total);progressFill.style.width=Math.min((c/total)*100,95)+'%';progressCount.textContent=Math.floor(c)+'/'+total;},200);
-    progressLabel.textContent='Scanning platforms...';
+    prog.classList.add('active');let c=0;const t=80;
+    animInt=setInterval(()=>{c=Math.min(c+Math.random()*12,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
+    pl.textContent='Scanning 80+ platforms...';
   }
 
   try{
@@ -266,32 +245,36 @@ async function doLookup(){
     const data=await r.json();
     if(!r.ok)throw new Error(data.detail||'Error');
     lastData=data;
-    if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);progressFill.style.width='100%';progressCount.textContent='Done';setTimeout(()=>progress.classList.remove('active'),600)}
+    if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);pf.style.width='100%';pc.textContent='Done';setTimeout(()=>prog.classList.remove('active'),600)}
     renderResult(data);
   }catch(e){
-    if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);progress.classList.remove('active')}
-    resultArea.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
+    if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);prog.classList.remove('active')}
+    ra.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
   }
   btn.disabled=false;
 }
 
-function renderResult(data){
-  const resultArea=document.getElementById('resultArea');
-  if(currentPage==='username'||currentPage==='social')renderUsernameResult(data,resultArea);
-  else if(currentPage==='email')renderEmailResult(data,resultArea);
-  else if(currentPage==='ip')renderIPResult(data,resultArea);
-  else if(currentPage==='domain')renderDomainResult(data,resultArea);
-  else renderGenericResult(data,resultArea);
+function renderResult(d){
+  const ra=document.getElementById('resultArea');
+  if(showJSON){ra.innerHTML=`<pre style="font-size:.65rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;overflow:auto;max-height:calc(100vh - 180px);font-family:monospace">${JSON.stringify(d,null,2)}</pre>`;return}
+
+  if(currentPage==='username'||currentPage==='social')renderUsername(d,ra);
+  else if(currentPage==='email')renderEmail(d,ra);
+  else if(currentPage==='emailholehe')renderHolehe(d,ra);
+  else if(currentPage==='breach')renderBreach(d,ra);
+  else if(currentPage==='ip')renderIP(d,ra);
+  else if(currentPage==='domain')renderDomain(d,ra);
+  else if(currentPage==='url')renderURL(d,ra);
+  else if(currentPage==='wayback')renderWayback(d,ra);
+  else if(currentPage==='phone')renderPhone(d,ra);
+  else if(currentPage==='crypto')renderCrypto(d,ra);
+  else renderGeneric(d,ra);
 }
 
-function renderUsernameResult(d,el){
-  const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',tumblr:'TM',spotify:'SP',soundcloud:'SC',deviantart:'DA',flickr:'FL',medium:'MD',substack:'SS',npm:'NP',dockerhub:'DK',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',keybase:'KB',aboutme:'AM',gravatar:'GV',bitbucket:'BB',gitlab:'GL',codeberg:'CB',hackthebox:'HT',tryhackme:'TM',hackerone:'HO',producthunt:'PH',behance:'BE',dribbble:'DR',etsy:'ET',ebay:'EB',goodreads:'GR',strava:'SV',kalshi:'KS',myanimelist:'MA',letterboxd:'LD',duolingo:'DL',replit:'RE','itch.io':'IT',chesscom:'CH',scratch:'SR',kaggle:'KG',hackernews:'HN','4chan':'4C'};
-  const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative & Content',professional:'Professional',fitness:'Fitness & Learning',music:'Music',security:'Security'};
-
-  if(showJSON){el.innerHTML=`<pre style="font-size:.7rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;max-height:calc(100vh - 200px)">${JSON.stringify(d,null,2)}</pre>`;return}
-
-  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill r">${d.not_found_count} not found</span>${d.error_count?`<span class="pill e">${d.error_count} errors</span>`:''}</div></div>`;
-
+function renderUsername(d,el){
+  const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
+  const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security'};
+  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill r">${d.not_found_count} not found</span></div></div>`;
   for(const[cat,platforms] of Object.entries(d.categories||{})){
     h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat}</div><div class="grid">`;
     for(const p of platforms){
@@ -299,138 +282,188 @@ function renderUsernameResult(d,el){
     }
     h+=`</div></div>`;
   }
-
   if(d.not_found?.length){
     h+=`<div class="nf-section"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`;
   }
   el.innerHTML=h;
 }
 
-function renderEmailResult(d,el){
-  if(showJSON){el.innerHTML=`<pre style="font-size:.7rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;max-height:calc(100vh - 200px)">${JSON.stringify(d,null,2)}</pre>`;return}
-  let h=`<div class="results-header"><h2>Email: <span class="uname">${d.email}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">`;
-
-  // MX Records
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--accent2);margin-right:6px"></i>MX Records</h3>`;
-  if(d.mx_records?.length){for(const mx of d.mx_records){h+=`<div class="tool-row"><span class="tool-label">MX</span><span class="tool-value">${mx}</span></div>`}}
-  else{h+=`<div class="tool-row"><span class="tool-label">No MX records</span></div>`}
+function renderEmail(d,el){
+  let h=`<div class="results-header"><h2>Email: <span class="uname">${d.email}</span></h2></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--accent2)"></i>MX Records</h3>`;
+  (d.mx_records||[]).forEach(mx=>{h+=`<div class="tool-row"><span class="tool-label">MX</span><span class="tool-value">${mx}</span></div>`});
+  if(!d.mx_records?.length)h+=`<div class="tool-row"><span class="tool-label">No MX records</span></div>`;
   h+=`</div>`;
-
-  // DNS
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--purple);margin-right:6px"></i>DNS</h3>`;
-  for(const[typ,vals] of Object.entries(d.dns_records||{})){
-    for(const v of vals){h+=`<div class="tool-row"><span class="tool-label">${typ}</span><span class="tool-value">${v.substring(0,60)}</span></div>`}
-  }
-  h+=`</div>`;
-
-  // Security
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow);margin-right:6px"></i>Security</h3>`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3>`;
   h+=`<div class="tool-row"><span class="tool-label">Disposable</span><span class="tool-value">${d.disposable?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
-  if(d.breach_check){
-    h+=`<div class="tool-row"><span class="tool-label">Breached</span><span class="tool-value">${d.breach_check.breached?'<span class="badge badge-red">Yes ('+d.breach_check.breach_count+' breaches)</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
-    if(d.breach_check.breaches){for(const b of d.breach_check.breaches){h+=`<div class="tool-row"><span class="tool-label">${b.name}</span><span class="tool-value">${b.date}</span></div>`}}
-  }
   h+=`</div>`;
-
-  // Gravatar
-  if(d.gravatar){h+=`<div class="tool-card"><h3><i class="fa-solid fa-circle-user" style="color:var(--cyan);margin-right:6px"></i>Gravatar</h3><img src="${d.gravatar}?s=80" style="width:60px;height:60px;border-radius:50%;margin:4px"/></div>`}
-
-  h+=`</div>`;
-  if(showJSON){h+=`<pre style="font-size:.7rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:16px;overflow:auto;max-height:400px">${JSON.stringify(d,null,2)}</pre>`}
-  el.innerHTML=h;
-}
-
-function renderIPResult(d,el){
-  if(showJSON){el.innerHTML=`<pre style="font-size:.7rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;max-height:calc(100vh - 200px)">${JSON.stringify(d,null,2)}</pre>`;return}
-  let h=`<div class="results-header"><h2>IP: <span class="uname">${d.ip}</span></h2><div class="pills"><span class="pill blue">${d.type}</span></div></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">`;
-
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--accent2);margin-right:6px"></i>Geolocation</h3>`;
-  for(const[k,v] of Object.entries(d.geo||{})){
-    if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`;
-  }
-  h+=`</div>`;
-
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-building" style="color:var(--purple);margin-right:6px"></i>ASN</h3>`;
-  for(const[k,v] of Object.entries(d.asn||{})){
-    if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`;
-  }
-  if(d.reverse_dns){h+=`<div class="tool-row"><span class="tool-label">rDNS</span><span class="tool-value">${d.reverse_dns}</span></div>`}
-  h+=`</div>`;
-
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow);margin-right:6px"></i>Abuse Flags</h3>`;
-  for(const[k,v] of Object.entries(d.abuse||{})){
-    h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
-  }
-  h+=`</div>`;
-
-  if(d.blacklists?.length){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-ban" style="color:var(--red);margin-right:6px"></i>Blacklists</h3>`;
-    for(const bl of d.blacklists){
-      h+=`<div class="tool-row"><span class="tool-label">${bl.list}</span><span class="tool-value">${bl.listed?'<span class="badge badge-red">LISTED</span>':'<span class="badge badge-green">Clean</span>'}</span></div>`;
-    }
-    h+=`</div>`;
-  }
-
+  if(d.gravatar){h+=`<div class="tool-card"><h3><i class="fa-solid fa-circle-user" style="color:var(--cyan)"></i>Gravatar</h3><img src="${d.gravatar}?s=60" style="width:50px;height:50px;border-radius:50%"/></div>`}
   h+=`</div>`;
   el.innerHTML=h;
 }
 
-function renderDomainResult(d,el){
-  if(showJSON){el.innerHTML=`<pre style="font-size:.7rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;max-height:calc(100vh - 200px)">${JSON.stringify(d,null,2)}</pre>`;return}
-  let h=`<div class="results-header"><h2>Domain: <span class="uname">${d.domain}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">`;
-
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--accent2);margin-right:6px"></i>DNS Records</h3>`;
-  for(const[typ,vals] of Object.entries(d.dns||{})){
-    for(const v of vals){h+=`<div class="tool-row"><span class="tool-label">${typ}</span><span class="tool-value">${v.substring(0,50)}</span></div>`}
+function renderHolehe(d,el){
+  let h=`<div class="results-header"><h2>Email → Accounts: <span class="uname">${d.email}</span></h2><div class="pills"><span class="pill g">${d.registered_count} accounts found</span></div></div>`;
+  if(d.registered_on?.length){
+    h+=`<div class="cat"><div class="cat-title">Registered On (${d.registered_on.length})</div><div class="grid">`;
+    d.registered_on.forEach(site=>{
+      const IC={github:'GH',twitter:'TW',instagram:'IG',discord:'DC',spotify:'SP',reddit:'RD',tumblr:'TM',snapchat:'SC',pinterest:'PI',npm:'NP',gitlab:'GL',twitch:'TV',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',ebay:'EB',amazon:'AM',google:'GG',yahoo:'YH',zoho:'ZO',adobe:'AD',apple:'AP',microsoft:'MS',microsoft:'MS',flickr:'FL',medium:'MD',deviantart:'DA',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',buymeacoffee:'BC',evernote:'EN',quora:'QA',wattpad:'WP',smule:'SM',vivino:'VV',vsco:'VS',canva:'CN',protonmail:'PM',aboutme:'AM',keybase:'KB',dockerhub:'DK',bitbucket:'BB',soundcloud:'SC',myanimelist:'MA',letterboxd:'LD',duolingo:'DL',blablacar:'BL',pipedrive:'PD',samsung:'SA',nike:'NK'};
+      const ic=IC[site]||site.substring(0,2).toUpperCase();
+      h+=`<div class="card found"><div class="card-top"><div class="card-icon">${ic}</div><div class="card-name">${site}</div></div><div class="card-status">Account exists</div></div>`;
+    });
+    h+=`</div></div>`;
   }
-  h+=`</div>`;
-
-  if(d.ssl?.common_name){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-lock" style="color:var(--accent);margin-right:6px"></i>SSL Certificate</h3>`;
-    h+=`<div class="tool-row"><span class="tool-label">Issuer</span><span class="tool-value">${d.ssl.issuer}</span></div>`;
-    h+=`<div class="tool-row"><span class="tool-label">Valid From</span><span class="tool-value">${d.ssl.valid_from}</span></div>`;
-    h+=`<div class="tool-row"><span class="tool-label">Valid To</span><span class="tool-value">${d.ssl.valid_to}</span></div>`;
-    h+=`<div class="tool-row"><span class="tool-label">Cert Entries</span><span class="tool-value">${d.ssl.name_count}</span></div>`;
-    h+=`</div>`;
+  if(d.not_registered_on?.length){
+    h+=`<div class="nf-section"><div class="nf-title">Not registered on (${d.not_registered_on.length})</div><div class="nf-grid">${d.not_registered_on.map(s=>`<div class="nf-chip">${s}</div>`).join('')}</div></div>`;
   }
-
-  if(d.technologies?.length){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple);margin-right:6px"></i>Technologies</h3>`;
-    for(const t of d.technologies){h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`}
-    h+=`</div>`;
-  }
-
-  if(d.subdomains_found?.length){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-sitemap" style="color:var(--cyan);margin-right:6px"></i>Subdomains (${d.subdomains_found.length})</h3>`;
-    for(const s of d.subdomains_found.slice(0,20)){h+=`<div class="tool-row"><span class="tool-value" style="font-size:.7rem">${s}</span></div>`}
-    h+=`</div>`;
-  }
-
-  h+=`</div>`;
   el.innerHTML=h;
 }
 
-function renderGenericResult(d,el){
-  if(showJSON){el.innerHTML=`<pre style="font-size:.7rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;max-height:calc(100vh - 200px)">${JSON.stringify(d,null,2)}</pre>`;return}
-  const platform=d.platform||currentPage;
-  const p=d.profile||{};
-  let h=`<div class="results-header"><h2>${platform}: <span class="uname">${d.username||''}</span></h2>${d.found?'<span class="pill g">Found</span>':'<span class="pill r">Not Found</span>'}</div>`;
-
-  if(d.found){
-    h+=`<div class="tool-card" style="max-width:500px"><h3><i class="fa-solid fa-user" style="color:var(--accent);margin-right:6px"></i>Profile</h3>`;
-    for(const[k,v] of Object.entries(p)){
-      if(v&&k!=='avatar'){
-        h+=`<div class="tool-row"><span class="tool-label">${k.replace(/_/g,' ')}</span><span class="tool-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`;
-      }
-    }
-    if(p.avatar){h+=`<div style="margin-top:8px"><img src="${p.avatar}" style="width:80px;height:80px;border-radius:50%;border:2px solid var(--border)"/></div>`}
-    if(p.url){h+=`<div style="margin-top:8px"><a href="${p.url}" target="_blank" style="color:var(--accent);font-size:.75rem;text-decoration:none">Open Profile →</a></div>`}
+function renderBreach(d,el){
+  let h=`<div class="results-header"><h2>Breach Check: <span class="uname">${d.email}</span></h2></div>`;
+  if(d.breach_check?.breached){
+    h+=`<div class="tool-card" style="border-color:#ef444430"><h3><i class="fa-solid fa-skull-crossbones" style="color:var(--red)"></i>BREACHED — ${d.breach_check.breach_count} breaches found</h3>`;
+    (d.breach_check.breaches||[]).forEach(b=>{
+      h+=`<div class="tool-row"><span class="tool-label">${b.name}</span><span class="tool-value">${b.date} • ${(b.data_classes||[]).join(', ')}</span></div>`;
+    });
     h+=`</div>`;
   }else{
-    h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>Not found on ${platform}</h3></div>`;
+    h+=`<div class="tool-card" style="border-color:#22c55e30"><h3><i class="fa-solid fa-check-circle" style="color:var(--accent)"></i>No breaches found</h3><p style="font-size:.75rem;color:var(--dim)">Email not found in known breach databases</p></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderIP(d,el){
+  let h=`<div class="results-header"><h2>IP: <span class="uname">${d.ip}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--accent2)"></i>Geolocation</h3>`;
+  for(const[k,v] of Object.entries(d.geo||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+  h+=`</div>`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-building" style="color:var(--purple)"></i>ASN</h3>`;
+  for(const[k,v] of Object.entries(d.asn||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+  if(d.reverse_dns)h+=`<div class="tool-row"><span class="tool-label">rDNS</span><span class="tool-value">${d.reverse_dns}</span></div>`;
+  h+=`</div>`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow)"></i>Abuse Flags</h3>`;
+  for(const[k,v] of Object.entries(d.abuse||{})){h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`}
+  h+=`</div>`;
+  if(d.blacklists?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-ban" style="color:var(--red)"></i>Blacklists</h3>`;
+    d.blacklists.forEach(bl=>{h+=`<div class="tool-row"><span class="tool-label">${bl.list}</span><span class="tool-value">${bl.listed?'<span class="badge badge-red">LISTED</span>':'<span class="badge badge-green">Clean</span>'}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderDomain(d,el){
+  let h=`<div class="results-header"><h2>Domain: <span class="uname">${d.domain}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--accent2)"></i>DNS</h3>`;
+  for(const[typ,vals] of Object.entries(d.dns||{})){vals.forEach(v=>{h+=`<div class="tool-row"><span class="tool-label">${typ}</span><span class="tool-value">${v.substring(0,45)}</span></div>`})}
+  h+=`</div>`;
+  if(d.ssl?.issuer){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-lock" style="color:var(--accent)"></i>SSL</h3>`;
+    h+=`<div class="tool-row"><span class="tool-label">Issuer</span><span class="tool-value">${d.ssl.issuer}</span></div>`;
+    h+=`<div class="tool-row"><span class="tool-label">From</span><span class="tool-value">${d.ssl.from}</span></div>`;
+    h+=`<div class="tool-row"><span class="tool-label">To</span><span class="tool-value">${d.ssl.to}</span></div>`;
+    h+=`</div>`;
+  }
+  if(d.technologies?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Tech</h3>`;
+    d.technologies.forEach(t=>{h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`});
+    h+=`</div>`;
+  }
+  if(d.subdomains?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-sitemap" style="color:var(--cyan)"></i>Subdomains (${d.subdomains.length})</h3>`;
+    d.subdomains.slice(0,20).forEach(s=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.65rem">${s}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderURL(d,el){
+  let h=`<div class="results-header"><h2>URL: <span class="uname">${d.url}</span></h2>${d.status?`<span class="pill b">${d.status}</span>`:''}</div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  if(d.title){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-heading" style="color:var(--accent)"></i>Title</h3><div class="tool-row"><span class="tool-value">${d.title}</span></div></div>`;
+  }
+  if(d.description){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-align-left" style="color:var(--accent2)"></i>Description</h3><div class="tool-row"><span class="tool-value">${d.description}</span></div></div>`;
+  }
+  if(d.technologies?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Technologies</h3>`;
+    d.technologies.forEach(t=>{h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`});
+    h+=`</div>`;
+  }
+  if(d.og_site_name){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-globe" style="color:var(--cyan)"></i>Site</h3><div class="tool-row"><span class="tool-label">Name</span><span class="tool-value">${d.og_site_name}</span></div>`;
+    if(d.og_image)h+=`<div class="tool-row"><span class="tool-label">Image</span><span class="tool-value" style="font-size:.6rem">${d.og_image.substring(0,40)}</span></div>`;
+    h+=`</div>`;
+  }
+  if(d.redirects?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-arrow-right-arrow-left" style="color:var(--yellow)"></i>Redirects</h3>`;
+    d.redirects.forEach(r=>{h+=`<div class="tool-row"><span class="tool-label">${r.status}</span><span class="tool-value">${r.url.substring(0,40)}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderWayback(d,el){
+  let h=`<div class="results-header"><h2>Wayback: <span class="uname">${d.url}</span></h2><div class="pills"><span class="pill b">${d.total_snapshots} snapshots</span></div></div>`;
+  if(d.first_snapshot)h+=`<div style="margin-bottom:12px;font-size:.75rem;color:var(--dim)">First: ${d.first_snapshot} — Last: ${d.last_snapshot}</div>`;
+  if(d.snapshots?.length){
+    h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">`;
+    d.snapshots.forEach(s=>{
+      h+=`<a href="${s.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">WB</div><div class="card-name">${s.date}</div></div><div class="card-status">${s.status} • ${s.mimetype}</div></a>`;
+    });
+    h+=`</div>`;
+  }else{
+    h+=`<div class="empty-state"><h3>No snapshots found</h3><p>This URL has not been archived</p></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderPhone(d,el){
+  let h=`<div class="results-header"><h2>Phone: <span class="uname">${d.phone}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-phone" style="color:var(--accent2)"></i>Phone Info</h3>`;
+  if(d.valid!==undefined)h+=`<div class="tool-row"><span class="tool-label">Valid</span><span class="tool-value">${d.valid?'<span class="badge badge-green">Yes</span>':'<span class="badge badge-red">No</span>'}</span></div>`;
+  if(d.country)h+=`<div class="tool-row"><span class="tool-label">Country</span><span class="tool-value">${d.country}</span></div>`;
+  if(d.location)h+=`<div class="tool-row"><span class="tool-label">Location</span><span class="tool-value">${d.location}</span></div>`;
+  if(d.carrier)h+=`<div class="tool-row"><span class="tool-label">Carrier</span><span class="tool-value">${d.carrier}</span></div>`;
+  if(d.line_type)h+=`<div class="tool-row"><span class="tool-label">Line Type</span><span class="tool-value">${d.line_type}</span></div>`;
+  for(const[k,v] of Object.entries(d.format||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+  h+=`</div></div>`;
+  el.innerHTML=h;
+}
+
+function renderCrypto(d,el){
+  let h=`<div class="results-header"><h2>Wallet: <span class="uname">${d.address.substring(0,20)}...</span></h2><div class="pills"><span class="pill b">${d.chain||'Unknown'}</span><span class="pill g">${d.type||''}</span></div></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-brands fa-bitcoin" style="color:var(--yellow)"></i>Wallet Info</h3>`;
+  h+=`<div class="tool-row"><span class="tool-label">Address</span><span class="tool-value" style="font-size:.6rem">${d.address}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Chain</span><span class="tool-value">${d.chain||'Unknown'}</span></div>`;
+  if(d.balance)h+=`<div class="tool-row"><span class="tool-label">Balance</span><span class="tool-value">${d.balance}</span></div>`;
+  if(d.transactions)h+=`<div class="tool-row"><span class="tool-label">Transactions</span><span class="tool-value">${d.transactions}</span></div>`;
+  if(d.total_received)h+=`<div class="tool-row"><span class="tool-label">Total Received</span><span class="tool-value">${d.total_received}</span></div>`;
+  if(d.first_seen)h+=`<div class="tool-row"><span class="tool-label">First Seen</span><span class="tool-value">${d.first_seen}</span></div>`;
+  if(d.last_seen)h+=`<div class="tool-row"><span class="tool-label">Last Seen</span><span class="tool-value">${d.last_seen}</span></div>`;
+  h+=`</div></div>`;
+  el.innerHTML=h;
+}
+
+function renderGeneric(d,el){
+  const p=d.profile||{};
+  let h=`<div class="results-header"><h2>${d.platform||''}: <span class="uname">${d.username||''}</span></h2>${d.found?'<span class="pill g">Found</span>':'<span class="pill r">Not Found</span>'}</div>`;
+  if(d.found){
+    h+=`<div class="tool-card" style="max-width:450px"><h3><i class="fa-solid fa-user" style="color:var(--accent)"></i>Profile</h3>`;
+    for(const[k,v] of Object.entries(p)){if(v&&k!=='avatar')h+=`<div class="tool-row"><span class="tool-label">${k.replace(/_/g,' ')}</span><span class="tool-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}
+    if(p.url)h+=`<div style="margin-top:8px"><a href="${p.url}" target="_blank" style="color:var(--accent);font-size:.7rem;text-decoration:none">Open Profile →</a></div>`;
+    h+=`</div>`;
+  }else{
+    h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>Not found</h3></div>`;
   }
   el.innerHTML=h;
 }
