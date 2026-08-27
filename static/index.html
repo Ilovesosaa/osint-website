@@ -108,13 +108,15 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">OS</div>
-      <div><div class="sidebar-title">OSINT Hub</div><div class="sidebar-ver">v2.1 — No API Keys</div></div>
+      <div><div class="sidebar-title">OSINT Hub</div>      <div class="sidebar-ver">v3.0 — 160+ Platforms</div></div>
     </div>
     <div class="sidebar-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search anything..."/></div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Overview</div>
       <div class="sidebar-item active" data-page="username"><i class="fa-solid fa-user-secret"></i>Username Search</div>
+      <div class="sidebar-item" data-page="name"><i class="fa-solid fa-id-card"></i>Name Search</div>
+      <div class="sidebar-item" data-page="person"><i class="fa-solid fa-magnifying-glass"></i>Person Search</div>
     </div>
 
     <div class="sidebar-section">
@@ -186,7 +188,9 @@ document.querySelectorAll('.sidebar-item').forEach(item=>{
 function toggleJSON(){showJSON=!showJSON;document.getElementById('jsonToggle').classList.toggle('active',showJSON);if(lastData)renderResult(lastData)}
 
 const P={
-  username:{title:'Username Search',badge:'80+ Platforms',placeholder:'Enter username...',btn:'Scan',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame'],api:'/api/scan/'},
+  username:{title:'Username Search',badge:'160+ Platforms',placeholder:'Enter username...',btn:'Scan',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame'],api:'/api/scan/'},
+  name:{title:'Name Search',badge:'Cross-Platform',placeholder:'Full name (e.g. John Doe)',btn:'Search',examples:['John Doe','Elon Musk','Linus Torvalds'],api:'/api/name/'},
+  person:{title:'Person Search',badge:'Email / Phone / Username',placeholder:'Email, phone, or username',btn:'Search',examples:['test@gmail.com','+14155552671','torvalds'],api:'/api/person/'},
   email:{title:'Email Lookup',badge:'Full Intel',placeholder:'user@example.com',btn:'Lookup',examples:['test@gmail.com','admin@github.com','john@protonmail.com'],api:'/api/email/',holehe:false},
   emailholehe:{title:'Email → Accounts',badge:'Holehe Engine',placeholder:'user@example.com',btn:'Find Accounts',examples:['test@gmail.com','user@outlook.com','info@protonmail.com'],api:'/api/email/',holehe:true},
   breach:{title:'Breach Check',badge:'HIBP',placeholder:'user@example.com',btn:'Check Breaches',examples:['test@gmail.com','admin@company.com'],api:'/api/email/'},
@@ -195,7 +199,7 @@ const P={
   url:{title:'URL Unfurl',badge:'Metadata',placeholder:'https://example.com',btn:'Unfurl',examples:['https://github.com','https://google.com'],api:'/api/url/'},
   wayback:{title:'Wayback Machine',badge:'Archive',placeholder:'example.com',btn:'Check Archive',examples:['google.com','myspace.com','twitter.com'],api:'/api/wayback/'},
   phone:{title:'Phone Lookup',badge:'Carrier + Location',placeholder:'+1234567890',btn:'Lookup',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
-  social:{title:'Social Scan',badge:'80+ Platforms',placeholder:'Enter username...',btn:'Scan all',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
+  social:{title:'Social Scan',badge:'160+ Platforms',placeholder:'Enter username...',btn:'Scan all',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
   steam:{title:'Steam Lookup',badge:'Gaming',placeholder:'Steam username',btn:'Lookup',examples:['gaben'],api:'/api/gaming/steam/'},
   roblox:{title:'Roblox Lookup',badge:'Gaming',placeholder:'Roblox username',btn:'Lookup',examples:['Roblox'],api:'/api/gaming/roblox/'},
   xbox:{title:'Xbox Lookup',badge:'Gaming',placeholder:'Gamertag',btn:'Lookup',examples:['Major Nelson'],api:'/api/gaming/xbox/'},
@@ -235,9 +239,9 @@ async function doLookup(){
   btn.disabled=true;ra.innerHTML='';
 
   if(currentPage==='username'||currentPage==='social'){
-    prog.classList.add('active');let c=0;const t=80;
-    animInt=setInterval(()=>{c=Math.min(c+Math.random()*12,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
-    pl.textContent='Scanning 80+ platforms...';
+    prog.classList.add('active');let c=0;const t=160;
+    animInt=setInterval(()=>{c=Math.min(c+Math.random()*15,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
+    pl.textContent='Scanning 160+ platforms...';
   }
 
   try{
@@ -259,6 +263,8 @@ function renderResult(d){
   if(showJSON){ra.innerHTML=`<pre style="font-size:.65rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;overflow:auto;max-height:calc(100vh - 180px);font-family:monospace">${JSON.stringify(d,null,2)}</pre>`;return}
 
   if(currentPage==='username'||currentPage==='social')renderUsername(d,ra);
+  else if(currentPage==='name')renderName(d,ra);
+  else if(currentPage==='person')renderPerson(d,ra);
   else if(currentPage==='email')renderEmail(d,ra);
   else if(currentPage==='emailholehe')renderHolehe(d,ra);
   else if(currentPage==='breach')renderBreach(d,ra);
@@ -452,6 +458,86 @@ function renderCrypto(d,el){
   if(d.last_seen)h+=`<div class="tool-row"><span class="tool-label">Last Seen</span><span class="tool-value">${d.last_seen}</span></div>`;
   h+=`</div></div>`;
   el.innerHTML=h;
+}
+
+function renderName(d,el){
+  let h=`<div class="results-header"><h2>Name: <span class="uname">${d.name}</span></h2><div class="pills"><span class="pill b">${d.count} results</span></div></div>`;
+  if(d.results?.length){
+    h+=`<div class="cat"><div class="cat-title">Search Results</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">`;
+    d.results.forEach(r=>{
+      let icon='FA',color='var(--accent2)';
+      if(r.url.includes('linkedin')){icon='LI';color='#0077b5'}
+      else if(r.url.includes('twitter')||r.url.includes('x.com')){icon='TW';color='#1da1f2'}
+      else if(r.url.includes('facebook')){icon='FB';color='#1877f2'}
+      else if(r.url.includes('instagram')){icon='IG';color='#e4405f'}
+      else if(r.url.includes('github')){icon='GH';color='var(--text)'}
+      else if(r.url.includes('youtube')){icon='YT';color='#ff0000'}
+      h+=`<a href="${r.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon" style="background:${color}15;color:${color}">${icon}</div><div class="card-name">${new URL(r.url).hostname}</div></div><div class="card-url">${r.url.substring(0,50)}</div><div class="card-status" style="color:${color}">View Profile</div></a>`;
+    });
+    h+=`</div></div>`;
+  }else{
+    h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>No results found</h3><p>Try a different name or spelling</p></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderPerson(d,el){
+  let h=`<div class="results-header"><h2>Person: <span class="uname">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type} search</span></div></div>`;
+  if(d.username_results){
+    h+=renderUsernameHTML(d.username_results);
+  }else if(d.email_results){
+    h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+    const em=d.email_results;
+    if(em.mx_records?.length){
+      h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--accent2)"></i>MX Records</h3>`;
+      em.mx_records.forEach(mx=>{h+=`<div class="tool-row"><span class="tool-label">MX</span><span class="tool-value">${mx}</span></div>`});
+      h+=`</div>`;
+    }
+    if(em.registered_on?.length){
+      h+=`<div class="tool-card"><h3><i class="fa-solid fa-user-check" style="color:var(--accent)"></i>Registered On (${em.registered_on.length})</h3>`;
+      em.registered_on.forEach(s=>{h+=`<div class="tool-row"><span class="tool-value">${s}</span></div>`});
+      h+=`</div>`;
+    }
+    if(em.disposable!==undefined){
+      h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3><div class="tool-row"><span class="tool-label">Disposable</span><span class="tool-value">${em.disposable?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div></div>`;
+    }
+    h+=`</div>`;
+  }else if(d.phone_results){
+    h+=renderPhoneHTML(d.phone_results);
+  }else{
+    h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>No results</h3><p>Try a different query</p></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderUsernameHTML(d){
+  const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
+  const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security'};
+  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill r">${d.not_found_count} not found</span></div></div>`;
+  for(const[cat,platforms] of Object.entries(d.categories||{})){
+    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat}</div><div class="grid">`;
+    for(const p of platforms){
+      h+=`<a href="${p.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div><div class="card-url">${p.url.replace('https://','')}</div><div class="card-status">Found</div></a>`;
+    }
+    h+=`</div></div>`;
+  }
+  if(d.not_found?.length){
+    h+=`<div class="nf-section"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`;
+  }
+  return h;
+}
+
+function renderPhoneHTML(d){
+  let h=`<div class="results-header"><h2>Phone: <span class="uname">${d.phone}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-phone" style="color:var(--accent2)"></i>Phone Info</h3>`;
+  if(d.valid!==undefined)h+=`<div class="tool-row"><span class="tool-label">Valid</span><span class="tool-value">${d.valid?'<span class="badge badge-green">Yes</span>':'<span class="badge badge-red">No</span>'}</span></div>`;
+  if(d.country)h+=`<div class="tool-row"><span class="tool-label">Country</span><span class="tool-value">${d.country}</span></div>`;
+  if(d.location)h+=`<div class="tool-row"><span class="tool-label">Location</span><span class="tool-value">${d.location}</span></div>`;
+  if(d.carrier)h+=`<div class="tool-row"><span class="tool-label">Carrier</span><span class="tool-value">${d.carrier}</span></div>`;
+  for(const[k,v] of Object.entries(d.format||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+  h+=`</div></div>`;
+  return h;
 }
 
 function renderGeneric(d,el){
