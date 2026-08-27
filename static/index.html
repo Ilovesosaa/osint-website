@@ -371,15 +371,81 @@ function renderResult(d){
 
 function renderUsername(d,el){
   const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
-  const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security',blog:'Blogging',community:'Community',chinese:'Chinese Platforms',finance:'Finance',shopping:'Shopping',cloud:'Cloud',video:'Video',fitness:'Fitness'};
+  const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security',blog:'Blogging',community:'Community',chinese:'Chinese Platforms',finance:'Finance',shopping:'Shopping',cloud:'Cloud',video:'Video'};
+
+  // Summary stats
+  const breachedPlatforms = (d.found||[]).filter(p=>p.breach&&p.breach.breached);
+  const safePlatforms = (d.found||[]).filter(p=>!p.breach||!p.breach.breached);
+  const criticalCount = breachedPlatforms.filter(p=>p.breach.severity==='critical').length;
+  const highCount = breachedPlatforms.filter(p=>p.breach.severity==='high').length;
+
   let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill r">${d.not_found_count} not found</span></div></div>`;
+
+  // Threat Summary Panel
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:20px">`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(0,255,136,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--green)">${d.found_count}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Accounts Found</div></div>`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(255,59,59,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--red)">${breachedPlatforms.length}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Breached Platforms</div></div>`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(251,191,36,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--yellow)">${criticalCount}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Critical Breaches</div></div>`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(168,85,247,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--purple)">${d.paste_leak_count||0}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Paste Leaks Found</div></div>`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(6,214,160,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--cyan)">${safePlatforms.length}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Safe Platforms</div></div>`;
+  h+=`</div>`;
+
+  // Paste/Breach Leaks Section
+  if(d.paste_leaks?.length){
+    h+=`<div class="cat"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-skull-crossbones" style="margin-right:4px"></i>Paste / Breach Leaks (${d.paste_leak_count})</div>`;
+    d.paste_leaks.forEach(leak=>{
+      h+=`<div class="tool-card" style="border-left:2px solid var(--red);margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.72rem;font-weight:600;color:var(--red)">${leak.source}</div><div style="font-size:.58rem;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-top:2px">${leak.snippet?.substring(0,120)||'Match found'}</div></div><a href="${leak.url}" target="_blank" style="font-size:.58rem;color:var(--blue);text-decoration:none;font-family:'JetBrains Mono',monospace">VIEW .</a></div></div>`;
+    });
+    h+=`</div>`;
+  }
+
+  // Found platforms with breach info
   for(const[cat,platforms] of Object.entries(d.categories||{})){
-    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat} (${platforms.length})</div><div class="grid">`;
+    const catBreached = platforms.filter(p=>p.breach&&p.breach.breached);
+    const catSafe = platforms.filter(p=>!p.breach||!p.breach.breached);
+    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat} (${platforms.length})${catBreached.length?` <span style="color:var(--red)">— ${catBreached.length} breached</span>`:''}</div><div class="grid">`;
     for(const p of platforms){
-      h+=`<a href="${p.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div><div class="card-url">${p.url.replace('https://','').substring(0,35)}</div><div class="card-status">FOUND</div></a>`;
+      const b=p.breach||{};
+      const sevColors={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',low:'var(--dim)',none:'var(--green)'};
+      const sevBg={critical:'rgba(255,59,59,.1)',high:'rgba(255,59,59,.08)',medium:'rgba(251,191,36,.08)',low:'rgba(107,107,128,.05)',none:'rgba(0,255,136,.05)'};
+      const sevLabel={critical:'CRITICAL',high:'HIGH',medium:'MEDIUM',low:'LOW',none:'SAFE'};
+      const cardBorder=b.breached?`border-left:2px solid ${sevColors[b.severity]}`:'';
+      const cardBg=b.breached?`background:${sevBg[b.severity]}`:'';
+
+      h+=`<a href="${p.url}" target="_blank" class="card found" style="${cardBorder};${cardBg}">`;
+      h+=`<div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div>`;
+      h+=`<div class="card-url">${p.url.replace('https://','').substring(0,35)}</div>`;
+
+      if(b.breached){
+        h+=`<div style="margin-top:4px;padding:3px 6px;border-radius:4px;background:${sevColors[b.severity]}15;font-size:.5rem;font-weight:700;color:${sevColors[b.severity]};font-family:'JetBrains Mono',monospace;letter-spacing:.3px;display:inline-block">${sevLabel[b.severity]} BREACH</div>`;
+        h+=`<div style="margin-top:3px;font-size:.5rem;color:var(--dim)">${b.date} . ${b.records} records</div>`;
+        h+=`<div style="margin-top:2px;font-size:.48rem;color:var(--dim2)">${b.data?.join(', ')?.substring(0,60)}</div>`;
+      }else{
+        h+=`<div class="card-status">ACCOUNT EXISTS</div>`;
+      }
+      h+=`</a>`;
     }
     h+=`</div></div>`;
   }
+
+  // Breach Detail Panel
+  if(breachedPlatforms.length){
+    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-triangle-exclamation" style="margin-right:4px"></i>Breach Details</div>`;
+    h+=`<div class="tool-card" style="border-color:rgba(255,59,59,.2)">`;
+    h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px">`;
+    breachedPlatforms.forEach(p=>{
+      const b=p.breach;
+      const sevColors={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',low:'var(--dim)'};
+      h+=`<div style="padding:8px;border-radius:6px;border:1px solid ${sevColors[b.severity]}20;background:${sevColors[b.severity]}08">`;
+      h+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.72rem;font-weight:700">${p.platform}</span><span style="font-size:.5rem;font-weight:700;color:${sevColors[b.severity]};font-family:'JetBrains Mono',monospace">${b.severity?.toUpperCase()}</span></div>`;
+      h+=`<div style="font-size:.55rem;color:var(--dim);margin-bottom:3px">${b.date} . ${b.records} records affected</div>`;
+      h+=`<div style="font-size:.5rem;color:var(--dim2);margin-bottom:3px">Leaked: ${b.data?.join(', ')}</div>`;
+      h+=`<div style="font-size:.5rem;color:var(--dim2);font-style:italic">${b.note}</div>`;
+      h+=`</div>`;
+    });
+    h+=`</div></div></div>`;
+  }
+
   if(d.not_found?.length){
     h+=`<div class="nf-section"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`;
   }
@@ -572,10 +638,20 @@ function renderPerson(d,el){
 function renderUsernameHTML(d){
   const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
   const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security'};
-  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill r">${d.not_found_count} not found</span></div></div>`;
+  const breachedPlatforms=(d.found||[]).filter(p=>p.breach&&p.breach.breached);
+  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span>${breachedPlatforms.length?`<span class="pill e">${breachedPlatforms.length} breached</span>`:''}</div></div>`;
   for(const[cat,platforms] of Object.entries(d.categories||{})){
-    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat}</div><div class="grid">`;
-    for(const p of platforms){h+=`<a href="${p.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div><div class="card-url">${p.url.replace('https://','')}</div><div class="card-status">FOUND</div></a>`}
+    const catBreached=platforms.filter(p=>p.breach&&p.breach.breached);
+    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat} (${platforms.length})${catBreached.length?` <span style="color:var(--red)">— ${catBreached.length} breached</span>`:''}</div><div class="grid">`;
+    for(const p of platforms){
+      const b=p.breach||{};
+      const sevColors={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',none:'var(--green)'};
+      const cardBorder=b.breached?`border-left:2px solid ${sevColors[b.severity]}`:'';
+      h+=`<a href="${p.url}" target="_blank" class="card found" style="${cardBorder}"><div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div><div class="card-url">${p.url.replace('https://','').substring(0,35)}</div>`;
+      if(b.breached){h+=`<div style="margin-top:3px;font-size:.48rem;font-weight:700;color:${sevColors[b.severity]};font-family:'JetBrains Mono',monospace">${b.severity?.toUpperCase()} BREACH . ${b.date}</div>`}
+      else{h+=`<div class="card-status">ACCOUNT EXISTS</div>`}
+      h+=`</a>`;
+    }
     h+=`</div></div>`;
   }
   if(d.not_found?.length){h+=`<div class="nf-section"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`}
