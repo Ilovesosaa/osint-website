@@ -49,10 +49,7 @@ if os.path.exists(static_dir):
 
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
-        # fallback for SPA - serve index if file not found, but keep /api routes
-        if full_path.startswith("api/"):
-            return {"error": "not found"}
         file_path = os.path.join(static_dir, full_path)
-        if os.path.isfile(file_path):
+        if full_path and os.path.isfile(file_path):
             return FileResponse(file_path)
         return FileResponse(os.path.join(static_dir, "index.html"))
