@@ -129,9 +129,22 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
     <div class="sidebar-section">
       <div class="sidebar-label">Network</div>
       <div class="sidebar-item" data-page="ip"><i class="fa-solid fa-location-dot"></i>IP Lookup</div>
+      <div class="sidebar-item" data-page="reverseip"><i class="fa-solid fa-rotate"></i>Reverse IP</div>
       <div class="sidebar-item" data-page="domain"><i class="fa-solid fa-globe"></i>Domain Lookup</div>
+      <div class="sidebar-item" data-page="whois"><i class="fa-solid fa-id-card"></i>WHOIS</div>
+      <div class="sidebar-item" data-page="subdomains"><i class="fa-solid fa-sitemap"></i>Subdomains</div>
+      <div class="sidebar-item" data-page="ports"><i class="fa-solid fa-plug"></i>Port Scanner</div>
+      <div class="sidebar-item" data-page="ssl"><i class="fa-solid fa-lock"></i>SSL/TLS</div>
+      <div class="sidebar-item" data-page="waf"><i class="fa-solid fa-shield"></i>WAF / CDN</div>
       <div class="sidebar-item" data-page="url"><i class="fa-solid fa-link"></i>URL Unfurl</div>
       <div class="sidebar-item" data-page="wayback"><i class="fa-solid fa-clock-rotate-left"></i>Wayback Machine</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Intel</div>
+      <div class="sidebar-item" data-page="dorks"><i class="fa-solid fa-magnifying-glass"></i>Google Dorks</div>
+      <div class="sidebar-item" data-page="pastes"><i class="fa-solid fa-paste"></i>Paste Search</div>
+      <div class="sidebar-item" data-page="shodan"><i class="fa-solid fa-server"></i>Shodan-style</div>
     </div>
 
     <div class="sidebar-section">
@@ -197,6 +210,15 @@ const P={
   breach:{title:'Breach Check',badge:'HIBP',placeholder:'user@example.com',btn:'Check Breaches',examples:['test@gmail.com','admin@company.com'],api:'/api/email/'},
   ip:{title:'IP Lookup',badge:'Geo + ASN + Blacklists',placeholder:'8.8.8.8',btn:'Lookup',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/'},
   domain:{title:'Domain Lookup',badge:'DNS + SSL + Tech',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
+  reverseip:{title:'Reverse IP Lookup',badge:'Domains + Geo',placeholder:'IP address',btn:'Lookup',examples:['8.8.8.8','1.1.1.1'],api:'/api/reverseip/'},
+  whois:{title:'WHOIS Lookup',badge:'RDAP',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com'],api:'/api/whois/'},
+  subdomains:{title:'Subdomain Finder',badge:'cTLD + DNS',placeholder:'example.com',btn:'Find Subdomains',examples:['github.com','google.com','discord.com'],api:'/api/subdomains/'},
+  ports:{title:'Port Scanner',badge:'Top 25 Ports',placeholder:'IP address',btn:'Scan Ports',examples:['8.8.8.8','1.1.1.1','192.168.1.1'],api:'/api/ports/'},
+  ssl:{title:'SSL/TLS Analysis',badge:'Certificate + Cipher',placeholder:'example.com',btn:'Analyze',examples:['github.com','google.com','discord.com'],api:'/api/ssl/'},
+  waf:{title:'WAF / CDN Detection',badge:'Firewall + Tech',placeholder:'example.com',btn:'Detect',examples:['github.com','cloudflare.com','google.com'],api:'/api/waf/'},
+  dorks:{title:'Google Dork Generator',badge:'25+ Dorks',placeholder:'Target domain',btn:'Generate Dorks',examples:['github.com','google.com','target.com'],api:'/api/dorks/'},
+  pastes:{title:'Paste / Breach Search',badge:'Pastebin + More',placeholder:'Email, username, or domain',btn:'Search Pastes',examples:['test@gmail.com','admin','target.com'],api:'/api/pastes/'},
+  shodan:{title:'Shodan-style Lookup',badge:'IP + Ports + Services',placeholder:'IP address',btn:'Lookup',examples:['8.8.8.8','1.1.1.1'],api:'/api/shodan/'},
   url:{title:'URL Unfurl',badge:'Metadata',placeholder:'https://example.com',btn:'Unfurl',examples:['https://github.com','https://google.com'],api:'/api/url/'},
   wayback:{title:'Wayback Machine',badge:'Archive',placeholder:'example.com',btn:'Check Archive',examples:['google.com','myspace.com','twitter.com'],api:'/api/wayback/'},
   phone:{title:'Phone Lookup',badge:'Carrier + Location',placeholder:'+1234567890',btn:'Lookup',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
@@ -271,7 +293,16 @@ function renderResult(d){
   else if(currentPage==='emailholehe')renderHolehe(d,ra);
   else if(currentPage==='breach')renderBreach(d,ra);
   else if(currentPage==='ip')renderIP(d,ra);
+  else if(currentPage==='reverseip')renderReverseIP(d,ra);
   else if(currentPage==='domain')renderDomain(d,ra);
+  else if(currentPage==='whois')renderWHOIS(d,ra);
+  else if(currentPage==='subdomains')renderSubdomains(d,ra);
+  else if(currentPage==='ports')renderPorts(d,ra);
+  else if(currentPage==='ssl')renderSSL(d,ra);
+  else if(currentPage==='waf')renderWAF(d,ra);
+  else if(currentPage==='dorks')renderDorks(d,ra);
+  else if(currentPage==='pastes')renderPastes(d,ra);
+  else if(currentPage==='shodan')renderShodan(d,ra);
   else if(currentPage==='url')renderURL(d,ra);
   else if(currentPage==='wayback')renderWayback(d,ra);
   else if(currentPage==='phone')renderPhone(d,ra);
@@ -541,6 +572,172 @@ function renderPhoneHTML(d){
   for(const[k,v] of Object.entries(d.format||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
   h+=`</div></div>`;
   return h;
+}
+
+function renderReverseIP(d,el){
+  let h=`<div class="results-header"><h2>Reverse IP: <span class="uname">${d.ip}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  if(d.reverse_dns){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-arrow-right" style="color:var(--accent2)"></i>Reverse DNS</h3><div class="tool-row"><span class="tool-label">Hostname</span><span class="tool-value">${d.reverse_dns}</span></div></div>`;
+  }
+  if(d.geo){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--accent)"></i>Geolocation</h3>`;
+    for(const[k,v] of Object.entries(d.geo)){if(v&&k!=='loc')h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+    h+=`</div>`;
+  }
+  if(d.same_server_domains?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--purple)"></i>Same Server (${d.same_server_domains.length})</h3>`;
+    d.same_server_domains.slice(0,10).forEach(d2=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.65rem">${d2}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderWHOIS(d,el){
+  let h=`<div class="results-header"><h2>WHOIS: <span class="uname">${d.domain}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-id-card" style="color:var(--accent2)"></i>Registration</h3>`;
+  if(d.registrar)h+=`<div class="tool-row"><span class="tool-label">Registrar</span><span class="tool-value">${d.registrar}</span></div>`;
+  if(d.creation_date)h+=`<div class="tool-row"><span class="tool-label">Created</span><span class="tool-value">${d.creation_date}</span></div>`;
+  if(d.expiration_date)h+=`<div class="tool-row"><span class="tool-label">Expires</span><span class="tool-value">${d.expiration_date}</span></div>`;
+  if(d.registrant)h+=`<div class="tool-row"><span class="tool-label">Registrant</span><span class="tool-value">${d.registrant}</span></div>`;
+  if(d.status?.length)d.status.forEach(s=>{h+=`<div class="tool-row"><span class="tool-label">Status</span><span class="tool-value" style="font-size:.6rem">${s}</span></div>`});
+  h+=`</div>`;
+  if(d.name_servers?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--cyan)"></i>Name Servers</h3>`;
+    d.name_servers.forEach(ns=>{h+=`<div class="tool-row"><span class="tool-value">${ns}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderSubdomains(d,el){
+  let h=`<div class="results-header"><h2>Subdomains: <span class="uname">${d.domain}</span></h2><div class="pills"><span class="pill g">${d.count} found</span></div></div>`;
+  if(d.subdomains?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-sitemap" style="color:var(--accent)"></i>Discovered (${d.count})</h3>`;
+    d.subdomains.forEach(s=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.65rem;font-family:monospace">${s}</span></div>`});
+    h+=`</div>`;
+  }else{
+    h+=`<div class="empty-state"><h3>No subdomains found</h3></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderPorts(d,el){
+  let h=`<div class="results-header"><h2>Ports: <span class="uname">${d.ip}</span></h2><div class="pills"><span class="pill g">${d.total_open} open</span><span class="pill r">${d.closed_ports?.length||0} closed</span></div></div>`;
+  if(d.open_ports?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-plug" style="color:var(--accent)"></i>Open Ports</h3>`;
+    d.open_ports.forEach(p=>{
+      const svc=d.services?.[p]||{};
+      h+=`<div class="tool-row"><span class="tool-label">${p}</span><span class="tool-value">${svc.service||'unknown'}${svc.banner?` — ${svc.banner.substring(0,30)}`:''}</span></div>`;
+    });
+    h+=`</div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderSSL(d,el){
+  let h=`<div class="results-header"><h2>SSL/TLS: <span class="uname">${d.domain}</span></h2>${d.days_left!==null?`<div class="pills"><span class="pill ${d.days_left<30?'r':'g'}">${d.days_left} days left</span></div>`:''}</div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  if(d.subject){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-certificate" style="color:var(--accent)"></i>Subject</h3>`;
+    for(const[k,v] of Object.entries(d.subject)){h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+    h+=`</div>`;
+  }
+  if(d.issuer){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-building" style="color:var(--accent2)"></i>Issuer</h3>`;
+    for(const[k,v] of Object.entries(d.issuer)){h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+    h+=`</div>`;
+  }
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-clock" style="color:var(--yellow)"></i>Validity</h3>`;
+  if(d.valid_from)h+=`<div class="tool-row"><span class="tool-label">From</span><span class="tool-value">${d.valid_from}</span></div>`;
+  if(d.valid_to)h+=`<div class="tool-row"><span class="tool-label">To</span><span class="tool-value">${d.valid_to}</span></div>`;
+  if(d.days_left!==null)h+=`<div class="tool-row"><span class="tool-label">Days Left</span><span class="tool-value">${d.days_left<30?'<span class="badge badge-red">'+d.days_left+'</span>':d.days_left+' days'}</span></div>`;
+  h+=`</div>`;
+  if(d.san?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-globe" style="color:var(--cyan)"></i>SAN (${d.san.length})</h3>`;
+    d.san.slice(0,10).forEach(s=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.6rem">${s}</span></div>`});
+    h+=`</div>`;
+  }
+  if(d.cipher){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-lock" style="color:var(--purple)"></i>Security</h3>`;
+    h+=`<div class="tool-row"><span class="tool-label">Cipher</span><span class="tool-value" style="font-size:.6rem">${d.cipher}</span></div>`;
+    d.protocols?.forEach(p=>{h+=`<div class="tool-row"><span class="tool-label">Protocol</span><span class="tool-value">${p}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderWAF(d,el){
+  let h=`<div class="results-header"><h2>WAF / CDN: <span class="uname">${d.domain}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield" style="color:var(--accent)"></i>Protection</h3>`;
+  if(d.detected?.length){
+    d.detected.forEach(w=>{h+=`<div class="tool-row"><span class="tool-label">WAF/CDN</span><span class="tool-value"><span class="badge badge-green">${w}</span></span></div>`});
+  }else{
+    h+=`<div class="tool-row"><span class="tool-label">WAF</span><span class="tool-value"><span class="badge badge-red">None detected</span></span></div>`;
+  }
+  if(d.server)h+=`<div class="tool-row"><span class="tool-label">Server</span><span class="tool-value">${d.server}</span></div>`;
+  h+=`</div>`;
+  if(d.technologies?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Technologies</h3>`;
+    d.technologies.forEach(t=>{h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderDorks(d,el){
+  let h=`<div class="results-header"><h2>Google Dorks: <span class="uname">${d.target}</span></h2><div class="pills"><span class="pill g">${d.count} dorks</span></div></div>`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-magnifying-glass" style="color:var(--accent)"></i>Generated Dorks</h3>`;
+  for(const[key,query] of Object.entries(d.dorks)){
+    h+=`<div class="tool-row"><span class="tool-label" style="min-width:120px">${key.replace(/_/g,' ')}</span><span class="tool-value" style="font-size:.6rem;font-family:monospace;cursor:pointer" onclick="navigator.clipboard.writeText('${query.replace(/'/g,"\\'")}');this.textContent='Copied!'" title="Click to copy">${query}</span></div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function renderPastes(d,el){
+  let h=`<div class="results-header"><h2>Paste Search: <span class="uname">${d.query}</span></h2><div class="pills"><span class="pill g">${d.count} results</span></div></div>`;
+  if(d.results?.length){
+    d.results.forEach(r=>{
+      h+=`<div class="tool-card"><h3><i class="fa-solid fa-paste" style="color:var(--accent2)"></i>${r.source}</h3>`;
+      h+=`<div class="tool-row"><span class="tool-label">URL</span><span class="tool-value" style="font-size:.6rem"><a href="${r.url}" target="_blank" style="color:var(--accent2)">${r.url.substring(0,60)}...</a></span></div>`;
+      if(r.snippet)h+=`<div class="tool-row"><span class="tool-label">Snippet</span><span class="tool-value" style="font-size:.6rem">${r.snippet.substring(0,120)}</span></div>`;
+      h+=`</div>`;
+    });
+  }else{
+    h+=`<div class="empty-state"><i class="fa-solid fa-check-circle"></i><h3>No paste results</h3><p>Query not found in known paste sites</p></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderShodan(d,el){
+  let h=`<div class="results-header"><h2>Shodan: <span class="uname">${d.ip}</span></h2></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--accent2)"></i>Host Info</h3>`;
+  if(d.org)h+=`<div class="tool-row"><span class="tool-label">Org</span><span class="tool-value">${d.org}</span></div>`;
+  if(d.isp)h+=`<div class="tool-row"><span class="tool-label">ISP</span><span class="tool-value">${d.isp}</span></div>`;
+  if(d.as)h+=`<div class="tool-row"><span class="tool-label">AS</span><span class="tool-value" style="font-size:.6rem">${d.as}</span></div>`;
+  if(d.hostnames?.length)d.hostnames.forEach(h2=>{h+=`<div class="tool-row"><span class="tool-label">Hostname</span><span class="tool-value">${h2}</span></div>`});
+  if(d.city)h+=`<div class="tool-row"><span class="tool-label">City</span><span class="tool-value">${d.city}</span></div>`;
+  if(d.region)h+=`<div class="tool-row"><span class="tool-label">Region</span><span class="tool-value">${d.region}</span></div>`;
+  if(d.country)h+=`<div class="tool-row"><span class="tool-label">Country</span><span class="tool-value">${d.country}</span></div>`;
+  if(d.proxy!==undefined)h+=`<div class="tool-row"><span class="tool-label">Proxy</span><span class="tool-value">${d.proxy?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
+  if(d.hosting!==undefined)h+=`<div class="tool-row"><span class="tool-label">Hosting</span><span class="tool-value">${d.hosting?'<span class="badge badge-yellow">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
+  if(d.mobile!==undefined)h+=`<div class="tool-row"><span class="tool-label">Mobile</span><span class="tool-value">${d.mobile?'Yes':'No'}</span></div>`;
+  h+=`</div>`;
+  if(d.ports?.length){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-plug" style="color:var(--accent)"></i>Open Ports (${d.ports.length})</h3>`;
+    d.ports.forEach(p=>{h+=`<div class="tool-row"><span class="tool-label">${p}</span><span class="tool-value"><span class="badge badge-green">Open</span></span></div>`});
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
 }
 
 function renderDiscord(d,el){

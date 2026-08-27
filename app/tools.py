@@ -680,3 +680,415 @@ async def discord_lookup(discord_id: str):
             "info": len([r for r in risk_flags if r["severity"] == "info"]),
         },
     }
+
+
+# === Reverse IP Lookup ===
+@router.get("/reverseip/{ip}")
+async def reverse_ip(ip: str):
+    ip = ip.strip()
+    results = {"ip": ip, "reverse_dns": None, "same_server_domains": [], "geo": None}
+
+    # Reverse DNS
+    try:
+        hostname = socket.gethostbyaddr(ip)
+        results["reverse_dns"] = hostname[0]
+    except: pass
+
+    async with httpx.AsyncClient(headers=HEADERS) as client:
+        # ipinfo.io for geo
+        try:
+            r = await client.get(f"https://ipinfo.io/{ip}/json", timeout=8)
+            if r.status_code == 200:
+                results["geo"] = r.json()
+        except: pass
+
+        # Find domains on same IP via DNS lookup
+        try:
+            r = await client.get(f"https://api.hackertarget.com/reverseiplookup/?q={ip}", timeout=10)
+            if r.status_code == 200 and "error" not in r.text.lower():
+                domains = [line.strip() for line in r.text.strip().split("\n") if line.strip() and not line.startswith("API")]
+                results["same_server_domains"] = domains[:20]
+        except: pass
+
+    return results
+
+
+# === SSL/TLS Certificate Analysis ===
+@router.get("/ssl/{domain}")
+async def ssl_check(domain: str):
+    domain = domain.strip().replace("https://", "").replace("http://", "").split("/")[0]
+    result = {"domain": domain, "certificates": [], "issuer": None, "subject": None, "valid_from": None, "valid_to": None, "days_left": None, "san": [], "protocols": [], "cipher": None}
+
+    import ssl
+    import datetime
+    context = ssl.create_default_context()
+    try:
+        with socket.create_connection((domain, 443), timeout=10) as sock:
+            with context.wrap_socket(sock, server_hostname=domain) as ssock:
+                cert = ssock.getpeercert()
+                cipher_info = ssock.cipher()
+                protocol = ssock.version()
+
+                result["subject"] = dict(x[0] for x in cert.get("subject", []))
+                result["issuer"] = dict(x[0] for x in cert.get("issuer", []))
+                result["valid_from"] = cert.get("notBefore")
+                result["valid_to"] = cert.get("notAfter")
+                result["san"] = [entry[1] for entry in cert.get("subjectAltName", [])]
+                result["protocols"] = [protocol]
+                result["cipher"] = cipher_info[0] if cipher_info else None
+
+                # Calculate days left
+                if result["valid_to"]:
+                    expire = datetime.datetime.strptime(result["valid_to"], "%b %d %H:%M:%S %Y %Z")
+                    result["days_left"] = (expire - datetime.datetime.utcnow()).days
+    except Exception as e:
+        result["error"] = str(e)
+
+    return result
+
+
+# === WAF / CDN Detection ===
+WAF_SIGNATURES = {
+    "Cloudflare": ["cf-ray", "cf-cache-status", "cloudflare"],
+    "AWS CloudFront": ["x-amz-cf-id", "x-amz-cf-pop", "cloudfront"],
+    "Akamai": ["x-akamai-transformed", "akamai"],
+    "Fastly": ["x-fastly-request-id", "fastly"],
+    "Sucuri": ["x-sucuri-id", "sucuri"],
+    "Imperva": ["x-iinfo", "imperva"],
+    "Incapsula": ["x-incap-ses", "incapsula"],
+    "F5 BIG-IP": ["bigip"],
+    "Barracuda": ["barracounter_session"],
+    "Vercel": ["x-vercel-id", "vercel"],
+    "Netlify": ["x-nf-request-id", "netlify"],
+    "Firebase": ["firebase"],
+}
+
+@router.get("/waf/{domain}")
+async def waf_detect(domain: str):
+    domain = domain.strip().replace("https://", "").replace("http://", "").split("/")[0]
+    result = {"domain": domain, "detected": [], "headers": {}, "server": None, "technologies": []}
+
+    async with httpx.AsyncClient(headers=HEADERS, follow_redirects=True) as client:
+        try:
+            r = await client.get(f"https://{domain}", timeout=10)
+            headers_lower = {k.lower(): v for k, v in r.headers.items()}
+            result["headers"] = dict(r.headers)
+            result["server"] = r.headers.get("Server") or r.headers.get("server")
+            result["status"] = r.status_code
+
+            # WAF detection
+            for waf, signatures in WAF_SIGNATURES.items():
+                for sig in signatures:
+                    if any(sig in str(v).lower() for v in headers_lower.values()) or sig in str(headers_lower):
+                        result["detected"].append(waf)
+
+            # Technology detection from headers and body
+            body_preview = r.text[:5000].lower()
+            tech_map = {
+                "WordPress": ["wp-content", "wp-includes"],
+                "nginx": ["nginx"],
+                "Apache": ["apache"],
+                "Express": ["x-powered-by: express"],
+                "PHP": ["x-powered-by: php"],
+                "ASP.NET": ["x-powered-by: asp.net", "x-aspnet-version"],
+                "Vercel": ["vercel"],
+                "Netlify": ["netlify"],
+                "React": ["react", "_next"],
+                "Next.js": ["_next/static"],
+                "Vue.js": ["vue"],
+                "Angular": ["ng-version"],
+                "Cloudflare": ["cloudflare"],
+                "Google Analytics": ["google-analytics.com", "gtag"],
+                "Sentry": ["sentry"],
+                "Bootstrap": ["bootstrap"],
+                "jQuery": ["jquery"],
+                "Tailwind CSS": ["tailwindcss"],
+            }
+            for tech, patterns in tech_map.items():
+                for pat in patterns:
+                    if pat in body_preview or pat in str(headers_lower):
+                        if tech not in result["technologies"]:
+                            result["technologies"].append(tech)
+        except Exception as e:
+            result["error"] = str(e)
+
+    return result
+
+
+# === Google Dork Generator ===
+@router.get("/dorks/{target}")
+async def generate_dorks(target: str):
+    target = target.strip()
+    dorks = {
+        "site_pages": f'site:{target}',
+        "filetype_pdf": f'site:{target} filetype:pdf',
+        "filetype_doc": f'site:{target} filetype:doc OR filetype:docx',
+        "filetype_xls": f'site:{target} filetype:xls OR filetype:xlsx',
+        "filetype_ppt": f'site:{target} filetype:ppt OR filetype:pptx',
+        "filetype_sql": f'site:{target} filetype:sql',
+        "filetype_log": f'site:{target} filetype:log',
+        "filetype_config": f'site:{target} filetype:yml OR filetype:yaml OR filetype:conf',
+        "filetype_env": f'site:{target} filetype:env',
+        "filetype_key": f'site:{target} filetype:key OR filetype:pem',
+        "login_pages": f'site:{target} inurl:login OR inurl:signin OR inurl:admin',
+        "api_endpoints": f'site:{target} inurl:api OR inurl:v1 OR inurl:v2',
+        "error_pages": f'site:{target} intitle:"error" OR intitle:"exception"',
+        "backup_files": f'site:{target} filetype:bak OR filetype:old OR filetype:backup',
+        "directory_listing": f'site:{target} intitle:"index of"',
+        "emails": f'site:{target} "@{target}" email OR contact',
+        "phone_numbers": f'site:{target} phone OR tel OR mobile',
+        "employees": f'site:{target} "team" OR "staff" OR "employee" OR "about"',
+        "github_secrets": f'site:github.com "{target}" password OR secret OR token OR api_key',
+        "pastebin_leaks": f'site:pastebin.com "{target}"',
+        "job_listings": f'site:{target} inurl:jobs OR inurl:careers OR "hiring"',
+        "subdomains": f'site:*.{target}',
+        "sitemap": f'site:{target} filetype:xml',
+        "robots": f'site:{target} robots.txt',
+        "exposed_data": f'site:{target} filetype:csv OR filetype:json OR filetype:xml',
+        "swagger_api": f'site:{target} inurl:swagger OR inurl:docs OR inurl:openapi',
+    }
+    return {"target": target, "dorks": dorks, "count": len(dorks)}
+
+
+# === Port Scanner ===
+@router.get("/ports/{ip}")
+async def port_scan(ip: str):
+    ip = ip.strip()
+    common_ports = {
+        21: "FTP", 22: "SSH", 23: "Telnet", 25: "SMTP", 53: "DNS",
+        80: "HTTP", 110: "POP3", 111: "RPCBind", 135: "MSRPC",
+        139: "NetBIOS", 143: "IMAP", 443: "HTTPS", 445: "SMB",
+        993: "IMAPS", 995: "POP3S", 1723: "PPTP", 3306: "MySQL",
+        3389: "RDP", 5432: "PostgreSQL", 5900: "VNC", 6379: "Redis",
+        8080: "HTTP-Alt", 8443: "HTTPS-Alt", 8888: "HTTP-Proxy",
+        9090: "HTTP-Mgmt", 27017: "MongoDB",
+    }
+
+    open_ports = []
+    banners = {}
+
+    async def check_port(port):
+        try:
+            _, writer = await asyncio.wait_for(
+                asyncio.open_connection(ip, port), timeout=1.5
+            )
+            writer.close()
+            await writer.wait_closed()
+            open_ports.append(port)
+            # Try to grab banner
+            try:
+                reader2, writer2 = await asyncio.wait_for(
+                    asyncio.open_connection(ip, port), timeout=1.5
+                )
+                banner_data = await asyncio.wait_for(reader2.read(256), timeout=1.5)
+                banners[port] = banner_data.decode(errors="ignore").strip()
+                writer2.close()
+                await writer2.wait_closed()
+            except: pass
+        except: pass
+
+    tasks = [check_port(port) for port in common_ports.keys()]
+    await asyncio.gather(*tasks, return_exceptions=True)
+
+    return {
+        "ip": ip,
+        "open_ports": sorted(open_ports),
+        "closed_ports": [p for p in common_ports.keys() if p not in open_ports],
+        "services": {p: {"port": p, "service": common_ports[p], "banner": banners.get(p)} for p in open_ports},
+        "total_open": len(open_ports),
+    }
+
+
+# === Paste / Pastebin Search ===
+@router.get("/pastes/{query}")
+async def paste_search(query: str):
+    query = query.strip()
+    results = {"query": query, "results": [], "count": 0}
+
+    async with httpx.AsyncClient(headers=HEADERS) as client:
+        # Search for the query in known paste/breach sites via Google dork
+        dorks = [
+            f'"{query}" site:pastebin.com',
+            f'"{query}" site:ghostbin.co',
+            f'"{query}" site:hastebin.com',
+            f'"{query}" site:paste.ee',
+            f'"{query}" site:dpaste.org',
+            f'"{query}" site:rentry.co',
+        ]
+
+        for dork in dorks[:4]:
+            try:
+                r = await client.get(
+                    "https://html.duckduckgo.com/html/",
+                    params={"q": dork},
+                    timeout=10,
+                )
+                if r.status_code == 200:
+                    links = re.findall(r'href="(https?://[^"]+)"', r.text)
+                    snippets = re.findall(r'class="result__snippet">(.*?)</a>', r.text, re.DOTALL)
+                    for i, link in enumerate(links[:3]):
+                        snippet_text = re.sub(r'<[^>]+>', '', snippets[i]).strip() if i < len(snippets) else ""
+                        source = link.split("/")[2] if "/" in link else link
+                        results["results"].append({
+                            "source": source,
+                            "url": link,
+                            "snippet": snippet_text[:200],
+                            "query": dork,
+                        })
+            except: pass
+
+    # Deduplicate
+    seen = set()
+    unique = []
+    for r in results["results"]:
+        if r["url"] not in seen:
+            seen.add(r["url"])
+            unique.append(r)
+    results["results"] = unique[:20]
+    results["count"] = len(results["results"])
+
+    return results
+
+
+# === WHOIS Lookup ===
+@router.get("/whois/{domain}")
+async def whois_lookup(domain: str):
+    domain = domain.strip().replace("https://", "").replace("http://", "").split("/")[0]
+    result = {"domain": domain, "registrar": None, "creation_date": None, "expiration_date": None, "name_servers": [], "registrant": None, "status": []}
+
+    # Use RDAP (free, no API key)
+    rdap_urls = [
+        f"https://rdap.verisign.com/com/v1/domain/{domain}",
+        f"https://rdap.org/domain/{domain}",
+    ]
+
+    async with httpx.AsyncClient(headers=HEADERS) as client:
+        for url in rdap_urls:
+            try:
+                r = await client.get(url, timeout=8)
+                if r.status_code == 200:
+                    data = r.json()
+                    result["ldh_name"] = data.get("ldhName")
+                    result["status"] = data.get("status", [])
+
+                    # Events
+                    for ev in data.get("events", []):
+                        if ev.get("eventAction") == "registration":
+                            result["creation_date"] = ev.get("eventDate")
+                        elif ev.get("eventAction") == "expiration":
+                            result["expiration_date"] = ev.get("eventDate")
+
+                    # Nameservers
+                    for ns in data.get("nameservers", []):
+                        if ns.get("ldhName"):
+                            result["name_servers"].append(ns["ldhName"])
+
+                    # Entities
+                    for ent in data.get("entities", []):
+                        roles = ent.get("roles", [])
+                        if "registrar" in roles:
+                            vcards = ent.get("vcardArray", [None, []])[1] if ent.get("vcardArray") else []
+                            for v in vcards:
+                                if len(v) > 3 and v[0] == "fn":
+                                    result["registrar"] = v[3]
+                        if "registrant" in roles or "technical" in roles:
+                            vcards = ent.get("vcardArray", [None, []])[1] if ent.get("vcardArray") else []
+                            for v in vcards:
+                                if len(v) > 3 and v[0] == "fn":
+                                    result["registrant"] = v[3]
+
+                    if result["creation_date"] or result["name_servers"]:
+                        break
+            except: pass
+
+    return result
+
+
+# === Subdomain Finder (via crt.sh Certificate Transparency) ===
+@router.get("/subdomains/{domain}")
+async def subdomain_finder(domain: str):
+    domain = domain.strip().replace("https://", "").replace("http://", "").split("/")[0]
+    subdomains = set()
+
+    async with httpx.AsyncClient(headers=HEADERS) as client:
+        # crt.sh Certificate Transparency
+        try:
+            r = await client.get(
+                f"https://crt.sh/?q=%.{domain}&output=json",
+                timeout=15,
+            )
+            if r.status_code == 200:
+                data = r.json()
+                for entry in data:
+                    name = entry.get("name_value", "")
+                    for sub in name.split("\n"):
+                        sub = sub.strip().lower()
+                        if sub.endswith(domain) and "*" not in sub:
+                            subdomains.add(sub)
+        except: pass
+
+        # Also try DNS resolution on common subdomains
+        common_subs = ["www","mail","ftp","smtp","pop","ns1","ns2","dns","mx","webmail","cpanel","api","dev","staging","test","admin","portal","vpn","remote","blog","shop","store","cdn","media","static","img","images","app","dashboard","panel"]
+        for sub in common_subs:
+            try:
+                full = f"{sub}.{domain}"
+                socket.getaddrinfo(full, None)
+                subdomains.add(full)
+            except: pass
+
+    return {
+        "domain": domain,
+        "subdomains": sorted(subdomains),
+        "count": len(subdomains),
+        "sources": ["crt.sh Certificate Transparency", "Common subdomain DNS probe"],
+    }
+
+
+# === Shodan-style (IP Info + Services) via public APIs ===
+@router.get("/shodan/{ip}")
+async def shodan_lookup(ip: str):
+    ip = ip.strip()
+    result = {"ip": ip, "ports": [], "vulns": [], "hostnames": [], "org": None, "os": None, "isp": None}
+
+    async with httpx.AsyncClient(headers=HEADERS) as client:
+        # Use ipinfo.io + ip-api for free data
+        try:
+            r = await client.get(f"https://ipinfo.io/{ip}/json", timeout=8)
+            if r.status_code == 200:
+                data = r.json()
+                result["hostnames"] = [data.get("hostname", "")]
+                result["org"] = data.get("org")
+                result["isp"] = data.get("org")
+                result["city"] = data.get("city")
+                result["region"] = data.get("region")
+                result["country"] = data.get("country")
+                result["loc"] = data.get("loc")
+        except: pass
+
+        # IP-API for more details
+        try:
+            r = await client.get(f"http://ip-api.com/json/{ip}?fields=status,message,isp,org,as,mobile,proxy,hosting", timeout=8)
+            if r.status_code == 200:
+                data = r.json()
+                result["isp"] = result["isp"] or data.get("isp")
+                result["org"] = result["org"] or data.get("org")
+                result["as"] = data.get("as")
+                result["mobile"] = data.get("mobile")
+                result["proxy"] = data.get("proxy")
+                result["hosting"] = data.get("hosting")
+        except: pass
+
+        # Try to get open ports from common ports
+        common_ports = [21,22,23,25,53,80,110,143,443,993,995,1723,3306,3389,5432,5900,6379,8080,8443,8888,9090,27017]
+        open_ports = []
+        async def check(port):
+            try:
+                _, w = await asyncio.wait_for(asyncio.open_connection(ip, port), timeout=1)
+                w.close()
+                await w.wait_closed()
+                open_ports.append(port)
+            except: pass
+        await asyncio.gather(*[check(p) for p in common_ports], return_exceptions=True)
+        result["ports"] = sorted(open_ports)
+
+    return result
