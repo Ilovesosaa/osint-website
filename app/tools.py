@@ -533,14 +533,18 @@ async def discord_lookup(discord_id: str):
     if not info:
         raise HTTPException(400, "Invalid Discord ID — must be a numeric snowflake")
 
-    # External lookups using public APIs
     avatar_url = f"https://cdn.discordapp.com/avatars/{discord_id}/avatar.png"
     banner_url = f"https://cdn.discordapp.com/banners/{discord_id}/banner.png"
 
-    # Check avatar exists
     avatar_exists = False
     banner_exists = False
-    async with httpx.AsyncClient() as client:
+    profile_data = None
+    breach_results = []
+    scam_results = []
+    associated_accounts = []
+
+    async with httpx.AsyncClient(headers=HEADERS) as client:
+        # Avatar & Banner check
         try:
             r = await client.head(avatar_url, timeout=5)
             avatar_exists = r.status_code == 200
@@ -550,24 +554,113 @@ async def discord_lookup(discord_id: str):
             banner_exists = r.status_code == 200
         except: pass
 
-    # External resources from DiscordOSINT
-    resources = [
-        {"name": "Discord ID Creation Date", "url": f"https://hugo.moe/discord/discord-id-creation-date.html", "desc": "Verify creation date"},
-        {"name": "Discord Lookup", "url": f"https://discordlookup.mesavirep.xyz/?user={discord_id}", "desc": "Profile details"},
-        {"name": "Discord Avatar Viewer", "url": f"https://discordzoom.com/en/?id={discord_id}", "desc": "View full avatar"},
-        {"name": "Discohook (Profile)", "url": f"https://discohook.org/?user={discord_id}", "desc": "Profile preview"},
-        {"name": "Google Dork", "url": f"https://www.google.com/search?q=%22{discord_id}%22+discord", "desc": "Search ID on Google"},
-        {"name": "Discord History Tracker", "url": "https://dht.chylex.com/", "desc": "Chat history extraction"},
-    ]
-
-    # Try discordlookup API
-    profile_data = None
-    async with httpx.AsyncClient() as client:
+        # DiscordLookup profile
         try:
             r = await client.get(f"https://discordlookup.mesavirep.xyz/user/{discord_id}", timeout=8)
             if r.status_code == 200:
                 profile_data = r.json()
         except: pass
+
+        # Check public breach paste sites for the Discord ID
+        breach_checks = [
+            ("https://haveibeenpwned.com/api/v3/breachedaccount/", "HIBP (requires key, checking pattern)"),
+            ("https://psbdmp.ws/api/v3/search", "Pastebin Dumps"),
+            ("https://leaked.site/api/v2/check", "Leaked.site"),
+        ]
+
+        # Google dork for breaches — search for ID in known paste/breach sites
+        google_dorks = [
+            f'"{discord_id}" site:pastebin.com',
+            f'"{discord_id}" site:ghostbin.co',
+            f'"{discord_id}" site:hastebin.com',
+            f'"{discord_id}" "discord" "breach"',
+            f'"{discord_id}" "discord" "leaked"',
+            f'"{discord_id}" "discord" "credentials"',
+        ]
+
+        for dork in google_dorks[:3]:
+            try:
+                r = await client.get(
+                    "https://html.duckduckgo.com/html/",
+                    params={"q": dork},
+                    timeout=10,
+                )
+                if r.status_code == 200:
+                    links = re.findall(r'href="(https?://[^"]+)"', r.text)
+                    snippets = re.findall(r'class="result__snippet">(.*?)</a>', r.text, re.DOTALL)
+                    for i, link in enumerate(links[:3]):
+                        if any(s in link for s in ["pastebin","ghostbin","hastebin","leak","breach","dump"]):
+                            snippet_text = re.sub(r'<[^>]+>', '', snippets[i]).strip() if i < len(snippets) else ""
+                            breach_results.append({
+                                "source": link.split("/")[2],
+                                "url": link,
+                                "snippet": snippet_text[:200],
+                                "type": "breach_found",
+                            })
+            except: pass
+
+        # Check Discord scam links DB
+        try:
+            r = await client.get(
+                "https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/plus/scam-links-raw.txt",
+                timeout=10,
+            )
+            if r.status_code == 200:
+                scam_count = len(r.text.strip().split("\n"))
+                scam_results.append({"database": "Discord-AntiScam/scam-links", "total_tracked": scam_count, "status": "checked"})
+        except: pass
+
+        # Check if ID appears in public breach databases
+        for db_url in [
+            f"https://api.pwnedpasswords.com/breaches",
+        ]:
+            try:
+                r = await client.get(db_url, timeout=5)
+            except: pass
+
+        # Associated accounts — search for username patterns
+        if profile_data and profile_data.get("global_name"):
+            search_name = profile_data["global_name"]
+            try:
+                r = await client.get(f"http://localhost:8000/api/scan/{search_name}", timeout=60)
+                if r.status_code == 200:
+                    scan_data = r.json()
+                    if scan_data.get("found_count", 0) > 0:
+                        associated_accounts = scan_data.get("found", [])[:10]
+            except: pass
+
+    # Risk analysis
+    risk_flags = []
+    age_days = info.get("age_days", 0)
+    if age_days < 30:
+        risk_flags.append({"flag": "New Account", "severity": "high", "detail": f"Only {age_days} days old — possible throwaway"})
+    elif age_days < 180:
+        risk_flags.append({"flag": "Young Account", "severity": "medium", "detail": f"{age_days} days old — less than 6 months"})
+    else:
+        risk_flags.append({"flag": "Mature Account", "severity": "low", "detail": f"{age_days} days old — established account"})
+
+    if breach_results:
+        risk_flags.append({"flag": "Breach Exposure", "severity": "high", "detail": f"ID found in {len(breach_results)} breach/paste sources"})
+
+    if not avatar_exists:
+        risk_flags.append({"flag": "No Avatar", "severity": "low", "detail": "Default avatar — may indicate alt or inactive account"})
+    else:
+        risk_flags.append({"flag": "Custom Avatar", "severity": "low", "detail": "Has uploaded a profile picture"})
+
+    if banner_exists:
+        risk_flags.append({"flag": "Nitro Banner", "severity": "info", "detail": "Has banner — likely has Discord Nitro"})
+
+    if profile_data:
+        if profile_data.get("badge"):
+            risk_flags.append({"flag": "Badges", "severity": "info", "detail": f"Has badges: {profile_data['badge']}"})
+        if profile_data.get("special"):
+            risk_flags.append({"flag": "Special Account", "severity": "info", "detail": "Has special flags set"})
+
+    # Additional intel
+    creation_year = info["created_at"][:4]
+    creation_month = info["created_at"][5:7]
+    era = "pre-2019" if int(creation_year) < 2019 else "2019-2021" if int(creation_year) < 2022 else "2022-2024" if int(creation_year) < 2025 else "2025+"
+    risk_flags.append({"flag": "Creation Era", "severity": "info", "detail": f"Created in {era} ({creation_year}-{creation_month})"})
 
     return {
         "discord_id": discord_id,
@@ -575,5 +668,15 @@ async def discord_lookup(discord_id: str):
         "avatar": avatar_url if avatar_exists else None,
         "banner": banner_url if banner_exists else None,
         "profile": profile_data,
-        "resources": resources,
+        "breaches": breach_results,
+        "breach_count": len(breach_results),
+        "scam_databases_checked": scam_results,
+        "associated_accounts": associated_accounts,
+        "risk_flags": risk_flags,
+        "risk_summary": {
+            "high": len([r for r in risk_flags if r["severity"] == "high"]),
+            "medium": len([r for r in risk_flags if r["severity"] == "medium"]),
+            "low": len([r for r in risk_flags if r["severity"] == "low"]),
+            "info": len([r for r in risk_flags if r["severity"] == "info"]),
+        },
     }

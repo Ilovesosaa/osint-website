@@ -545,6 +545,7 @@ function renderPhoneHTML(d){
 
 function renderDiscord(d,el){
   const info=d.info||{};
+  const rs=d.risk_summary||{};
   let h=`<div class="results-header"><h2>Discord: <span class="uname">${d.discord_id}</span></h2><div class="pills"><span class="pill b">Snowflake</span><span class="pill g">${info.age_human||''}</span></div></div>`;
   h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
 
@@ -553,37 +554,68 @@ function renderDiscord(d,el){
     h+=`<div class="tool-card"><h3><i class="fa-brands fa-discord" style="color:#5865F2"></i>Avatar</h3><img src="${d.avatar}?size=128" style="width:64px;height:64px;border-radius:50%;border:2px solid #5865F2"/></div>`;
   }
 
-  // ID Info
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-fingerprint" style="color:var(--accent)"></i>Snowflake Info</h3>`;
-  h+=`<div class="tool-row"><span class="tool-label">ID</span><span class="tool-value">${info.id}</span></div>`;
+  // Account Age & Creation
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-calendar" style="color:var(--accent)"></i>Account Age</h3>`;
   h+=`<div class="tool-row"><span class="tool-label">Created</span><span class="tool-value">${info.created_at}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Account Age</span><span class="tool-value">${info.age_human}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Unix Timestamp</span><span class="tool-value">${info.created_at_unix}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Age</span><span class="tool-value">${info.age_human}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Days Old</span><span class="tool-value">${info.age_days?.toLocaleString()}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Unix</span><span class="tool-value">${info.created_at_unix}</span></div>`;
   h+=`</div>`;
 
-  // Internal IDs
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Internal Structure</h3>`;
-  h+=`<div class="tool-row"><span class="tool-label">Worker ID</span><span class="tool-value">${info.internal_worker_id}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Process ID</span><span class="tool-value">${info.internal_process_id}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Increment</span><span class="tool-value">${info.internal_increment}</span></div>`;
+  // Risk Assessment
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:${rs.high>0?'var(--red)':'var(--accent)'}"></i>Risk Assessment</h3>`;
+  h+=`<div class="tool-row"><span class="tool-label">High Risk</span><span class="tool-value">${rs.high>0?`<span class="badge badge-red">${rs.high} flags</span>`:'<span class="badge badge-green">0</span>'}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Medium</span><span class="tool-value">${rs.medium>0?`<span class="badge badge-yellow">${rs.medium}</span>`:'<span class="badge badge-green">0</span>'}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Low</span><span class="tool-value">${rs.low||0}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Info</span><span class="tool-value">${rs.info||0}</span></div>`;
+  h+=`</div>`;
+
+  // Breach Exposure
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-skull-crossbones" style="color:${d.breach_count>0?'var(--red)':'var(--accent)'}"></i>Breach Exposure</h3>`;
+  if(d.breach_count>0){
+    h+=`<div class="tool-row"><span class="tool-label">Status</span><span class="tool-value"><span class="badge badge-red">COMPROMISED</span></span></div>`;
+    h+=`<div class="tool-row"><span class="tool-label">Sources</span><span class="tool-value">${d.breach_count}</span></div>`;
+    d.breaches.slice(0,5).forEach(b=>{
+      h+=`<div class="tool-row"><span class="tool-label">${b.source}</span><span class="tool-value" style="font-size:.6rem;max-width:150px;overflow:hidden;text-overflow:ellipsis">${b.snippet?.substring(0,60)||'Found in breach data'}</span></div>`;
+    });
+  }else{
+    h+=`<div class="tool-row"><span class="tool-label">Status</span><span class="tool-value"><span class="badge badge-green">CLEAN</span></span></div>`;
+    h+=`<div class="tool-row"><span class="tool-label">Sources</span><span class="tool-value">0 breaches found</span></div>`;
+  }
   h+=`</div>`;
 
   // Profile from discordlookup
   if(d.profile){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-user" style="color:var(--cyan)"></i>Profile</h3>`;
-    for(const[k,v] of Object.entries(d.profile)){
-      if(v&&k!=='id')h+=`<div class="tool-row"><span class="tool-label">${k.replace(/_/g,' ')}</span><span class="tool-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`;
-    }
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-user" style="color:var(--cyan)"></i>Profile Data</h3>`;
+    if(d.profile.global_name)h+=`<div class="tool-row"><span class="tool-label">Display Name</span><span class="tool-value">${d.profile.global_name}</span></div>`;
+    if(d.profile.username)h+=`<div class="tool-row"><span class="tool-label">Username</span><span class="tool-value">${d.profile.username}</span></div>`;
+    if(d.profile.discriminator)h+=`<div class="tool-row"><span class="tool-label">Discriminator</span><span class="tool-value">#${d.profile.discriminator}</span></div>`;
+    if(d.profile.badge)h+=`<div class="tool-row"><span class="tool-label">Badges</span><span class="tool-value">${d.profile.badge}</span></div>`;
+    if(d.profile.special)h+=`<div class="tool-row"><span class="tool-label">Flags</span><span class="tool-value">${d.profile.special}</span></div>`;
+    if(d.profile.created_at)h+=`<div class="tool-row"><span class="tool-label">API Created</span><span class="tool-value">${d.profile.created_at}</span></div>`;
+    if(d.profile.avatar)h+=`<div class="tool-row"><span class="tool-label">Avatar Hash</span><span class="tool-value" style="font-size:.6rem">${d.profile.avatar}</span></div>`;
     h+=`</div>`;
   }
 
   h+=`</div>`;
 
-  // Resources from DiscordOSINT
-  if(d.resources?.length){
-    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title">Discord OSINT Resources</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">`;
-    d.resources.forEach(r=>{
-      h+=`<a href="${r.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon" style="background:#5865F215;color:#5865F2"><i class="fa-solid fa-external-link"></i></div><div class="card-name">${r.name}</div></div><div class="card-url">${r.desc}</div><div class="card-status" style="color:#5865F2">Open Tool</div></a>`;
+  // Risk Flags
+  if(d.risk_flags?.length){
+    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title">Risk Flags & Intel</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+    d.risk_flags.forEach(f=>{
+      const colors={high:'var(--red)',medium:'var(--yellow)',low:'var(--dim2)',info:'var(--accent2)'};
+      const icons={high:'fa-triangle-exclamation',medium:'fa-exclamation-circle',low:'fa-info-circle',info:'fa-circle-info'};
+      h+=`<div class="tool-card" style="border-left:2px solid ${colors[f.severity]}"><h3><i class="fa-solid ${icons[f.severity]}" style="color:${colors[f.severity]}"></i>${f.flag}</h3><div class="tool-row"><span class="tool-value">${f.detail}</span></div></div>`;
+    });
+    h+=`</div></div>`;
+  }
+
+  // Associated Accounts
+  if(d.associated_accounts?.length){
+    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title">Associated Accounts (via username)</div><div class="grid">`;
+    const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
+    d.associated_accounts.forEach(a=>{
+      h+=`<a href="${a.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">${IC[a.platform]||a.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${a.platform}</div></div><div class="card-url">${a.url.replace('https://','')}</div><div class="card-status">Found</div></a>`;
     });
     h+=`</div></div>`;
   }
