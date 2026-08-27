@@ -137,6 +137,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
     <div class="sidebar-section">
       <div class="sidebar-label">People</div>
       <div class="sidebar-item" data-page="phone"><i class="fa-solid fa-phone"></i>Phone Lookup</div>
+      <div class="sidebar-item" data-page="discord"><i class="fa-brands fa-discord"></i>Discord ID</div>
       <div class="sidebar-item" data-page="social"><i class="fa-solid fa-share-nodes"></i>Social Scan</div>
     </div>
 
@@ -199,6 +200,7 @@ const P={
   url:{title:'URL Unfurl',badge:'Metadata',placeholder:'https://example.com',btn:'Unfurl',examples:['https://github.com','https://google.com'],api:'/api/url/'},
   wayback:{title:'Wayback Machine',badge:'Archive',placeholder:'example.com',btn:'Check Archive',examples:['google.com','myspace.com','twitter.com'],api:'/api/wayback/'},
   phone:{title:'Phone Lookup',badge:'Carrier + Location',placeholder:'+1234567890',btn:'Lookup',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
+  discord:{title:'Discord ID Lookup',badge:'Snowflake Decoder',placeholder:'Discord ID (e.g. 535045342098489344)',btn:'Lookup',examples:['535045342098489344','804296431879045141'],api:'/api/discord/'},
   social:{title:'Social Scan',badge:'160+ Platforms',placeholder:'Enter username...',btn:'Scan all',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
   steam:{title:'Steam Lookup',badge:'Gaming',placeholder:'Steam username',btn:'Lookup',examples:['gaben'],api:'/api/gaming/steam/'},
   roblox:{title:'Roblox Lookup',badge:'Gaming',placeholder:'Roblox username',btn:'Lookup',examples:['Roblox'],api:'/api/gaming/roblox/'},
@@ -273,6 +275,7 @@ function renderResult(d){
   else if(currentPage==='url')renderURL(d,ra);
   else if(currentPage==='wayback')renderWayback(d,ra);
   else if(currentPage==='phone')renderPhone(d,ra);
+  else if(currentPage==='discord')renderDiscord(d,ra);
   else if(currentPage==='crypto')renderCrypto(d,ra);
   else renderGeneric(d,ra);
 }
@@ -538,6 +541,54 @@ function renderPhoneHTML(d){
   for(const[k,v] of Object.entries(d.format||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
   h+=`</div></div>`;
   return h;
+}
+
+function renderDiscord(d,el){
+  const info=d.info||{};
+  let h=`<div class="results-header"><h2>Discord: <span class="uname">${d.discord_id}</span></h2><div class="pills"><span class="pill b">Snowflake</span><span class="pill g">${info.age_human||''}</span></div></div>`;
+  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
+
+  // Avatar
+  if(d.avatar){
+    h+=`<div class="tool-card"><h3><i class="fa-brands fa-discord" style="color:#5865F2"></i>Avatar</h3><img src="${d.avatar}?size=128" style="width:64px;height:64px;border-radius:50%;border:2px solid #5865F2"/></div>`;
+  }
+
+  // ID Info
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-fingerprint" style="color:var(--accent)"></i>Snowflake Info</h3>`;
+  h+=`<div class="tool-row"><span class="tool-label">ID</span><span class="tool-value">${info.id}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Created</span><span class="tool-value">${info.created_at}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Account Age</span><span class="tool-value">${info.age_human}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Unix Timestamp</span><span class="tool-value">${info.created_at_unix}</span></div>`;
+  h+=`</div>`;
+
+  // Internal IDs
+  h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Internal Structure</h3>`;
+  h+=`<div class="tool-row"><span class="tool-label">Worker ID</span><span class="tool-value">${info.internal_worker_id}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Process ID</span><span class="tool-value">${info.internal_process_id}</span></div>`;
+  h+=`<div class="tool-row"><span class="tool-label">Increment</span><span class="tool-value">${info.internal_increment}</span></div>`;
+  h+=`</div>`;
+
+  // Profile from discordlookup
+  if(d.profile){
+    h+=`<div class="tool-card"><h3><i class="fa-solid fa-user" style="color:var(--cyan)"></i>Profile</h3>`;
+    for(const[k,v] of Object.entries(d.profile)){
+      if(v&&k!=='id')h+=`<div class="tool-row"><span class="tool-label">${k.replace(/_/g,' ')}</span><span class="tool-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`;
+    }
+    h+=`</div>`;
+  }
+
+  h+=`</div>`;
+
+  // Resources from DiscordOSINT
+  if(d.resources?.length){
+    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title">Discord OSINT Resources</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">`;
+    d.resources.forEach(r=>{
+      h+=`<a href="${r.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon" style="background:#5865F215;color:#5865F2"><i class="fa-solid fa-external-link"></i></div><div class="card-name">${r.name}</div></div><div class="card-url">${r.desc}</div><div class="card-status" style="color:#5865F2">Open Tool</div></a>`;
+    });
+    h+=`</div></div>`;
+  }
+
+  el.innerHTML=h;
 }
 
 function renderGeneric(d,el){

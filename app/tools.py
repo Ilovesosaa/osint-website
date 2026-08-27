@@ -499,3 +499,81 @@ async def playstation_lookup(username: str):
                 return {"platform":"playstation","username":username,"found":True,"profile":{"psn_id":name_m.group(1).strip() if name_m else username,"trophies":trophy_m.group(1) if trophy_m else None,"url":f"https://psnprofiles.com/{username}"}}
         except: pass
     return {"platform":"playstation","username":username,"found":False}
+
+# === Discord ID Snowflake Decoder ===
+DISCORD_EPOCH = 1420070400000  # Discord epoch in ms (2015-01-01T00:00:00Z)
+
+def decode_discord_id(discord_id: str):
+    discord_id = discord_id.strip().replace(" ", "")
+    if not discord_id.isdigit():
+        return None
+    snowflake = int(discord_id)
+    timestamp_ms = ((snowflake >> 22) + DISCORD_EPOCH)
+    from datetime import datetime, timezone
+    created_at = datetime.fromtimestamp(timestamp_ms / 1000, tz=timezone.utc)
+    internal_worker_id = (snowflake & 0x3E0000) >> 17
+    internal_process_id = (snowflake & 0x1F000) >> 12
+    internal_increment = snowflake & 0xFFF
+    now = datetime.now(tz=timezone.utc)
+    age = now - created_at
+    return {
+        "id": discord_id,
+        "created_at": created_at.strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "created_at_unix": int(timestamp_ms / 1000),
+        "age_days": age.days,
+        "age_human": f"{age.days // 365}y {(age.days % 365) // 30}mo {age.days % 30}d",
+        "internal_worker_id": internal_worker_id,
+        "internal_process_id": internal_process_id,
+        "internal_increment": internal_increment,
+    }
+
+@router.get("/discord/{discord_id}")
+async def discord_lookup(discord_id: str):
+    info = decode_discord_id(discord_id)
+    if not info:
+        raise HTTPException(400, "Invalid Discord ID — must be a numeric snowflake")
+
+    # External lookups using public APIs
+    avatar_url = f"https://cdn.discordapp.com/avatars/{discord_id}/avatar.png"
+    banner_url = f"https://cdn.discordapp.com/banners/{discord_id}/banner.png"
+
+    # Check avatar exists
+    avatar_exists = False
+    banner_exists = False
+    async with httpx.AsyncClient() as client:
+        try:
+            r = await client.head(avatar_url, timeout=5)
+            avatar_exists = r.status_code == 200
+        except: pass
+        try:
+            r = await client.head(banner_url, timeout=5)
+            banner_exists = r.status_code == 200
+        except: pass
+
+    # External resources from DiscordOSINT
+    resources = [
+        {"name": "Discord ID Creation Date", "url": f"https://hugo.moe/discord/discord-id-creation-date.html", "desc": "Verify creation date"},
+        {"name": "Discord Lookup", "url": f"https://discordlookup.mesavirep.xyz/?user={discord_id}", "desc": "Profile details"},
+        {"name": "Discord Avatar Viewer", "url": f"https://discordzoom.com/en/?id={discord_id}", "desc": "View full avatar"},
+        {"name": "Discohook (Profile)", "url": f"https://discohook.org/?user={discord_id}", "desc": "Profile preview"},
+        {"name": "Google Dork", "url": f"https://www.google.com/search?q=%22{discord_id}%22+discord", "desc": "Search ID on Google"},
+        {"name": "Discord History Tracker", "url": "https://dht.chylex.com/", "desc": "Chat history extraction"},
+    ]
+
+    # Try discordlookup API
+    profile_data = None
+    async with httpx.AsyncClient() as client:
+        try:
+            r = await client.get(f"https://discordlookup.mesavirep.xyz/user/{discord_id}", timeout=8)
+            if r.status_code == 200:
+                profile_data = r.json()
+        except: pass
+
+    return {
+        "discord_id": discord_id,
+        "info": info,
+        "avatar": avatar_url if avatar_exists else None,
+        "banner": banner_url if banner_exists else None,
+        "profile": profile_data,
+        "resources": resources,
+    }
