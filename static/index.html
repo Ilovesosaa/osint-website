@@ -3,98 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSINT Hub — GitHub Module</title>
+<title>OSINT Hub — Multi-Platform</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-  ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:8px}
-  .glass{backdrop-filter:blur(12px);background:rgba(24,24,27,.8)}
-  pre{white-space:pre-wrap;word-break:break-all}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:8px}
+.glass{backdrop-filter:blur(12px);background:rgba(24,24,27,.8)}
+pre{white-space:pre-wrap;word-break:break-all}
+.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 </style>
 </head>
 <body class="bg-[#09090b] text-zinc-100 min-h-screen">
-  <!-- Header -->
-  <header class="sticky top-0 z-20 border-b border-zinc-800 glass">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center font-black">OS</div>
-        <div>
-          <h1 class="font-bold leading-none">OSINT HUB</h1>
-          <p class="text-xs text-zinc-400">GitHub Module • Railway Ready</p>
-        </div>
-        <span class="ml-3 hidden md:inline-flex text-[11px] px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">NO AUTH • 60/hr</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <a href="/docs" target="_blank" id="docsLink" class="text-xs px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 hover:bg-zinc-800">API Docs</a>
-        <a href="https://github.com" target="_blank" class="text-xs px-3 py-2 rounded-lg bg-white text-black font-semibold">GitHub API</a>
-      </div>
+<header class="sticky top-0 z-20 border-b border-zinc-800 glass">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center font-black text-sm">OS</div>
+      <div><h1 class="font-bold leading-none">OSINT HUB</h1><p class="text-[11px] text-zinc-500">Multi-Platform OSINT</p></div>
     </div>
-  </header>
+    <div class="flex gap-2">
+      <a href="/docs" target="_blank" class="text-[11px] px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 hover:bg-zinc-800">API Docs</a>
+    </div>
+  </div>
+</header>
 
-  <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-12 gap-6">
-    <!-- Left nav -->
-    <aside class="col-span-12 lg:col-span-3 space-y-4">
-      <div class="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4">
-        <h2 class="text-sm font-semibold mb-3">Modules</h2>
-        <div class="space-y-2">
-          <button data-tab="user" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl bg-white text-black font-medium text-sm"><i class="fa-solid fa-user mr-2"></i>Username Lookup</button>
-          <button data-tab="emails" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm"><i class="fa-solid fa-envelope mr-2"></i>Email Finder</button>
-          <button data-tab="repo" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm"><i class="fa-solid fa-code-branch mr-2"></i>Repo Analyzer</button>
-          <button data-tab="search" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm"><i class="fa-solid fa-magnifying-glass mr-2"></i>Search</button>
-          <button data-tab="network" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm"><i class="fa-solid fa-diagram-project mr-2"></i>Network Map</button>
-          <button data-tab="org" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm"><i class="fa-solid fa-building mr-2"></i>Org Lookup</button>
-        </div>
-        <div class="mt-4 p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-400">
-          <b class="text-zinc-200">Tip:</b> Add <code class="bg-zinc-800 px-1 rounded">GITHUB_TOKEN</code> in Railway Variables to get 5000 req/hr.
-        </div>
-      </div>
-      <div class="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4">
-        <h3 class="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Railway Deploy</h3>
-        <ol class="mt-2 text-xs space-y-1 text-zinc-300 list-decimal list-inside">
-          <li>Push this folder to GitHub</li>
-          <li>Railway.app → New Project → Deploy from GitHub</li>
-          <li>Auto builds Dockerfile</li>
-          <li>Set <code>PORT</code> handled auto</li>
-        </ol>
-        <div class="mt-3 text-[11px] text-zinc-500">Health: <code>/api/health</code></div>
-      </div>
-    </aside>
+<main class="max-w-7xl mx-auto px-4 py-6">
+  <!-- Platform Selector -->
+  <div class="mb-6 flex flex-wrap gap-2">
+    <button data-platform="github" class="plat-btn active px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 bg-white text-black"><i class="fa-brands fa-github"></i>GitHub</button>
+    <button data-platform="tiktok" class="plat-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800"><i class="fa-brands fa-tiktok"></i>TikTok</button>
+    <button data-platform="instagram" class="plat-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800"><i class="fa-brands fa-instagram"></i>Instagram</button>
+    <button data-platform="twitter" class="plat-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800"><i class="fa-brands fa-x-twitter"></i>Twitter/X</button>
+    <button data-platform="youtube" class="plat-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800"><i class="fa-brands fa-youtube"></i>YouTube</button>
+    <button data-platform="discord" class="plat-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800"><i class="fa-brands fa-discord"></i>Discord</button>
+  </div>
 
-    <!-- Main panel -->
-    <section class="col-span-12 lg:col-span-9 space-y-4">
-      <!-- Global search bar -->
-      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
-        <div id="inputArea" class="flex gap-2">
-          <!-- dynamic -->
-        </div>
-        <div class="mt-3 flex flex-wrap gap-2 text-[11px] text-zinc-500">
-          <span>Try:</span>
-          <button class="example px-2 py-1 rounded-full border border-zinc-800 hover:bg-zinc-800" data-example="torvalds">torvalds</button>
-          <button class="example px-2 py-1 rounded-full border border-zinc-800 hover:bg-zinc-800" data-example="octocat">octocat</button>
-          <button class="example px-2 py-1 rounded-full border border-zinc-800 hover:bg-zinc-800" data-example="vercel/next.js">vercel/next.js</button>
-          <button class="example px-2 py-1 rounded-full border border-zinc-800 hover:bg-zinc-800" data-example="github">github</button>
-        </div>
-      </div>
+  <!-- Search Bar -->
+  <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 mb-4">
+    <div id="inputArea" class="flex gap-2"></div>
+    <div class="mt-3 flex flex-wrap gap-2 text-[11px] text-zinc-500">
+      <span>Try:</span>
+      <div id="examples" class="flex flex-wrap gap-1"></div>
+    </div>
+  </div>
 
-      <!-- Status / error -->
-      <div id="status" class="hidden rounded-xl border px-4 py-3 text-sm"></div>
-
-      <!-- Results -->
-      <div id="results" class="space-y-4">
-        <div class="rounded-2xl border border-dashed border-zinc-800 p-10 text-center">
-          <div class="w-12 h-12 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center"><i class="fa-solid fa-satellite-dish text-zinc-500"></i></div>
-          <h3 class="mt-4 font-semibold">Ready to investigate</h3>
-          <p class="text-sm text-zinc-500 max-w-lg mx-auto">Pick a module on the left, enter a username or repo, and hit Search. This is a 100% frontend + FastAPI wrapper over the public GitHub API — ideal for Railway.</p>
-          <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-left">
-            <div class="rounded-xl bg-zinc-900 border border-zinc-800 p-3"><div class="text-xs text-zinc-500">Endpoint</div><div class="text-xs font-mono">/api/github/user/{u}</div></div>
-            <div class="rounded-xl bg-zinc-900 border border-zinc-800 p-3"><div class="text-xs text-zinc-500">Endpoint</div><div class="text-xs font-mono">/api/github/emails/{u}</div></div>
-            <div class="rounded-xl bg-zinc-900 border border-zinc-800 p-3"><div class="text-xs text-zinc-500">Endpoint</div><div class="text-xs font-mono">/api/github/repo/{o}/{r}</div></div>
-            <div class="rounded-xl bg-zinc-900 border border-zinc-800 p-3"><div class="text-xs text-zinc-500">Endpoint</div><div class="text-xs font-mono">/api/github/network/{u}</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+  <div id="status" class="hidden rounded-xl border px-4 py-3 text-sm mb-4"></div>
+  <div id="results" class="space-y-4">
+    <div class="rounded-2xl border border-dashed border-zinc-800 p-10 text-center">
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center"><i class="fa-solid fa-satellite-dish text-zinc-500"></i></div>
+      <h3 class="mt-4 font-semibold">Pick a platform above and search a username</h3>
+      <p class="text-sm text-zinc-500 max-w-lg mx-auto">Each platform uses public APIs or web scraping — no auth needed. Data varies by platform availability.</p>
+    </div>
+  </div>
+</main>
 
 <script src="/static/app.js"></script>
 </body>

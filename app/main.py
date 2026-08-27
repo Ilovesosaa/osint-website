@@ -4,6 +4,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from .github import router as github_router
+from .tiktok import router as tiktok_router
+from .instagram import router as instagram_router
+from .twitter import router as twitter_router
+from .youtube import router as youtube_router
+from .discord import router as discord_router
 
 app = FastAPI(
     title="OSINT Website - GitHub Module",
@@ -20,19 +25,26 @@ app.add_middleware(
 )
 
 app.include_router(github_router)
+app.include_router(tiktok_router)
+app.include_router(instagram_router)
+app.include_router(twitter_router)
+app.include_router(youtube_router)
+app.include_router(discord_router)
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "version": "1.0.0", "modules": ["github"]}
+    return {"status": "ok", "version": "1.0.0", "modules": ["github", "tiktok", "instagram", "twitter", "youtube", "discord"]}
 
 @app.get("/api/modules")
 async def modules():
     return {
         "available": [
             {"id": "github", "name": "GitHub OSINT", "status": "active", "endpoints": 7},
-            {"id": "instagram", "name": "Instagram OSINT", "status": "planned"},
-            {"id": "domain", "name": "Domain OSINT", "status": "planned"},
-            {"id": "email", "name": "Email OSINT", "status": "planned"},
+            {"id": "tiktok", "name": "TikTok OSINT", "status": "active", "endpoints": 3},
+            {"id": "instagram", "name": "Instagram OSINT", "status": "active", "endpoints": 2},
+            {"id": "twitter", "name": "Twitter/X OSINT", "status": "active", "endpoints": 2},
+            {"id": "youtube", "name": "YouTube OSINT", "status": "active", "endpoints": 3},
+            {"id": "discord", "name": "Discord OSINT", "status": "active", "endpoints": 3},
         ]
     }
 

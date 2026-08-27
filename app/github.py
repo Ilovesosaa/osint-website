@@ -24,11 +24,13 @@ def get_headers():
 async def gh_get(client: httpx.AsyncClient, path: str, params=None):
     url = f"{GITHUB_API}{path}"
     r = await client.get(url, headers=get_headers(), params=params, timeout=15)
+    # If token is bad, retry without auth
+    if r.status_code == 401 and os.getenv("GITHUB_TOKEN"):
+        r = await client.get(url, headers=HEADERS, params=params, timeout=15)
     if r.status_code == 404:
         raise HTTPException(status_code=404, detail=f"Not found: {path}")
     if r.status_code == 403:
-        # rate limited
-        raise HTTPException(status_code=429, detail=f"GitHub rate limited (60/hr without token). Try adding GITHUB_TOKEN. Body: {r.text[:300]}")
+        raise HTTPException(status_code=429, detail=f"GitHub rate limited (60/hr without token). Body: {r.text[:300]}")
     if r.status_code != 200:
         raise HTTPException(status_code=r.status_code, detail=r.text[:500])
     return r.json(), dict(r.headers)
