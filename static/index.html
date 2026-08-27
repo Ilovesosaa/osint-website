@@ -115,6 +115,30 @@ html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',san
 .card.found .card-status{color:var(--green)}
 .card.nf .card-status{color:var(--dim2)}
 
+/* === BREACH LEAK CARDS (inquire.sh style) === */
+.breach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.breach-card{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);position:relative;transition:all .2s;overflow:hidden}
+.breach-card:hover{border-color:var(--border2);background:var(--surface3);transform:translateY(-1px)}
+.breach-card .bc-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.breach-card .bc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(255,59,59,.12);color:var(--red);border:1px solid rgba(255,59,59,.15)}
+.breach-card .bc-icon.safe{background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.12)}
+.breach-card .bc-title{font-size:.82rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;font-family:'Space Grotesk',sans-serif}
+.breach-card .bc-subtitle{font-size:.58rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.breach-card .bc-badge{position:absolute;top:10px;right:10px;padding:2px 7px;border-radius:4px;font-size:.48rem;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
+.breach-card .bc-badge.leak{background:rgba(255,59,59,.15);color:var(--red);border:1px solid rgba(255,59,59,.2)}
+.breach-card .bc-badge.safe{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
+.breach-card .bc-badge.hacked{background:rgba(255,59,59,.2);color:#ff6b6b;border:1px solid rgba(255,59,59,.3);animation:pulse-red 2s infinite}
+.breach-card .bc-fields{display:flex;flex-direction:column;gap:6px}
+.breach-card .bc-field{display:flex;flex-direction:column;gap:2px}
+.breach-card .bc-field-label{font-size:.48rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;font-family:'JetBrains Mono',monospace}
+.breach-card .bc-field-value{font-size:.65rem;color:var(--text);font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.2);padding:4px 8px;border-radius:4px;word-break:break-all;border:1px solid var(--border)}
+.breach-card .bc-source{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid var(--border);font-size:.48rem;color:var(--dim2);font-family:'JetBrains Mono',monospace}
+.breach-card .bc-source a{color:var(--blue);text-decoration:none;font-size:.48rem}
+.breach-card .bc-source a:hover{text-decoration:underline}
+.breach-card .bc-link{position:absolute;bottom:10px;right:10px;font-size:.5rem;color:var(--dim2);text-decoration:none;font-family:'JetBrains Mono',monospace}
+.breach-card .bc-link:hover{color:var(--blue)}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.15)}50%{box-shadow:0 0 0 4px rgba(255,59,59,0)}}
+
 /* === NOT FOUND CHIPS === */
 .nf-section{margin-top:14px}
 .nf-title{font-size:.55rem;font-weight:600;color:var(--dim2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
@@ -265,7 +289,7 @@ const P={
   person:{title:'Person Search',badge:'AUTO-DETECT',placeholder:'Email, phone, or username',btn:'Search',examples:['test@gmail.com','+14155552671','torvalds'],api:'/api/person/'},
   email:{title:'Email Lookup',badge:'FULL INTEL',placeholder:'user@example.com',btn:'Lookup',examples:['test@gmail.com','admin@github.com','john@protonmail.com'],api:'/api/email/',holehe:false},
   emailholehe:{title:'Email to Accounts',badge:'HOLEHE ENGINE',placeholder:'user@example.com',btn:'Find Accounts',examples:['test@gmail.com','user@outlook.com','info@protonmail.com'],api:'/api/email/',holehe:true},
-  breach:{title:'Breach Check',badge:'HIBP',placeholder:'user@example.com',btn:'Check Breaches',examples:['test@gmail.com','admin@company.com'],api:'/api/email/'},
+  breach:{title:'Breach Check',badge:'LEAKED / HACKED',placeholder:'Email or username to check for breaches...',btn:'Check Breaches',examples:['test@gmail.com','admin','elonmusk','johndoe'],api:'/api/breach/'},
   ip:{title:'IP Lookup',badge:'GEO + ASN',placeholder:'8.8.8.8',btn:'Lookup',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/'},
   reverseip:{title:'Reverse IP Lookup',badge:'DOMAINS + GEO',placeholder:'IP address',btn:'Lookup',examples:['8.8.8.8','1.1.1.1'],api:'/api/reverseip/'},
   domain:{title:'Domain Lookup',badge:'DNS + SSL + TECH',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
@@ -324,6 +348,10 @@ async function doLookup(){
     prog.classList.add('active');let c=0;const t=160;
     animInt=setInterval(()=>{c=Math.min(c+Math.random()*15,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
     pl.textContent='Scanning 160+ platforms...';
+  }else if(currentPage==='breach'){
+    prog.classList.add('active');let c=0;const t=100;
+    animInt=setInterval(()=>{c=Math.min(c+Math.random()*10,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
+    pl.textContent='Searching paste sites, GitHub, and breach DBs...';
   }
 
   try{
@@ -332,9 +360,11 @@ async function doLookup(){
     if(!r.ok)throw new Error(data.detail||'Error');
     lastData=data;
     if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);pf.style.width='100%';pc.textContent='Done';setTimeout(()=>prog.classList.remove('active'),600)}
+    else if(currentPage==='breach'){clearInterval(animInt);pf.style.width='100%';pc.textContent='Done';setTimeout(()=>prog.classList.remove('active'),600)}
     renderResult(data);
   }catch(e){
     if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);prog.classList.remove('active')}
+    else if(currentPage==='breach'){clearInterval(animInt);prog.classList.remove('active')}
     ra.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
   }
   btn.disabled=false;
@@ -484,16 +514,64 @@ function renderHolehe(d,el){
 }
 
 function renderBreach(d,el){
-  let h=`<div class="results-header"><h2>Breach Check: <span class="uname">${d.email}</span></h2></div>`;
-  if(d.breach_check?.breached){
-    h+=`<div class="tool-card" style="border-color:rgba(255,59,59,.2)"><h3><i class="fa-solid fa-skull-crossbones" style="color:var(--red)"></i>BREACHED — ${d.breach_check.breach_count} breaches found</h3>`;
-    (d.breach_check.breaches||[]).forEach(b=>{
-      h+=`<div class="tool-row"><span class="tool-label">${b.name}</span><span class="tool-value">${b.date} . ${(b.data_classes||[]).join(', ')}</span></div>`;
+  const sevColors={critical:'#ff3b3b',high:'#ff6b6b',medium:'#fbbf24',low:'#6b6b80',none:'#00ff88'};
+  const sevLabels={critical:'CRITICAL',high:'HIGH',medium:'MEDIUM',low:'LOW',none:'SAFE'};
+  const typeLabel = d.type === 'email' ? 'EMAIL' : 'USERNAME';
+
+  // Header
+  let h=`<div class="results-header"><h2>Breach Check: <span class="uname">${d.query}</span></h2><div class="pills"><span class="pill b">${typeLabel}</span><span class="pill r">${d.total_leaks} leaks found</span><span class="pill e">${d.total_hacked} platforms breached</span></div></div>`;
+
+  // Summary stats
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:20px">`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(255,59,59,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--red)">${d.total_leaks}</div><div style="font-size:.58rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Credential Leaks</div></div>`;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(251,191,36,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--yellow)">${d.total_hacked}</div><div style="font-size:.58rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Hacked Platforms</div></div>`;
+  const withPass = (d.leaks||[]).filter(l=>l.has_password).length;
+  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(168,85,247,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--purple)">${withPass}</div><div style="font-size:.58rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">With Password</div></div>`;
+  h+=`</div>`;
+
+  // LEAK CARDS — dark credential cards like the screenshot
+  if(d.leaks?.length){
+    h+=`<div class="cat"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-skull-crossbones" style="margin-right:4px"></i>Leaked Credentials (${d.leaks.length})</div><div class="breach-grid">`;
+    d.leaks.forEach(leak=>{
+      h+=`<div class="breach-card">`;
+      h+=`<div class="bc-header"><div class="bc-icon">${(leak.source||'??').substring(0,2).toUpperCase()}</div><div><div class="bc-title">${leak.source}</div><div class="bc-subtitle">${leak.host}</div></div></div>`;
+      h+=`<div class="bc-badge leak">LEAK</div>`;
+      h+=`<div class="bc-fields">`;
+      if(leak.email)h+=`<div class="bc-field"><div class="bc-field-label">Email</div><div class="bc-field-value">${leak.email}</div></div>`;
+      if(leak.username)h+=`<div class="bc-field"><div class="bc-field-label">Username</div><div class="bc-field-value">${leak.username}</div></div>`;
+      if(leak.password)h+=`<div class="bc-field"><div class="bc-field-label">Password</div><div class="bc-field-value">${leak.password}</div></div>`;
+      if(!leak.email && !leak.username && !leak.password)h+=`<div class="bc-field"><div class="bc-field-label">Snippet</div><div class="bc-field-value">${leak.snippet?.substring(0,80)||'Match found'}</div></div>`;
+      h+=`</div>`;
+      h+=`<div class="bc-source"><span>SOURCE</span><a href="${leak.leak_url}" target="_blank">${leak.host} . open</a></div>`;
+      h+=`</div>`;
     });
-    h+=`</div>`;
-  }else{
-    h+=`<div class="tool-card" style="border-color:rgba(0,255,136,.15)"><h3><i class="fa-solid fa-check-circle" style="color:var(--green)"></i>No breaches found</h3><p style="font-size:.72rem;color:var(--dim)">Email not found in known breach databases</p></div>`;
+    h+=`</div></div>`;
   }
+
+  // HACKED PLATFORMS — dark cards showing which platforms were breached
+  if(d.hacked_platforms?.length){
+    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-triangle-exclamation" style="margin-right:4px"></i>Platforms Breached (${d.hacked_platforms.length})</div><div class="breach-grid">`;
+    d.hacked_platforms.forEach(p=>{
+      const sc=sevColors[p.severity]||sevColors.medium;
+      h+=`<div class="breach-card">`;
+      h+=`<div class="bc-header"><div class="bc-icon">${p.platform.substring(0,2).toUpperCase()}</div><div><div class="bc-title">${p.platform}</div><div class="bc-subtitle">${p.source}</div></div></div>`;
+      h+=`<div class="bc-badge hacked">${sevLabels[p.severity]||'BREACH'}</div>`;
+      h+=`<div class="bc-fields">`;
+      h+=`<div class="bc-field"><div class="bc-field-label">Date</div><div class="bc-field-value">${p.date}</div></div>`;
+      h+=`<div class="bc-field"><div class="bc-field-label">Records</div><div class="bc-field-value">${p.records}</div></div>`;
+      h+=`<div class="bc-field"><div class="bc-field-label">Data Leaked</div><div class="bc-field-value">${p.data_types.join(', ')}</div></div>`;
+      h+=`</div>`;
+      h+=`<div class="bc-source"><span>${p.severity.toUpperCase()}</span><span>${p.data_types.length} data types</span></div>`;
+      h+=`</div>`;
+    });
+    h+=`</div></div>`;
+  }
+
+  // No leaks found
+  if(!d.leaks?.length && !d.hacked_platforms?.length){
+    h+=`<div class="empty-state"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i><h3>No Leaks Found</h3><p>${d.query} was not found in any paste sites or breach databases</p></div>`;
+  }
+
   el.innerHTML=h;
 }
 

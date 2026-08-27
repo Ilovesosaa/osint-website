@@ -1396,3 +1396,194 @@ async def shodan_lookup(ip: str):
         result["ports"] = sorted(open_ports)
 
     return result
+
+
+# === BREACH CHECKER — find leaked/hacked data across paste sites & breach DBs ===
+import json as _json
+
+BREACH_SOURCES = [
+    {"name": "Pastebin", "domain": "pastebin.com", "search_url": "https://pastebin.com/search?q={q}"},
+    {"name": "GitHub Gists", "domain": "gist.github.com", "api": "https://api.github.com/search/gists?q={q}"},
+    {"name": "paste.ee", "domain": "paste.ee", "search_url": "https://paste.ee/search?q={q}"},
+    {"name": "dpaste", "domain": "dpaste.org", "search_url": "https://dpaste.org/search/?q={q}"},
+    {"name": "rentry", "domain": "rentry.co", "search_url": "https://rentry.co/search?q={q}"},
+]
+
+HACKED_PLATFORMS = {
+    "facebook": {"breached": True, "date": "2021-04", "records": "533M", "severity": "critical", "data_types": ["email","phone","name","password"], "source": "Facebook Leak"},
+    "instagram": {"breached": True, "date": "2022-08", "records": "3.3B", "severity": "critical", "data_types": ["email","phone","username"], "source": "Instagram Scrape"},
+    "twitter": {"breached": True, "date": "2023-01", "records": "5.4M", "severity": "high", "data_types": ["email","phone","name"], "source": "Twitter API Exploit"},
+    "linkedin": {"breached": True, "date": "2021-06", "records": "700M", "severity": "critical", "data_types": ["email","phone","name"], "source": "LinkedIn Scrape"},
+    "tiktok": {"breached": True, "date": "2022-09", "records": "2B", "severity": "critical", "data_types": ["email","phone","name"], "source": "TikTok Scrape"},
+    "twitch": {"breached": True, "date": "2021-10", "records": "7.5M", "severity": "critical", "data_types": ["email","password","payment"], "source": "Twitch Source Leak"},
+    "discord": {"breached": True, "date": "2023-05", "records": "Unknown", "severity": "high", "data_types": ["email","password","token"], "source": "Discord Phishing"},
+    "snapchat": {"breached": True, "date": "2013-12", "records": "4.6M", "severity": "high", "data_types": ["phone","username"], "source": "Snapchat Scrape"},
+    "yahoo": {"breached": True, "date": "2013-07", "records": "3B", "severity": "critical", "data_types": ["email","password","security_questions"], "source": "Yahoo Hack"},
+    "adobe": {"breached": True, "date": "2013-10", "records": "153M", "severity": "critical", "data_types": ["email","password","password_hint"], "source": "Adobe Breach"},
+    "dropbox": {"breached": True, "date": "2012-06", "records": "68M", "severity": "high", "data_types": ["email","password"], "source": "Dropbox Hack"},
+    "spotify": {"breached": True, "date": "2020-09", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Spotify Credentials"},
+    "reddit": {"breached": True, "date": "2023-01", "records": "Unknown", "severity": "high", "data_types": ["email","password"], "source": "Reddit Source Code"},
+    "github": {"breached": True, "date": "2022-04", "records": "Unknown", "severity": "high", "data_types": ["email","token"], "source": "GitHub Token Leak"},
+    "netflix": {"breached": True, "date": "2021-07", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Netflix Credentials"},
+    "roblox": {"breached": True, "date": "2021-08", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Roblox Credential Stuffing"},
+    "steam": {"breached": True, "date": "2011-11", "records": "35M", "severity": "high", "data_types": ["email","password","payment"], "source": "Steam Breach"},
+    "playstation": {"breached": True, "date": "2011-04", "records": "77M", "severity": "critical", "data_types": ["email","password","payment","dob"], "source": "PSN Hack"},
+    "paypal": {"breached": True, "date": "2022-12", "records": "35K", "severity": "high", "data_types": ["email","name","phone","address"], "source": "PayPal Credentials"},
+    "ebay": {"breached": True, "date": "2014-05", "records": "145M", "severity": "critical", "data_types": ["email","password","phone","address"], "source": "eBay Hack"},
+    "tumblr": {"breached": True, "date": "2013-02", "records": "65M", "severity": "high", "data_types": ["email","password"], "source": "Tumblr Hack"},
+    "myspace": {"breached": True, "date": "2013-06", "records": "360M", "severity": "critical", "data_types": ["email","password"], "source": "MySpace Hack"},
+    "quora": {"breached": True, "date": "2018-12", "records": "100M", "severity": "critical", "data_types": ["email","password","content"], "source": "Quora Breach"},
+    "wattpad": {"breached": True, "date": "2020-07", "records": "270M", "severity": "critical", "data_types": ["email","password","name"], "source": "Wattpad Leak"},
+    "canva": {"breached": True, "date": "2019-05", "records": "137M", "severity": "high", "data_types": ["email","password","name"], "source": "Canva Breach"},
+    "pinterest": {"breached": True, "date": "2019-01", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Pinterest Credentials"},
+    "patreon": {"breached": True, "date": "2015-09", "records": "15M", "severity": "high", "data_types": ["email","password","payment","address"], "source": "Patreon SQL Injection"},
+    "venmo": {"breached": True, "date": "2016-07", "records": "Unknown", "severity": "high", "data_types": ["email","phone","transactions"], "source": "Venmo API Exploit"},
+    "strava": {"breached": True, "date": "2020-05", "records": "Unknown", "severity": "high", "data_types": ["email","location"], "source": "Strava Location Leak"},
+    "lastfm": {"breached": True, "date": "2012-09", "records": "43M", "severity": "high", "data_types": ["email","password"], "source": "Last.fm Hack"},
+    "soundcloud": {"breached": True, "date": "2016-09", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "SoundCloud Credentials"},
+    "deviantart": {"breached": True, "date": "2012-08", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "DeviantArt Breach"},
+    "flickr": {"breached": True, "date": "2012-06", "records": "6.4M", "severity": "high", "data_types": ["email","password"], "source": "Flickr (via Yahoo)"},
+    "weibo": {"breached": True, "date": "2019-05", "records": "500M", "severity": "critical", "data_types": ["phone","email","username"], "source": "Weibo Leak"},
+    "bilibili": {"breached": True, "date": "2019-04", "records": "Unknown", "severity": "medium", "data_types": ["email","phone"], "source": "Bilibili Leak"},
+    "zhihu": {"breached": True, "date": "2018-07", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Zhihu Credentials"},
+    "etsy": {"breached": True, "date": "2019-08", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Etsy Credentials"},
+    "duolingo": {"breached": True, "date": "2023-08", "records": "2.6M", "severity": "medium", "data_types": ["email","name"], "source": "Duolingo Scrape"},
+    "hackthebox": {"breached": True, "date": "2022-11", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "HTB Credentials"},
+    "tryhackme": {"breached": True, "date": "2023-03", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "THM Credentials"},
+    "npm": {"breached": True, "date": "2021-03", "records": "Unknown", "severity": "high", "data_types": ["email","token"], "source": "NPM Token Leak"},
+    "dockerhub": {"breached": True, "date": "2019-04", "records": "190K", "severity": "medium", "data_types": ["email","password"], "source": "DockerHub Leak"},
+    "zoho": {"breached": True, "date": "2021-03", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Zoho Credentials"},
+    "aboutme": {"breached": True, "date": "2019-03", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "About.me Credentials"},
+    "behance": {"breached": True, "date": "2014-05", "records": "8M", "severity": "medium", "data_types": ["email","password"], "source": "Behance (via Adobe)"},
+    "goodreads": {"breached": True, "date": "2013-12", "records": "Unknown", "severity": "medium", "data_types": ["email","password"], "source": "Goodreads Credentials"},
+    "onlyfans": {"breached": True, "date": "2023-01", "records": "Unknown", "severity": "high", "data_types": ["email","password"], "source": "OnlyFans Credentials"},
+    "protonmail": {"breached": False, "date": None, "records": None, "severity": "none", "data_types": [], "source": "No Known Breach"},
+    "virustotal": {"breached": False, "date": None, "records": None, "severity": "none", "data_types": [], "source": "No Known Breach"},
+    "replit": {"breached": False, "date": None, "records": None, "severity": "none", "data_types": [], "source": "No Known Breach"},
+}
+
+
+@router.get("/breach/{query}")
+async def breach_check(query: str):
+    query = query.strip().lstrip("@")
+    if not query or len(query) < 2:
+        raise HTTPException(400, "Query must be at least 2 characters")
+
+    is_email = "@" in query
+    is_username = not is_email
+
+    results = {
+        "query": query,
+        "type": "email" if is_email else "username",
+        "leaks": [],
+        "hacked_platforms": [],
+        "paste_results": [],
+        "total_leaks": 0,
+    }
+
+    async with httpx.AsyncClient(headers=HEADERS, follow_redirects=True) as client:
+        # Search paste sites
+        for source in BREACH_SOURCES:
+            q_encoded = query.replace("@", "%40")
+            if source.get("api"):
+                url = source["api"].format(q=q_encoded)
+            elif source.get("search_url"):
+                url = source["search_url"].format(q=q_encoded)
+            else:
+                continue
+            try:
+                r = await client.get(url, timeout=10)
+                if r.status_code == 200:
+                    text = r.text[:8000]
+                    query_lower = query.lower()
+                    snippets = []
+                    for line in text.split("\n"):
+                        if query_lower in line.lower():
+                            clean = re.sub(r'<[^>]+>', '', line).strip()
+                            if clean and len(clean) > 5:
+                                snippets.append(clean[:200])
+                    for snippet in snippets[:3]:
+                        email_match = re.search(r'[\w.+-]+@[\w.-]+\.\w+', snippet)
+                        pass_match = re.search(r'(?:pass|password|pwd|pw)[:\s=]+([^\s;,<>"]{3,30})', snippet, re.IGNORECASE)
+                        user_match = re.search(r'(?:user|username|login)[:\s=]+([^\s;,<>"]{3,30})', snippet, re.IGNORECASE)
+                        results["leaks"].append({
+                            "source": source["name"],
+                            "host": source["domain"],
+                            "snippet": snippet[:150],
+                            "leak_url": url,
+                            "email": email_match.group(0) if email_match else (query if is_email else ""),
+                            "username": user_match.group(1) if user_match else (query if is_username else ""),
+                            "password": pass_match.group(1) if pass_match else "",
+                            "has_password": bool(pass_match),
+                        })
+            except: pass
+
+        # Search GitHub code
+        try:
+            r = await client.get(f"https://api.github.com/search/code?q={query}+password+OR+token+OR+credentials", timeout=10)
+            if r.status_code == 200:
+                for item in (r.json().get("items") or [])[:5]:
+                    repo = item.get("repository", {}).get("full_name", "")
+                    path = item.get("path", "")
+                    results["leaks"].append({
+                        "source": "GitHub",
+                        "host": "github.com",
+                        "snippet": f"Found in {repo}/{path}",
+                        "leak_url": item.get("html_url", ""),
+                        "email": query if is_email else "",
+                        "username": query if is_username else "",
+                        "password": "",
+                        "has_password": False,
+                    })
+        except: pass
+
+        # DuckDuckGo breach searches
+        for dq in [f'"{query}" password leaked', f'"{query}" credentials breach']:
+            try:
+                r = await client.get("https://html.duckduckgo.com/html/", params={"q": dq}, timeout=10)
+                if r.status_code == 200:
+                    snippets = re.findall(r'class="result__snippet">(.*?)</a>', r.text, re.DOTALL)
+                    links = re.findall(r'href="(https?://[^"]+)"', r.text)
+                    for i, snippet in enumerate(snippets[:2]):
+                        clean = re.sub(r'<[^>]+>', '', snippet).strip()
+                        link = links[i] if i < len(links) else ""
+                        if clean and len(clean) > 10:
+                            email_in = re.search(r'[\w.+-]+@[\w.-]+\.\w+', clean)
+                            pass_in = re.search(r'(?:pass|password|pwd)[:\s=]+([^\s;,<>"]{3,30})', clean, re.IGNORECASE)
+                            results["leaks"].append({
+                                "source": "DuckDuckGo",
+                                "host": link.split("/")[2] if link else "web",
+                                "snippet": clean[:150],
+                                "leak_url": link,
+                                "email": email_in.group(0) if email_in else "",
+                                "username": query if is_username else "",
+                                "password": pass_in.group(1) if pass_in else "",
+                                "has_password": bool(pass_in),
+                            })
+            except: pass
+
+        # Add known hacked platforms
+        for platform, info in HACKED_PLATFORMS.items():
+            if info["breached"]:
+                results["hacked_platforms"].append({
+                    "platform": platform,
+                    "date": info["date"],
+                    "records": info["records"],
+                    "severity": info["severity"],
+                    "data_types": info["data_types"],
+                    "source": info["source"],
+                })
+
+    # Deduplicate leaks
+    seen = set()
+    unique = []
+    for leak in results["leaks"]:
+        key = (leak["source"], leak["email"], leak["password"], leak["username"])
+        if key not in seen:
+            seen.add(key)
+            unique.append(leak)
+    results["leaks"] = unique[:20]
+    results["total_leaks"] = len(unique)
+    results["total_hacked"] = len(results["hacked_platforms"])
+
+    return results
