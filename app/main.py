@@ -1,7 +1,7 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from .scan import router as scan_router
 from .tools import router as tools_router
@@ -18,12 +18,16 @@ async def health():
 static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "static"))
 if os.path.exists(static_dir):
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
     @app.get("/")
     async def index():
         return FileResponse(os.path.join(static_dir, "index.html"))
-    @app.get("/{path:path}")
-    async def spa(path: str):
-        fp = os.path.join(static_dir, path)
-        if path and os.path.isfile(fp):
-            return FileResponse(fp)
-        return FileResponse(os.path.join(static_dir, "index.html"))
+
+@app.middleware("http")
+async def spa_fallback(request: Request, call_next):
+    response = await call_next(request)
+    if response.status_code == 404 and not request.url.path.startswith("/api") and not request.url.path.startswith("/static"):
+        index_path = os.path.join(static_dir, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+    return response
