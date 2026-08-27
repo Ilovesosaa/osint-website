@@ -142,19 +142,52 @@ async def email_lookup(email: str):
                 results["mx_records"] = [a.get("data","") for a in data.get("Answer",[]) if a.get("type")==15]
         except: pass
 
-        # DNS security
-        for rtype in ["TXT","DMARC"]:
+        # DNS security — SPF
+        try:
+            r = await client.get(f"https://dns.google/resolve?name={domain}&type=TXT", timeout=10)
+            if r.status_code == 200:
+                data = r.json()
+                answers = [a.get("data","") for a in data.get("Answer",[])]
+                results["dns_security"]["SPF"] = [a for a in answers if "spf" in a.lower()]
+        except: pass
+
+        # DMARC
+        try:
+            r = await client.get(f"https://dns.google/resolve?name=_dmarc.{domain}&type=TXT", timeout=10)
+            if r.status_code == 200:
+                data = r.json()
+                answers = [a.get("data","") for a in data.get("Answer",[])]
+                results["dns_security"]["DMARC"] = answers
+                # Parse DMARC policy
+                for ans in answers:
+                    if "p=reject" in ans.lower():
+                        results["dns_security"]["dmarc_policy"] = "reject"
+                    elif "p=quarantine" in ans.lower():
+                        results["dns_security"]["dmarc_policy"] = "quarantine"
+                    elif "p=none" in ans.lower():
+                        results["dns_security"]["dmarc_policy"] = "none"
+        except: pass
+
+        # DKIM (common selectors)
+        dkim_selectors = ["default","google","selector1","selector2","k1","mandrill","s1","s2","smoke","protonmail","everlytickey1","dkim","mail"]
+        results["dns_security"]["DKIM"] = []
+        for sel in dkim_selectors:
             try:
-                q = f"_dmarc.{domain}" if rtype == "DMARC" else domain
-                r = await client.get(f"https://dns.google/resolve?name={q}&type=TXT", timeout=10)
+                r = await client.get(f"https://dns.google/resolve?name={sel}._domainkey.{domain}&type=TXT", timeout=5)
                 if r.status_code == 200:
                     data = r.json()
-                    answers = [a.get("data","") for a in data.get("Answer",[])]
-                    if rtype == "TXT":
-                        results["dns_security"]["SPF"] = [a for a in answers if "spf" in a.lower()]
-                    else:
-                        results["dns_security"]["DMARC"] = answers
+                    if data.get("Answer"):
+                        results["dns_security"]["DKIM"].append({"selector": sel, "records": [a.get("data","") for a in data["Answer"]]})
             except: pass
+
+        # BIMI
+        try:
+            r = await client.get(f"https://dns.google/resolve?name=default._bimi.{domain}&type=TXT", timeout=5)
+            if r.status_code == 200:
+                data = r.json()
+                if data.get("Answer"):
+                    results["dns_security"]["BIMI"] = [a.get("data","") for a in data["Answer"]]
+        except: pass
 
         # Disposable check
         disposable_domains = ["tempmail.com","throwaway.email","guerrillamail.com","mailinator.com","yopmail.com","10minutemail.com","trashmail.com","fakeinbox.com","sharklasers.com","guerrillamailblock.com","grr.la","dispostable.com","tempail.com","temp-mail.org","mohmal.com","burnermail.io","getnada.com","emailondeck.com","33mail.com","mytemp.email","tmpmail.net","discard.email","maildrop.cc","harakirimail.com","tmail.io","tmpmail.org"]
@@ -208,12 +241,35 @@ async def ip_lookup(ip: str):
         except: pass
 
         ip_rev = ".".join(reversed(ip.split(".")))
-        for bl in ["zen.spamhaus.org","bl.spamcop.net","b.barracudacentral.org"]:
+        blacklists = [
+            ("zen.spamhaus.org", "Spamhaus"),
+            ("bl.spamcop.net", "SpamCop"),
+            ("b.barracudacentral.org", "Barracuda"),
+            ("dnsbl-1.uceprotect.net", "UCEPROTECT L1"),
+            ("dnsbl-2.uceprotect.net", "UCEPROTECT L2"),
+            ("dnsbl-3.uceprotect.net", "UCEPROTECT L3"),
+            ("cbl.abuseat.org", "AbuseAt CBL"),
+            ("dnsbl.sorbs.net", "SORBS"),
+            ("spam.dnsbl.sorbs.net", "SORBS Spam"),
+            ("dul.dnsbl.sorbs.net", "SORBS DUL"),
+            ("dyna.spamrats.com", "SpamRats Dyna"),
+            ("noptr.spamrats.com", "SpamRats NoPtr"),
+            ("spam.spamrats.com", "SpamRats Spam"),
+            ("bl.deadbeef.com", "DeadBeef"),
+            ("db.wpbl.info", "WPBL"),
+            ("dnsbl.dronebl.org", "DroneBL"),
+            ("rbl.interserver.net", "InterServer"),
+            ("ipspamlist.com", "IPSpamList"),
+            ("netscan.rbl.com.au", "NetScan RBL"),
+            ("all.s5h.net", "S5H"),
+            ("rbl.interserver.net", "InterServer"),
+        ]
+        for bl_url, bl_name in blacklists:
             try:
-                socket.gethostbyname(f"{ip_rev}.{bl}")
-                results["blacklists"].append({"list": bl, "listed": True})
+                socket.gethostbyname(f"{ip_rev}.{bl_url}")
+                results["blacklists"].append({"list": bl_name, "listed": True})
             except:
-                results["blacklists"].append({"list": bl, "listed": False})
+                results["blacklists"].append({"list": bl_name, "listed": False})
 
     return results
 
@@ -249,51 +305,172 @@ async def domain_lookup(domain: str):
 
         try:
             r = await client.get(f"https://{domain}", headers=HEADERS, timeout=10, follow_redirects=True)
-            results["technologies"] = [t for t in [r.headers.get("server",""), r.headers.get("x-powered-by","")] if t]
-            results["http"] = {"status": r.status_code, "url": str(r.url), "headers": {k:v for k,v in r.headers.items() if k.lower() in ["server","x-powered-by","strict-transport-security","content-security-policy"]}}
+            body = r.text[:10000].lower()
+            server = r.headers.get("server","")
+            powered = r.headers.get("x-powered-by","")
+            results["technologies"] = list(set([t for t in [server, powered] if t]))
+
+            # Technology detection from body
+            tech_signatures = {
+                "WordPress": ["wp-content", "wp-includes", "wordpress"],
+                "React": ["react", "_next", "reactroot"],
+                "Next.js": ["_next/static", "__next"],
+                "Vue.js": ["vue", "vuejs", "vue-router"],
+                "Angular": ["ng-version", "ng-app", "angular"],
+                "Svelte": ["svelte", "__svelte"],
+                "Django": ["csrfmiddlewaretoken", "django"],
+                "Flask": ["werkzeug", "flask"],
+                "Laravel": ["laravel", "csrf-token"],
+                "Express": ["x-powered-by: express"],
+                "Ruby on Rails": ["csrf-token", "ruby"],
+                "ASP.NET": ["asp.net", "viewstate"],
+                "PHP": ["php", "x-powered-by: php"],
+                "nginx": ["nginx"],
+                "Apache": ["apache"],
+                "IIS": ["microsoft-iis"],
+                "Caddy": ["caddy"],
+                "LiteSpeed": ["litespeed"],
+                "Cloudflare": ["cloudflare"],
+                "Vercel": ["vercel"],
+                "Netlify": ["netlify"],
+                "Firebase": ["firebase", "firebaseapp"],
+                "AWS": ["amazonaws", "aws"],
+                "Google Analytics": ["google-analytics", "gtag", "ga.js"],
+                "Google Tag Manager": ["googletagmanager", "gtm.js"],
+                "Sentry": ["sentry", "sentry-cdn"],
+                "Stripe": ["stripe.com"],
+                "Tailwind CSS": ["tailwindcss", "tailwind"],
+                "Bootstrap": ["bootstrap"],
+                "jQuery": ["jquery"],
+                "Font Awesome": ["font-awesome", "fontawesome"],
+                "Material UI": ["material-ui", "mui"],
+                "Chakra UI": ["chakra-ui"],
+                "Webpack": ["webpack"],
+                "Vite": ["vite", "@vitejs"],
+            }
+            for tech, sigs in tech_signatures.items():
+                for sig in sigs:
+                    if sig in body or sig.lower() in str(r.headers).lower():
+                        if tech not in results["technologies"]:
+                            results["technologies"].append(tech)
+
+            # Security headers
+            security_headers = {}
+            for h in ["strict-transport-security","content-security-policy","x-frame-options","x-content-type-options","x-xss-protection","referrer-policy","permissions-policy","x-permitted-cross-domain-policies"]:
+                val = r.headers.get(h)
+                if val:
+                    security_headers[h] = val
+
+            results["http"] = {
+                "status": r.status_code,
+                "url": str(r.url),
+                "headers": {k:v for k,v in r.headers.items() if k.lower() in ["server","x-powered-by","x-aspnet-version","x-aspnetmvc-version","x-runtime","x-request-id","x-varnish"]},
+                "security_headers": security_headers,
+                "redirect_chain": [{"url": str(r.url), "status": r.status_code}],
+            }
         except: pass
 
     return results
 
 
 # ==================== PHONE OSINT ====================
+import phonenumbers as pn
+from phonenumbers import carrier as pn_carrier
+from phonenumbers import timezone as pn_tz
+from phonenumbers import geocoder as pn_geo
+
 @router.get("/phone/{phone}")
 async def phone_lookup(phone: str):
     phone = phone.strip().replace(" ","").replace("-","").replace("(","").replace(")","")
-    results = {"phone": phone, "format": {}, "carrier": None, "location": None, "country": None, "type": None, "line_type": None}
+    results = {"phone": phone, "valid": False, "format": {}, "carrier": None, "location": None, "country": None, "country_code": None, "type": None, "line_type": None, "timezones": []}
 
-    # Parse phone
-    if phone.startswith("+"):
-        results["format"]["e164"] = phone
-        results["format"]["international"] = phone
-        country_code = phone[1:3] if len(phone) > 3 else phone[1:]
-        results["country"] = country_code
-    else:
-        results["format"]["local"] = phone
+    # Parse with phonenumbers library
+    try:
+        if phone.startswith("+"):
+            parsed = pn.parse(phone)
+        else:
+            parsed = pn.parse(phone, None)
 
-    async with httpx.AsyncClient() as client:
-        # NumVerify / abstract API style lookup via numverify
+        if not pn.is_valid_number(parsed):
+            # Try with US default
+            parsed = pn.parse(phone, "US")
+            if not pn.is_valid_number(parsed):
+                parsed = pn.parse(phone, None)
+
+        results["valid"] = pn.is_valid_number(parsed)
+        results["possible"] = pn.is_possible_number(parsed)
+
+        # Format variants
         try:
-            r = await client.get(f"http://apilayer.net/api/validate?access_key=demo&number={phone}", timeout=10)
-            if r.status_code == 200:
-                d = r.json()
-                if d.get("valid") is not None:
-                    results["valid"] = d.get("valid")
-                    results["carrier"] = d.get("carrier")
-                    results["line_type"] = d.get("line_type")
-                    results["location"] = d.get("location")
-                    results["country"] = d.get("country_name")
-                    results["format"]["national"] = d.get("local_format")
-                    results["format"]["international"] = d.get("international_format")
+            results["format"]["e164"] = pn.format_number(parsed, pn.PhoneNumberFormat.E164)
+        except: pass
+        try:
+            results["format"]["international"] = pn.format_number(parsed, pn.PhoneNumberFormat.INTERNATIONAL)
+        except: pass
+        try:
+            results["format"]["national"] = pn.format_number(parsed, pn.PhoneNumberFormat.NATIONAL)
+        except: pass
+        try:
+            results["format"]["rfc3966"] = pn.format_number(parsed, pn.PhoneNumberFormat.RFC3966)
         except: pass
 
-        # Fallback: parse country from number
-        if not results.get("country"):
-            prefix_map = {"1":"US/CA","44":"UK","33":"FR","49":"DE","34":"ES","39":"IT","81":"JP","86":"CN","91":"IN","61":"AU","55":"BR","7":"RU","82":"KR","31":"NL","46":"SE","47":"NO","45":"DK","358":"FI","48":"PL","351":"PT","352":"LU","353":"IE","43":"AT","41":"CH","32":"BE","30":"GR","90":"TR","972":"IL","971":"AE","966":"SA"}
-            for code, country in sorted(prefix_map.items(), key=lambda x: -len(x[0])):
-                if phone.startswith("+"+code) or phone.startswith(code):
-                    results["country"] = country
-                    break
+        # Country
+        region = pn.region_code_for_number(parsed)
+        results["country_code"] = region
+        country_name = pn.region_code_for_number(parsed)
+        # Get full country name
+        import pycountry
+        try:
+            results["country"] = pycountry.countries.get(alpha_2=region).name
+        except:
+            results["country"] = region
+
+        # Carrier
+        try:
+            carrier_name = pn_carrier.name_for_number(parsed, "en")
+            if carrier_name:
+                results["carrier"] = carrier_name
+        except: pass
+
+        # Location / description
+        try:
+            location = pn_geo.description_for_number(parsed, "en")
+            if location:
+                results["location"] = location
+        except: pass
+
+        # Timezones
+        try:
+            tz_list = pn_tz.time_zones_for_number(parsed)
+            results["timezones"] = list(tz_list)
+        except: pass
+
+        # Number type
+        num_type = pn.number_type(parsed)
+        type_map = {
+            pn.PhoneNumberType.FIXED_LINE: "Fixed Line",
+            pn.PhoneNumberType.MOBILE: "Mobile",
+            pn.PhoneNumberType.FIXED_LINE_OR_MOBILE: "Fixed Line or Mobile",
+            pn.PhoneNumberType.TOLL_FREE: "Toll Free",
+            pn.PhoneNumberType.PREMIUM_RATE: "Premium Rate",
+            pn.PhoneNumberType.SHARED_COST: "Shared Cost",
+            pn.PhoneNumberType.VOIP: "VoIP",
+            pn.PhoneNumberType.PERSONAL_NUMBER: "Personal",
+            pn.PhoneNumberType.PAGER: "Pager",
+            pn.PhoneNumberType.UAN: "UAN",
+            pn.PhoneNumberType.VOICEMAIL: "Voicemail",
+            pn.PhoneNumberType.UNKNOWN: "Unknown",
+        }
+        results["line_type"] = type_map.get(num_type, "Unknown")
+        results["type"] = type_map.get(num_type, "Unknown")
+
+    except pn.NumberParseException:
+        # Fallback: basic prefix detection
+        prefix_map = {"1":"United States","44":"United Kingdom","33":"France","49":"Germany","34":"Spain","39":"Italy","81":"Japan","86":"China","91":"India","61":"Australia","55":"Brazil","7":"Russia","82":"South Korea","31":"Netherlands","46":"Sweden","47":"Norway","45":"Denmark","358":"Finland","48":"Poland","351":"Portugal","353":"Ireland","43":"Austria","41":"Switzerland","32":"Belgium","30":"Greece","90":"Turkey","972":"Israel","971":"United Arab Emirates","966":"Saudi Arabia"}
+        for code, country in sorted(prefix_map.items(), key=lambda x: -len(x[0])):
+            if phone.startswith("+"+code) or phone.startswith(code):
+                results["country"] = country
+                break
 
     return results
 
@@ -561,35 +738,64 @@ async def discord_lookup(discord_id: str):
                 profile_data = r.json()
         except: pass
 
-        # Check public breach paste sites for the Discord ID
-        breach_checks = [
-            ("https://haveibeenpwned.com/api/v3/breachedaccount/", "HIBP (requires key, checking pattern)"),
-            ("https://psbdmp.ws/api/v3/search", "Pastebin Dumps"),
-            ("https://leaked.site/api/v2/check", "Leaked.site"),
+        # Direct paste site queries for the Discord ID
+        paste_sites = [
+            ("https://pastebin.com/search", {"q": discord_id}, "pastebin.com"),
+            ("https://api.github.com/search/gists", {"q": discord_id, "per_page": 3}, "gist.github.com"),
+            ("https://dpaste.org/search/", {"q": discord_id}, "dpaste.org"),
         ]
 
-        # Google dork for breaches — search for ID in known paste/breach sites
-        google_dorks = [
-            f'"{discord_id}" site:pastebin.com',
-            f'"{discord_id}" site:ghostbin.co',
-            f'"{discord_id}" site:hastebin.com',
-            f'"{discord_id}" "discord" "breach"',
-            f'"{discord_id}" "discord" "leaked"',
-            f'"{discord_id}" "discord" "credentials"',
-        ]
-
-        for dork in google_dorks[:3]:
+        for url, params, source in paste_sites:
             try:
-                r = await client.get(
-                    "https://html.duckduckgo.com/html/",
-                    params={"q": dork},
-                    timeout=10,
-                )
+                r = await client.get(url, params=params, timeout=10)
+                if r.status_code == 200:
+                    if source == "pastebin.com":
+                        paste_ids = re.findall(r'href="/([a-zA-Z0-9]{6,})"', r.text)
+                        for pid in paste_ids[:2]:
+                            try:
+                                pr = await client.get(f"https://pastebin.com/raw/{pid}", timeout=8)
+                                if pr.status_code == 200 and discord_id in pr.text:
+                                    breach_results.append({
+                                        "source": source,
+                                        "url": f"https://pastebin.com/{pid}",
+                                        "snippet": pr.text[:200],
+                                        "type": "breach_found",
+                                    })
+                            except: pass
+                    elif source == "gist.github.com":
+                        data = r.json()
+                        for gist in data.get("items", [])[:2]:
+                            breach_results.append({
+                                "source": source,
+                                "url": gist.get("html_url", ""),
+                                "snippet": (gist.get("description", "") or "")[:200],
+                                "type": "breach_found",
+                                "owner": gist.get("owner", {}).get("login", ""),
+                            })
+                    elif source == "dpaste.org":
+                        paste_ids = re.findall(r'href="/(\d+)"', r.text)
+                        for pid in paste_ids[:2]:
+                            breach_results.append({
+                                "source": source,
+                                "url": f"https://dpaste.org/{pid}/",
+                                "snippet": f"Paste containing Discord ID",
+                                "type": "breach_found",
+                            })
+            except: pass
+
+        # DuckDuckGo dork for broader breach detection
+        dorks = [
+            f'"{discord_id}" "discord" breach OR leaked OR credentials OR dump',
+            f'"{discord_id}" site:pastebin.com OR site:paste.ee OR site:dpaste.org',
+        ]
+        for dork in dorks[:2]:
+            try:
+                r = await client.get("https://html.duckduckgo.com/html/", params={"q": dork}, timeout=10)
                 if r.status_code == 200:
                     links = re.findall(r'href="(https?://[^"]+)"', r.text)
                     snippets = re.findall(r'class="result__snippet">(.*?)</a>', r.text, re.DOTALL)
                     for i, link in enumerate(links[:3]):
-                        if any(s in link for s in ["pastebin","ghostbin","hastebin","leak","breach","dump"]):
+                        if any(s in link for s in ["pastebin","ghostbin","hastebin","leak","breach","dump","paste.ee","dpaste","rentry"]):
                             snippet_text = re.sub(r'<[^>]+>', '', snippets[i]).strip() if i < len(snippets) else ""
                             breach_results.append({
                                 "source": link.split("/")[2],
@@ -607,16 +813,34 @@ async def discord_lookup(discord_id: str):
             )
             if r.status_code == 200:
                 scam_count = len(r.text.strip().split("\n"))
-                scam_results.append({"database": "Discord-AntiScam/scam-links", "total_tracked": scam_count, "status": "checked"})
+                scam_links = r.text.strip().split("\n")
+                # Check if any scam links contain this ID
+                id_in_scams = any(discord_id in link for link in scam_links[:5000])
+                scam_results.append({
+                    "database": "Discord-AntiScam/scam-links",
+                    "total_tracked": scam_count,
+                    "id_in_database": id_in_scams,
+                    "status": "compromised" if id_in_scams else "clean",
+                })
         except: pass
 
-        # Check if ID appears in public breach databases
-        for db_url in [
-            f"https://api.pwnedpasswords.com/breaches",
-        ]:
-            try:
-                r = await client.get(db_url, timeout=5)
-            except: pass
+        # Check GitHub for leaked Discord tokens/IDs
+        try:
+            r = await client.get(
+                "https://api.github.com/search/code",
+                params={"q": f"{discord_id} token", "per_page": 3},
+                timeout=10,
+            )
+            if r.status_code == 200:
+                data = r.json()
+                for item in data.get("items", [])[:3]:
+                    breach_results.append({
+                        "source": "github.com",
+                        "url": item.get("html_url", ""),
+                        "snippet": f"Code match in {item.get('repository',{}).get('full_name','')} — {item.get('name','')}",
+                        "type": "code_leak",
+                    })
+        except: pass
 
         # Associated accounts — search for username patterns
         if profile_data and profile_data.get("global_name"):
@@ -903,48 +1127,128 @@ async def port_scan(ip: str):
 @router.get("/pastes/{query}")
 async def paste_search(query: str):
     query = query.strip()
-    results = {"query": query, "results": [], "count": 0}
+    results = {"query": query, "results": [], "count": 0, "sources_checked": []}
 
-    async with httpx.AsyncClient(headers=HEADERS) as client:
-        # Search for the query in known paste/breach sites via Google dork
-        dorks = [
-            f'"{query}" site:pastebin.com',
-            f'"{query}" site:ghostbin.co',
-            f'"{query}" site:hastebin.com',
-            f'"{query}" site:paste.ee',
-            f'"{query}" site:dpaste.org',
-            f'"{query}" site:rentry.co',
-        ]
+    async with httpx.AsyncClient(headers=HEADERS, follow_redirects=True) as client:
+        # 1. Pastebin search (scrape search page)
+        try:
+            r = await client.get(f"https://pastebin.com/search", params={"q": query}, timeout=10)
+            if r.status_code == 200:
+                paste_links = re.findall(r'href="/([a-zA-Z0-9]+)"', r.text)
+                seen_pastes = set()
+                for paste_id in paste_links[:5]:
+                    if paste_id not in seen_pastes and len(paste_id) >= 6 and paste_id not in ("search","archive","tools","api","login","signup","faq","privacy","dmca","contact"):
+                        seen_pastes.add(paste_id)
+                        # Fetch paste content preview
+                        try:
+                            pr = await client.get(f"https://pastebin.com/raw/{paste_id}", timeout=8)
+                            if pr.status_code == 200:
+                                content = pr.text[:500]
+                                if query.lower() in content.lower():
+                                    results["results"].append({
+                                        "source": "pastebin.com",
+                                        "url": f"https://pastebin.com/{paste_id}",
+                                        "snippet": content[:200],
+                                        "matched": True,
+                                    })
+                        except: pass
+            results["sources_checked"].append("pastebin.com")
+        except: pass
 
-        for dork in dorks[:4]:
+        # 2. GitHub Gists search
+        try:
+            r = await client.get(
+                "https://api.github.com/search/gists",
+                params={"q": query, "per_page": 5},
+                timeout=10,
+            )
+            if r.status_code == 200:
+                data = r.json()
+                for gist in data.get("items", [])[:5]:
+                    desc = gist.get("description", "") or ""
+                    files = list(gist.get("files", {}).keys())[:3]
+                    results["results"].append({
+                        "source": "gist.github.com",
+                        "url": gist.get("html_url", ""),
+                        "snippet": f"{desc[:100]} | Files: {', '.join(files)}",
+                        "owner": gist.get("owner", {}).get("login", ""),
+                        "created": gist.get("created_at", ""),
+                    })
+            results["sources_checked"].append("gist.github.com")
+        except: pass
+
+        # 3. Paste.ee search
+        try:
+            r = await client.get(f"https://paste.ee/search", params={"q": query}, timeout=10)
+            if r.status_code == 200:
+                paste_links = re.findall(r'href="/p/([a-zA-Z0-9]+)"', r.text)
+                for pid in paste_links[:3]:
+                    results["results"].append({
+                        "source": "paste.ee",
+                        "url": f"https://paste.ee/p/{pid}",
+                        "snippet": f"Paste ID: {pid}",
+                    })
+            results["sources_checked"].append("paste.ee")
+        except: pass
+
+        # 4. DPaste search
+        try:
+            r = await client.get(f"https://dpaste.org/search/", params={"q": query}, timeout=10)
+            if r.status_code == 200:
+                paste_links = re.findall(r'href="/(\d+)"', r.text)
+                for pid in paste_links[:3]:
+                    results["results"].append({
+                        "source": "dpaste.org",
+                        "url": f"https://dpaste.org/{pid}/",
+                        "snippet": f"Paste ID: {pid}",
+                    })
+            results["sources_checked"].append("dpaste.org")
+        except: pass
+
+        # 5. Rentry.co search
+        try:
+            r = await client.get(f"https://rentry.co/search", params={"query": query}, timeout=10)
+            if r.status_code == 200:
+                paste_links = re.findall(r'href="/([a-zA-Z0-9-]+)"', r.text)
+                seen_rentry = set()
+                for slug in paste_links[:5]:
+                    if slug not in seen_rentry and slug not in ("search","api","docs","about","terms","privacy"):
+                        seen_rentry.add(slug)
+                        results["results"].append({
+                            "source": "rentry.co",
+                            "url": f"https://rentry.co/{slug}",
+                            "snippet": f"Page: {slug}",
+                        })
+            results["sources_checked"].append("rentry.co")
+        except: pass
+
+        # 6. DuckDuckGo dorks for broader coverage
+        dorks = [f'"{query}" site:pastebin.com', f'"{query}" site:paste.ee', f'"{query}" site:dpaste.org']
+        for dork in dorks[:2]:
             try:
-                r = await client.get(
-                    "https://html.duckduckgo.com/html/",
-                    params={"q": dork},
-                    timeout=10,
-                )
+                r = await client.get("https://html.duckduckgo.com/html/", params={"q": dork}, timeout=10)
                 if r.status_code == 200:
                     links = re.findall(r'href="(https?://[^"]+)"', r.text)
                     snippets = re.findall(r'class="result__snippet">(.*?)</a>', r.text, re.DOTALL)
                     for i, link in enumerate(links[:3]):
-                        snippet_text = re.sub(r'<[^>]+>', '', snippets[i]).strip() if i < len(snippets) else ""
-                        source = link.split("/")[2] if "/" in link else link
-                        results["results"].append({
-                            "source": source,
-                            "url": link,
-                            "snippet": snippet_text[:200],
-                            "query": dork,
-                        })
+                        if any(s in link for s in ["pastebin","paste.ee","dpaste","rentry"]):
+                            snippet_text = re.sub(r'<[^>]+>', '', snippets[i]).strip() if i < len(snippets) else ""
+                            results["results"].append({
+                                "source": link.split("/")[2],
+                                "url": link,
+                                "snippet": snippet_text[:200],
+                            })
             except: pass
 
     # Deduplicate
     seen = set()
     unique = []
     for r in results["results"]:
-        if r["url"] not in seen:
-            seen.add(r["url"])
+        key = r.get("url", "")
+        if key and key not in seen:
+            seen.add(key)
             unique.append(r)
-    results["results"] = unique[:20]
+    results["results"] = unique[:30]
     results["count"] = len(results["results"])
 
     return results
