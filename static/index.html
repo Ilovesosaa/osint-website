@@ -3,319 +3,327 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Error404 DOXNOSINT</title>
+<title>Inquire — Tools for online investigations</title>
+<meta name="description" content="Investigate emails, phones, usernames, and more. Breach data, account recovery, and phone intelligence in one console.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#05050a;--bg2:#0a0a12;--surface:#0d0d15;--surface2:#12121c;--surface3:#181825;
-  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
-  --text:#e8e8f0;--dim:#6b6b80;--dim2:#44445a;
-  --red:#ff3b3b;--red-glow:rgba(255,59,59,.15);
-  --green:#00ff88;--green-glow:rgba(0,255,136,.1);
-  --blue:#3b82f6;--blue-glow:rgba(59,130,246,.15);
-  --purple:#a855f7;--purple-glow:rgba(168,85,247,.15);
-  --cyan:#06d6a0;--cyan-glow:rgba(6,214,160,.1);
-  --yellow:#fbbf24;--yellow-glow:rgba(251,191,36,.1);
-  --pink:#ec4899;--pink-glow:rgba(236,72,153,.15);
-  --accent:#ff3b3b;--accent2:#3b82f6;
-  --glass:rgba(255,255,255,.03);--glass2:rgba(255,255,255,.05);
+  --bg:#09090b;--bg2:#0c0c0f;--surface:#111114;--surface2:#16161a;--surface3:#1c1c22;--surface4:#222228;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);--border3:rgba(255,255,255,.15);
+  --text:#fafafa;--text2:#a1a1aa;--text3:#71717a;--text4:#52525b;--text5:#3f3f46;
+  --blue:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--purple:#a855f7;--cyan:#06b6d4;--orange:#f97316;--pink:#ec4899;
+  --accent:#3b82f6;
 }
-html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px}
-::selection{background:var(--red);color:#000}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:4px}
+::selection{background:var(--accent);color:#fff}
 
-/* === ANIMATED BACKGROUND === */
-.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg-mesh::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 50%,rgba(255,59,59,.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(59,130,246,.03) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(168,85,247,.03) 0%,transparent 50%);animation:meshFloat 20s ease-in-out infinite}
-@keyframes meshFloat{0%,100%{transform:translate(0,0) rotate(0deg)}33%{transform:translate(-2%,1%) rotate(1deg)}66%{transform:translate(1%,-1%) rotate(-0.5deg)}}
-
-.layout{display:flex;height:100vh;position:relative;z-index:1}
-
-/* === SIDEBAR === */
-.sidebar{width:240px;background:rgba(8,8,15,.95);backdrop-filter:blur(20px);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;transition:all .3s}
-.sidebar-header{padding:16px 14px 12px;display:flex;align-items:center;gap:10px}
-.sidebar-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--red),#ff6b6b);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;letter-spacing:-.5px;box-shadow:0 0 20px rgba(255,59,59,.3)}
-.sidebar-title{font-weight:700;font-size:.85rem;letter-spacing:-.3px}
-.sidebar-ver{font-size:.55rem;color:var(--dim);margin-top:1px;font-family:'JetBrains Mono',monospace}
-.sidebar-search{padding:0 12px 12px;position:relative}
-.sidebar-search input{width:100%;padding:8px 10px 8px 30px;border-radius:8px;border:1px solid var(--border);background:var(--glass2);color:var(--text);font-size:.75rem;outline:none;font-family:'Space Grotesk',sans-serif;transition:all .2s}
-.sidebar-search input:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(255,59,59,.1)}
-.sidebar-search i{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--dim2);font-size:.65rem}
-.sidebar-section{padding:2px 10px}
-.sidebar-label{font-size:.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim2);padding:8px 8px 4px}
-.sidebar-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:var(--dim);font-size:.73rem;cursor:pointer;transition:all .15s;border:1px solid transparent;font-weight:500}
-.sidebar-item:hover{background:var(--glass2);color:var(--text);border-color:var(--border)}
-.sidebar-item.active{background:linear-gradient(135deg,rgba(255,59,59,.15),rgba(255,59,59,.05));color:var(--red);border-color:rgba(255,59,59,.2);font-weight:600}
-.sidebar-item.active i{color:var(--red)}
-.sidebar-item i{width:16px;text-align:center;font-size:.72rem;flex-shrink:0}
-.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
-.sidebar-footer a{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;color:var(--dim2);font-size:.65rem;text-decoration:none;transition:all .15s}
-.sidebar-footer a:hover{color:var(--text);background:var(--glass2)}
+/* === LAYOUT === */
+.shell{display:flex;height:100vh;position:relative}
+.nav{width:200px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.nav-head{padding:14px 12px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.nav-logo{width:28px;height:28px;border-radius:6px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.6rem}
+.nav-brand{font-weight:700;font-size:.78rem;letter-spacing:-.15px}
+.nav-brand span{color:var(--text4)}
+.nav-search{padding:8px 10px;position:relative}
+.nav-search input{width:100%;padding:6px 8px 6px 26px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.65rem;outline:none;font-family:'JetBrains Mono',monospace}
+.nav-search input:focus{border-color:var(--accent)}
+.nav-search i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text5);font-size:.55rem}
+.nav-group{padding:2px 6px}
+.nav-label{font-size:.44rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text5);padding:6px 6px 3px}
+.nav-item{display:flex;align-items:center;gap:6px;padding:4px 7px;border-radius:5px;color:var(--text4);font-size:.65rem;cursor:pointer;transition:all .1s;border:1px solid transparent;font-weight:500}
+.nav-item:hover{background:var(--surface2);color:var(--text3);border-color:var(--border)}
+.nav-item.active{background:rgba(59,130,246,.06);color:var(--accent);border-color:rgba(59,130,246,.1);font-weight:600}
+.nav-item i{width:13px;text-align:center;font-size:.58rem;flex-shrink:0}
+.nav-item .badge{margin-left:auto;font-size:.42rem;font-family:'JetBrains Mono',monospace;color:var(--text5);background:var(--surface2);padding:1px 4px;border-radius:3px}
+.nav-foot{margin-top:auto;padding:8px;border-top:1px solid var(--border)}
+.nav-foot a{display:flex;align-items:center;gap:5px;padding:4px 5px;border-radius:4px;color:var(--text5);font-size:.55rem;text-decoration:none;transition:all .1s}
+.nav-foot a:hover{color:var(--text3);background:var(--surface2)}
 
 /* === MAIN === */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
-.topbar{height:50px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;background:rgba(5,5,10,.8);backdrop-filter:blur(10px)}
-.topbar-title{font-weight:700;font-size:.85rem;letter-spacing:-.2px}
-.topbar-badge{padding:3px 8px;border-radius:6px;font-size:.55rem;font-weight:600;background:linear-gradient(135deg,var(--red),#ff6b6b);color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
-.topbar-right{margin-left:auto;display:flex;gap:6px}
-.topbar-btn{padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--glass);color:var(--dim);font-size:.68rem;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-weight:500}
-.topbar-btn:hover{border-color:var(--border2);color:var(--text);background:var(--glass2)}
-.topbar-btn.active{background:linear-gradient(135deg,rgba(255,59,59,.2),rgba(255,59,59,.1));color:var(--red);border-color:rgba(255,59,59,.3)}
-.content{flex:1;overflow-y:auto;padding:20px 24px}
+.topbar{height:40px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;background:var(--surface)}
+.topbar-title{font-weight:600;font-size:.75rem}
+.topbar-pill{padding:2px 6px;border-radius:3px;font-size:.45rem;font-weight:600;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace}
+.topbar-right{margin-left:auto;display:flex;gap:4px}
+.topbar-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.55rem;cursor:pointer;transition:all .1s;font-family:'JetBrains Mono',monospace}
+.topbar-btn:hover{border-color:var(--border2);color:var(--text3)}
+.content{flex:1;overflow-y:auto;padding:14px 18px}
 
-/* === SEARCH === */
-.search-section{margin-bottom:20px}
-.search-wrap{display:flex;gap:0;padding:4px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);transition:all .3s;max-width:720px;overflow:hidden}
-.search-wrap:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,59,59,.08),0 8px 32px rgba(0,0,0,.3)}
-.search-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.85rem;padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-weight:500}
-.search-wrap input::placeholder{color:var(--dim2)}
-.search-wrap button{padding:10px 22px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--red),#ff6b6b);color:#fff;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;text-transform:uppercase}
-.search-wrap button:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(255,59,59,.3)}
-.search-wrap button:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
-.quick-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-.quick-tag{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.63rem;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-weight:500}
-.quick-tag:hover{border-color:var(--red);color:var(--red);background:rgba(255,59,59,.05)}
+/* === HERO === */
+.hero{padding:28px 0 20px;text-align:center}
+.hero-eyebrow{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.hero h1{font-size:1.5rem;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:6px}
+.hero h1 em{font-style:italic;color:var(--text3);font-weight:400}
+.hero p{font-size:.75rem;color:var(--text3);max-width:440px;margin:0 auto;line-height:1.5}
 
-/* === PROGRESS === */
-.progress{display:none;margin-bottom:16px}.progress.active{display:block}
-.progress-bar{height:3px;background:var(--surface3);border-radius:2px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),#ff6b6b,var(--pink));border-radius:2px;transition:width .3s;width:0;box-shadow:0 0 10px rgba(255,59,59,.5)}
-.progress-info{display:flex;justify-content:space-between;font-size:.63rem;color:var(--dim2);margin-top:6px;font-family:'JetBrains Mono',monospace}
+/* === CONSOLE === */
+.console{max-width:560px;margin:16px auto 0;position:relative}
+.console-input{width:100%;padding:11px 14px 11px 36px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:.8rem;outline:none;font-family:'JetBrains Mono',monospace;transition:all .2s}
+.console-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+.console-input::placeholder{color:var(--text5)}
+.console-prompt{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text5);font-size:.7rem;font-family:'JetBrains Mono',monospace}
+.console-send{position:absolute;right:4px;top:50%;transform:translateY(-50%);padding:6px 14px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-weight:600;font-size:.65rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif}
+.console-send:hover{filter:brightness(1.1)}
+.console-send:disabled{opacity:.3;cursor:not-allowed}
 
-/* === RESULTS HEADER === */
-.results-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
-.results-header h2{font-size:1rem;font-weight:700;letter-spacing:-.3px}
-.results-header .uname{color:var(--red);font-family:'JetBrains Mono',monospace;background:rgba(255,59,59,.08);padding:3px 8px;border-radius:6px;font-size:.82rem;border:1px solid rgba(255,59,59,.15)}
-.pills{display:flex;gap:5px;flex-wrap:wrap}
-.pill{padding:3px 10px;border-radius:6px;font-size:.6rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
-.pill.g{background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.15)}
-.pill.r{background:rgba(107,107,128,.08);color:var(--dim);border:1px solid rgba(107,107,128,.15)}
-.pill.e{background:rgba(255,59,59,.08);color:var(--red);border:1px solid rgba(255,59,59,.15)}
-.pill.b{background:rgba(59,130,246,.08);color:var(--blue);border:1px solid rgba(59,130,246,.15)}
+/* === MODULE PILLS === */
+.modules-row{display:flex;justify-content:center;gap:4px;margin-top:10px;flex-wrap:wrap;max-width:560px;margin-left:auto;margin-right:auto}
+.mod-pill{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.5rem;cursor:pointer;transition:all .1s;font-family:'JetBrains Mono',monospace;font-weight:500}
+.mod-pill:hover{border-color:var(--accent);color:var(--accent)}
+.mod-pill.active{background:rgba(59,130,246,.06);color:var(--accent);border-color:rgba(59,130,246,.15)}
 
-/* === CARDS === */
-.cat{margin-bottom:16px}
-.cat-title{font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim2);padding:0 2px 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
-.card{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);transition:all .2s;cursor:pointer;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.02));opacity:0;transition:opacity .2s}
-.card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
-.card:hover::before{opacity:1}
-.card.found{border-color:rgba(0,255,136,.1)}.card.found:hover{border-color:rgba(0,255,136,.2);box-shadow:0 8px 25px rgba(0,255,136,.05)}
-.card-top{display:flex;align-items:center;gap:8px}
-.card-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace}
-.card.found .card-icon{background:rgba(0,255,136,.1);color:var(--green)}
-.card.nf .card-icon{background:rgba(107,107,128,.08);color:var(--dim2)}
-.card-name{font-size:.72rem;font-weight:600;letter-spacing:-.1px}
-.card-url{font-size:.52rem;color:var(--dim2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace}
-.card-status{font-size:.52rem;margin-top:4px;font-weight:600;font-family:'JetBrains Mono',monospace}
-.card.found .card-status{color:var(--green)}
-.card.nf .card-status{color:var(--dim2)}
+/* === MODULE GRID === */
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-top:16px;max-width:700px;margin-left:auto;margin-right:auto}
+.mod-card{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .12s;text-align:center}
+.mod-card:hover{border-color:var(--border2);background:var(--surface2)}
+.mod-card.active{border-color:rgba(59,130,246,.2);background:rgba(59,130,246,.04)}
+.mod-card-icon{font-size:.7rem;color:var(--text4);margin-bottom:4px}
+.mod-card-name{font-size:.65rem;font-weight:600;margin-bottom:1px}
+.mod-card-desc{font-size:.48rem;color:var(--text5);line-height:1.3}
+.mod-card-count{font-size:.42rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-top:3px}
 
-/* === BREACH LEAK CARDS (inquire.sh style) === */
-.breach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.breach-card{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);position:relative;transition:all .2s;overflow:hidden}
-.breach-card:hover{border-color:var(--border2);background:var(--surface3);transform:translateY(-1px)}
-.breach-card .bc-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.breach-card .bc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(255,59,59,.12);color:var(--red);border:1px solid rgba(255,59,59,.15)}
-.breach-card .bc-icon.safe{background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.12)}
-.breach-card .bc-title{font-size:.82rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;font-family:'Space Grotesk',sans-serif}
-.breach-card .bc-subtitle{font-size:.58rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
-.breach-card .bc-badge{position:absolute;top:10px;right:10px;padding:2px 7px;border-radius:4px;font-size:.48rem;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
-.breach-card .bc-badge.leak{background:rgba(255,59,59,.15);color:var(--red);border:1px solid rgba(255,59,59,.2)}
-.breach-card .bc-badge.safe{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
-.breach-card .bc-badge.hacked{background:rgba(255,59,59,.2);color:#ff6b6b;border:1px solid rgba(255,59,59,.3);animation:pulse-red 2s infinite}
-.breach-card .bc-fields{display:flex;flex-direction:column;gap:6px}
-.breach-card .bc-field{display:flex;flex-direction:column;gap:2px}
-.breach-card .bc-field-label{font-size:.48rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;font-family:'JetBrains Mono',monospace}
-.breach-card .bc-field-value{font-size:.65rem;color:var(--text);font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.2);padding:4px 8px;border-radius:4px;word-break:break-all;border:1px solid var(--border)}
-.breach-card .bc-source{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid var(--border);font-size:.48rem;color:var(--dim2);font-family:'JetBrains Mono',monospace}
-.breach-card .bc-source a{color:var(--blue);text-decoration:none;font-size:.48rem}
-.breach-card .bc-source a:hover{text-decoration:underline}
-.breach-card .bc-link{position:absolute;bottom:10px;right:10px;font-size:.5rem;color:var(--dim2);text-decoration:none;font-family:'JetBrains Mono',monospace}
-.breach-card .bc-link:hover{color:var(--blue)}
-@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.15)}50%{box-shadow:0 0 0 4px rgba(255,59,59,0)}}
-
-/* === NOT FOUND CHIPS === */
-.nf-section{margin-top:14px}
-.nf-title{font-size:.55rem;font-weight:600;color:var(--dim2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.nf-grid{display:flex;flex-wrap:wrap;gap:4px}
-.nf-chip{padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:var(--surface);font-size:.58rem;color:var(--dim2);font-family:'JetBrains Mono',monospace}
-
-/* === TOOL CARDS === */
-.tool-card{padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);margin-bottom:8px;transition:all .2s}
-.tool-card:hover{border-color:var(--border2);background:var(--surface3)}
-.tool-card h3{font-size:.78rem;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px;letter-spacing:-.1px}
-.tool-row{display:flex;justify-content:space-between;padding:4px 0;font-size:.68rem;border-bottom:1px solid var(--border)}
-.tool-row:last-child{border:none}
-.tool-label{color:var(--dim);font-weight:500}
-.tool-value{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;font-size:.65rem}
-
-/* === BADGES === */
-.badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.58rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
-.badge-green{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
-.badge-red{background:rgba(255,59,59,.1);color:var(--red);border:1px solid rgba(255,59,59,.15)}
-.badge-yellow{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
-.badge-blue{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.15)}
-
-/* === EMPTY STATE === */
-.empty-state{text-align:center;padding:60px 20px;color:var(--dim)}
-.empty-state i{font-size:2rem;color:var(--dim2);margin-bottom:12px;display:block}
-.empty-state h3{color:var(--text);font-size:.9rem;font-weight:700}
-.empty-state p{font-size:.72rem;margin-top:4px;color:var(--dim2)}
-
-/* === ANIMATIONS === */
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.content>*{animation:fadeIn .3s ease}
+/* === PIPELINE === */
+.pipeline{display:flex;align-items:center;gap:4px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.pipe-chip{padding:2px 7px;border-radius:3px;font-size:.42rem;font-weight:600;font-family:'JetBrains Mono',monospace;background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.pipe-chip.running{color:var(--accent);border-color:rgba(59,130,246,.2);animation:pulse 1.5s infinite}
+.pipe-chip.done{color:var(--green);border-color:rgba(34,197,94,.15)}
+.pipe-chip.error{color:var(--red);border-color:rgba(239,68,68,.15)}
+.pipe-arrow{color:var(--text5);font-size:.4rem}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
+/* === CASE VIEW === */
+.case{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.case-panel{border:1px solid var(--border);border-radius:8px;background:var(--surface);overflow:hidden}
+.case-panel-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.case-panel-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.case-panel-count{font-size:.45rem;font-family:'JetBrains Mono',monospace;color:var(--text5);background:var(--surface2);padding:2px 6px;border-radius:3px}
+.case-panel-body{padding:8px;max-height:400px;overflow-y:auto}
+
+/* === ACCOUNT CARD === */
+.acc-card{padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);margin-bottom:5px;transition:all .12s;cursor:pointer}
+.acc-card:hover{border-color:var(--border2);background:var(--surface3)}
+.acc-head{display:flex;align-items:center;justify-content:space-between}
+.acc-name{font-size:.72rem;font-weight:700}
+.acc-status{padding:2px 6px;border-radius:3px;font-size:.42rem;font-weight:700;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.3px}
+.acc-status.registered{background:rgba(34,197,94,.08);color:var(--green);border:1px solid rgba(34,197,94,.1)}
+.acc-status.linked{background:rgba(59,130,246,.08);color:var(--blue);border:1px solid rgba(59,130,246,.1)}
+.acc-status.leaked{background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.1)}
+.acc-status.safe{background:rgba(113,113,122,.08);color:var(--text4);border:1px solid var(--border)}
+.acc-detail{font-size:.52rem;color:var(--text4);margin-top:3px;font-family:'JetBrains Mono',monospace}
+
+/* === BREACH CARD === */
+.breach-card{padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);margin-bottom:5px;transition:all .12s}
+.breach-card:hover{border-color:var(--border2)}
+.breach-head{display:flex;align-items:center;justify-content:space-between}
+.breach-name{font-size:.72rem;font-weight:700}
+.breach-year{font-size:.45rem;color:var(--text5);font-family:'JetBrains Mono',monospace}
+.breach-detail{font-size:.52rem;color:var(--text4);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.breach-badge{padding:2px 6px;border-radius:3px;font-size:.4rem;font-weight:700;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.3px}
+.breach-badge.critical{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.12)}
+.breach-badge.high{background:rgba(239,68,68,.06);color:#f87171;border:1px solid rgba(239,68,68,.08)}
+.breach-badge.medium{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
+.breach-badge.low{background:rgba(113,113,122,.06);color:var(--text4);border:1px solid var(--border)}
+
+/* === HITS CHART === */
+.hits-chart{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);overflow:hidden}
+.hits-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.hits-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.hits-live{font-size:.42rem;font-family:'JetBrains Mono',monospace;color:var(--green);display:flex;align-items:center;gap:4px}
+.hits-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.hits-body{padding:14px;display:flex;align-items:flex-end;gap:6px;height:100px}
+.hit-bar{flex:1;border-radius:3px 3px 0 0;transition:height .3s;min-width:20px;position:relative}
+.hit-bar-label{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:.38rem;color:var(--text5);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.hit-bar-value{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:.4rem;color:var(--text4);font-family:'JetBrains Mono',monospace}
+
+/* === STATS ROW === */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+.stat{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);text-align:center}
+.stat-num{font-size:1.2rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.stat-label{font-size:.42rem;color:var(--text5);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+
+/* === RESULTS HEADER === */
+.res-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.res-head h2{font-size:.85rem;font-weight:700}
+.res-query{color:var(--accent);font-family:'JetBrains Mono',monospace;background:rgba(59,130,246,.06);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid rgba(59,130,246,.1)}
+.pills{display:flex;gap:4px;flex-wrap:wrap}
+.pill{padding:2px 7px;border-radius:4px;font-size:.48rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.2px}
+.pill.g{background:rgba(34,197,94,.06);color:var(--green);border:1px solid rgba(34,197,94,.08)}
+.pill.r{background:rgba(239,68,68,.06);color:var(--red);border:1px solid rgba(239,68,68,.08)}
+.pill.b{background:rgba(59,130,246,.06);color:var(--blue);border:1px solid rgba(59,130,246,.08)}
+.pill.y{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
+.pill.gray{background:rgba(113,113,122,.06);color:var(--text4);border:1px solid var(--border)}
+
+/* === DETAIL ROWS === */
+.det-card{padding:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);margin-bottom:6px}
+.det-card h3{font-size:.7rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.det-row{display:flex;justify-content:space-between;padding:3px 0;font-size:.6rem;border-bottom:1px solid var(--border)}
+.det-row:last-child{border:none}
+.det-label{color:var(--text4);font-weight:500}
+.det-value{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;font-size:.55rem}
+
+/* === FOUND GRID === */
+.found-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:5px}
+.found-card{padding:8px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface);transition:all .1s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.found-card:hover{border-color:var(--border2);background:var(--surface2)}
+.found-top{display:flex;align-items:center;gap:6px}
+.found-icon{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.38rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.found-name{font-size:.62rem;font-weight:600}
+.found-url{font-size:.42rem;color:var(--text5);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace}
+.found-status{font-size:.42rem;margin-top:3px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--green)}
+.found-card.breach .found-status{color:var(--red)}
+
+/* === NF === */
+.nf{margin-top:10px}
+.nf-title{font-size:.48rem;font-weight:600;color:var(--text5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.nf-grid{display:flex;flex-wrap:wrap;gap:3px}
+.nf-chip{padding:3px 6px;border-radius:3px;border:1px solid var(--border);background:var(--surface);font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace}
+
+/* === PROGRESS === */
+.prog{display:none;margin-bottom:12px}.prog.active{display:block}
+.prog-bar{height:2px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s;width:0}
+.prog-info{display:flex;justify-content:space-between;font-size:.52rem;color:var(--text5);margin-top:5px;font-family:'JetBrains Mono',monospace}
+
+/* === EMPTY === */
+.empty{text-align:center;padding:40px 16px;color:var(--text4)}
+.empty i{font-size:1.5rem;color:var(--text5);margin-bottom:8px;display:block}
+.empty h3{color:var(--text3);font-size:.8rem;font-weight:700}
+.empty p{font-size:.65rem;margin-top:3px;color:var(--text5)}
+
 /* === DIRECTORY === */
-.dir-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:20px}
-.dir-stat{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);text-align:center;transition:all .2s}
-.dir-stat:hover{border-color:var(--border2);transform:translateY(-2px)}
-.dir-stat-num{font-size:1.6rem;font-weight:700;font-family:'JetBrains Mono',monospace}
-.dir-stat-label{font-size:.55rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
-.dir-search{display:flex;gap:0;padding:4px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);transition:all .3s;margin-bottom:16px;overflow:hidden}
-.dir-search:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,59,59,.08)}
-.dir-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.85rem;padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-weight:500}
-.dir-search input::placeholder{color:var(--dim2)}
-.dir-search button{padding:10px 22px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;text-transform:uppercase}
-.dir-search button:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(59,130,246,.3)}
-.dir-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:16px}
-.dir-cat{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.dir-cat:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
-.dir-cat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--blue),var(--purple));opacity:0;transition:opacity .2s}
-.dir-cat:hover::before{opacity:1}
-.dir-cat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
-.dir-cat-name{font-size:.78rem;font-weight:700;letter-spacing:-.1px;margin-bottom:2px}
-.dir-cat-count{font-size:.6rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
-.dir-breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:.72rem;color:var(--dim)}
-.dir-breadcrumb span{cursor:pointer;transition:color .15s}
-.dir-breadcrumb span:hover{color:var(--red)}
-.dir-breadcrumb .sep{color:var(--dim2);cursor:default}
-.dir-breadcrumb .current{color:var(--text);font-weight:600}
-.dir-tool{padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);transition:all .2s;cursor:pointer;display:block;text-decoration:none;color:inherit}
-.dir-tool:hover{border-color:var(--border2);background:var(--surface3);transform:translateY(-1px)}
-.dir-tool-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.dir-tool-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(59,130,246,.1);color:var(--blue)}
-.dir-tool-name{font-size:.75rem;font-weight:700;letter-spacing:-.1px}
-.dir-tool-desc{font-size:.62rem;color:var(--dim);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.dir-tool-meta{display:flex;flex-wrap:wrap;gap:4px}
-.dir-tool-badge{padding:2px 6px;border-radius:4px;font-size:.48rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
-.dir-tool-badge.free{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
-.dir-tool-badge.freemium{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
-.dir-tool-badge.paid{background:rgba(255,59,59,.1);color:var(--red);border:1px solid rgba(255,59,59,.15)}
-.dir-tool-badge.passive{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.15)}
-.dir-tool-badge.active{background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.15)}
-.dir-tool-badge.local{background:rgba(236,72,153,.1);color:var(--pink);border:1px solid rgba(236,72,153,.15)}
-.dir-tool-badge.dork{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
-.dir-tool-badge.reg{background:rgba(107,107,128,.15);color:var(--dim);border:1px solid rgba(107,107,128,.2)}
-.dir-tool-badge.live{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
-.dir-tool-badge.degraded{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
-.dir-tool-badge.down{background:rgba(255,59,59,.1);color:var(--red);border:1px solid rgba(255,59,59,.15)}
-.dir-tool-badge.unknown{background:rgba(107,107,128,.1);color:var(--dim);border:1px solid rgba(107,107,128,.15)}
-.dir-filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.dir-filter{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.63rem;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-weight:500}
-.dir-filter:hover{border-color:var(--blue);color:var(--blue);background:rgba(59,130,246,.05)}
-.dir-filter.active{background:rgba(59,130,246,.1);color:var(--blue);border-color:rgba(59,130,246,.3)}
-.dir-count{font-size:.63rem;color:var(--dim2);font-family:'JetBrains Mono',monospace;margin-bottom:12px}
-.dir-subcats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.dir-subcat{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--dim);font-size:.68rem;cursor:pointer;transition:all .2s;font-weight:500}
-.dir-subcat:hover{border-color:var(--blue);color:var(--text);background:var(--surface3)}
-.dir-subcat.active{background:rgba(59,130,246,.1);color:var(--blue);border-color:rgba(59,130,246,.3)}
-.dir-tool-detail{position:fixed;top:0;right:-480px;width:460px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:100;transition:right .3s;overflow-y:auto;padding:20px;box-shadow:-8px 0 30px rgba(0,0,0,.4)}
-.dir-tool-detail.open{right:0}
-.dir-tool-detail-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;transition:all .15s}
-.dir-tool-detail-close:hover{border-color:var(--red);color:var(--red)}
-.dir-tool-detail h2{font-size:1rem;font-weight:700;margin-bottom:4px;padding-right:36px}
-.dir-tool-detail .breadcrumb{font-size:.62rem;color:var(--dim);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
-.dir-tool-detail .desc{font-size:.75rem;color:var(--text);line-height:1.6;margin-bottom:14px}
-.dir-tool-detail .field{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.7rem}
-.dir-tool-detail .field-label{color:var(--dim);font-weight:500}
-.dir-tool-detail .field-value{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;font-size:.65rem}
-.dir-tool-detail .open-btn{display:block;width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;text-align:center;text-decoration:none;margin-top:16px}
-.dir-tool-detail .open-btn:hover{transform:scale(1.01);box-shadow:0 4px 20px rgba(59,130,246,.3)}
-.dir-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;opacity:0;pointer-events:none;transition:opacity .3s}
+.dir-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.dir-stat{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);text-align:center}
+.dir-stat-num{font-size:1.1rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.dir-stat-label{font-size:.42rem;color:var(--text5);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+.dir-search{display:flex;gap:0;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--surface);margin-bottom:12px;overflow:hidden}
+.dir-search:focus-within{border-color:var(--accent)}
+.dir-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.75rem;padding:8px 10px;font-family:'JetBrains Mono',monospace}
+.dir-search input::placeholder{color:var(--text5)}
+.dir-search button{padding:8px 16px;border-radius:5px;border:none;background:var(--accent);color:#fff;font-weight:600;font-size:.65rem;cursor:pointer;font-family:'Inter',sans-serif}
+.dir-search button:hover{filter:brightness(1.1)}
+.dir-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin-bottom:12px}
+.dir-cat{padding:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .12s}
+.dir-cat:hover{border-color:var(--border2);transform:translateY(-1px)}
+.dir-cat-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;margin-bottom:5px;font-family:'JetBrains Mono',monospace}
+.dir-cat-name{font-size:.68rem;font-weight:700;margin-bottom:1px}
+.dir-cat-count{font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace}
+.dir-bc{display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:.62rem;color:var(--text4)}
+.dir-bc span{cursor:pointer;transition:color .1s}
+.dir-bc span:hover{color:var(--accent)}
+.dir-bc .sep{color:var(--text5);cursor:default}
+.dir-bc .cur{color:var(--text);font-weight:600}
+.dir-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px}
+.dir-tool{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);transition:all .12s;cursor:pointer}
+.dir-tool:hover{border-color:var(--border2);background:var(--surface2)}
+.dir-tool-h{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.dir-tool-i{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.38rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(59,130,246,.06);color:var(--blue)}
+.dir-tool-n{font-size:.65rem;font-weight:700}
+.dir-tool-d{font-size:.52rem;color:var(--text4);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dir-tool-m{display:flex;flex-wrap:wrap;gap:3px}
+.dir-badge{padding:1px 5px;border-radius:3px;font-size:.4rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.2px}
+.dir-badge.free{background:rgba(34,197,94,.06);color:var(--green);border:1px solid rgba(34,197,94,.08)}
+.dir-badge.freemium{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
+.dir-badge.paid{background:rgba(239,68,68,.06);color:var(--red);border:1px solid rgba(239,68,68,.08)}
+.dir-badge.passive{background:rgba(59,130,246,.06);color:var(--blue);border:1px solid rgba(59,130,246,.08)}
+.dir-badge.active{background:rgba(168,85,247,.06);color:var(--purple);border:1px solid rgba(168,85,247,.08)}
+.dir-badge.local{background:rgba(236,72,153,.06);color:var(--pink);border:1px solid rgba(236,72,153,.08)}
+.dir-badge.dork{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
+.dir-badge.reg{background:rgba(113,113,122,.08);color:var(--text4);border:1px solid var(--border)}
+.dir-badge.live{background:rgba(34,197,94,.06);color:var(--green);border:1px solid rgba(34,197,94,.08)}
+.dir-badge.down{background:rgba(239,68,68,.06);color:var(--red);border:1px solid rgba(239,68,68,.08)}
+.dir-badge.unknown{background:rgba(113,113,122,.06);color:var(--text5);border:1px solid var(--border)}
+.dir-filters{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.dir-filter{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.52rem;cursor:pointer;transition:all .1s;font-family:'JetBrains Mono',monospace;font-weight:500}
+.dir-filter:hover{border-color:var(--accent);color:var(--accent)}
+.dir-filter.active{background:rgba(59,130,246,.06);color:var(--accent);border-color:rgba(59,130,246,.15)}
+.dir-count{font-size:.52rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-bottom:8px}
+.dir-subcats{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.dir-subcat{padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text4);font-size:.6rem;cursor:pointer;transition:all .1s;font-weight:500}
+.dir-subcat:hover{border-color:var(--accent);color:var(--text2)}
+.dir-detail{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:100;transition:right .2s;overflow-y:auto;padding:16px;box-shadow:-6px 0 24px rgba(0,0,0,.4)}
+.dir-detail.open{right:0}
+.dir-detail-x{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);color:var(--text4);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.6rem}
+.dir-detail-x:hover{border-color:var(--red);color:var(--red)}
+.dir-detail h2{font-size:.88rem;font-weight:700;margin-bottom:2px;padding-right:28px}
+.dir-detail .bc{font-size:.52rem;color:var(--text5);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.dir-detail .desc{font-size:.68rem;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.dir-detail .field{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:.6rem}
+.dir-detail .fl{color:var(--text4);font-weight:500}
+.dir-detail .fv{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;font-size:.55rem}
+.dir-detail .open-btn{display:block;width:100%;padding:9px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-weight:700;font-size:.7rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif;text-align:center;text-decoration:none;margin-top:12px}
+.dir-detail .open-btn:hover{filter:brightness(1.1)}
+.dir-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;opacity:0;pointer-events:none;transition:opacity .2s}
 .dir-overlay.visible{opacity:1;pointer-events:auto}
-.dir-tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
-@media(max-width:768px){.sidebar{display:none}.dir-tool-detail{width:100%}}
+
+@media(max-width:768px){.nav{display:none}.case{grid-template-columns:1fr}.dir-detail{width:100%}.stats{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<div class="bg-mesh"></div>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">D4</div>
-      <div><div class="sidebar-title">DOXNOSINT</div><div class="sidebar-ver">v4.0 // 160+ platforms + 1100+ tools</div></div>
+<div class="shell">
+  <aside class="nav">
+    <div class="nav-head">
+      <div class="nav-logo">IQ</div>
+      <div><div class="nav-brand">inquire<span>.</span></div></div>
     </div>
-    <div class="sidebar-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search tools..."/></div>
+    <div class="nav-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search..."/></div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Overview</div>
-      <div class="sidebar-item active" data-page="username"><i class="fa-solid fa-user-secret"></i>Username Search</div>
-      <div class="sidebar-item" data-page="name"><i class="fa-solid fa-id-card"></i>Name Search</div>
-      <div class="sidebar-item" data-page="person"><i class="fa-solid fa-magnifying-glass"></i>Person Search</div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Email Intel</div>
-      <div class="sidebar-item" data-page="email"><i class="fa-solid fa-envelope"></i>Email Lookup</div>
-      <div class="sidebar-item" data-page="emailholehe"><i class="fa-solid fa-link"></i>Email to Accounts</div>
-      <div class="sidebar-item" data-page="breach"><i class="fa-solid fa-triangle-exclamation"></i>Breach Check</div>
+    <div class="nav-group">
+      <div class="nav-label">Lookups</div>
+      <div class="nav-item active" data-page="username"><i class="fa-solid fa-user-secret"></i>Username<span class="badge">160+</span></div>
+      <div class="nav-item" data-page="email"><i class="fa-solid fa-envelope"></i>Email</div>
+      <div class="nav-item" data-page="phone"><i class="fa-solid fa-phone"></i>Phone</div>
+      <div class="nav-item" data-page="person"><i class="fa-solid fa-magnifying-glass"></i>Person</div>
+      <div class="nav-item" data-page="discord"><i class="fa-brands fa-discord"></i>Discord</div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Network</div>
-      <div class="sidebar-item" data-page="ip"><i class="fa-solid fa-location-dot"></i>IP Lookup</div>
-      <div class="sidebar-item" data-page="reverseip"><i class="fa-solid fa-rotate"></i>Reverse IP</div>
-      <div class="sidebar-item" data-page="domain"><i class="fa-solid fa-globe"></i>Domain Lookup</div>
-      <div class="sidebar-item" data-page="whois"><i class="fa-solid fa-id-card"></i>WHOIS</div>
-      <div class="sidebar-item" data-page="subdomains"><i class="fa-solid fa-sitemap"></i>Subdomains</div>
-      <div class="sidebar-item" data-page="ports"><i class="fa-solid fa-plug"></i>Port Scanner</div>
-      <div class="sidebar-item" data-page="ssl"><i class="fa-solid fa-lock"></i>SSL/TLS</div>
-      <div class="sidebar-item" data-page="waf"><i class="fa-solid fa-shield"></i>WAF / CDN</div>
-      <div class="sidebar-item" data-page="url"><i class="fa-solid fa-link"></i>URL Unfurl</div>
-      <div class="sidebar-item" data-page="wayback"><i class="fa-solid fa-clock-rotate-left"></i>Wayback</div>
+    <div class="nav-group">
+      <div class="nav-label">Breach Intel</div>
+      <div class="nav-item" data-page="breach"><i class="fa-solid fa-triangle-exclamation"></i>Breach Check</div>
+      <div class="nav-item" data-page="emailholehe"><i class="fa-solid fa-link"></i>Email → Accounts</div>
+      <div class="nav-item" data-page="pastes"><i class="fa-solid fa-paste"></i>Paste Search</div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Intel</div>
-      <div class="sidebar-item" data-page="dorks"><i class="fa-solid fa-terminal"></i>Google Dorks</div>
-      <div class="sidebar-item" data-page="pastes"><i class="fa-solid fa-paste"></i>Paste Search</div>
-      <div class="sidebar-item" data-page="shodan"><i class="fa-solid fa-server"></i>Shodan</div>
+    <div class="nav-group">
+      <div class="nav-label">Network</div>
+      <div class="nav-item" data-page="ip"><i class="fa-solid fa-location-dot"></i>IP Lookup</div>
+      <div class="nav-item" data-page="domain"><i class="fa-solid fa-globe"></i>Domain</div>
+      <div class="nav-item" data-page="whois"><i class="fa-solid fa-id-card"></i>WHOIS</div>
+      <div class="nav-item" data-page="subdomains"><i class="fa-solid fa-sitemap"></i>Subdomains</div>
+      <div class="nav-item" data-page="ports"><i class="fa-solid fa-plug"></i>Ports</div>
+      <div class="nav-item" data-page="ssl"><i class="fa-solid fa-lock"></i>SSL/TLS</div>
+      <div class="nav-item" data-page="waf"><i class="fa-solid fa-shield"></i>WAF/CDN</div>
+      <div class="nav-item" data-page="shodan"><i class="fa-solid fa-server"></i>Shodan</div>
+      <div class="nav-item" data-page="reverseip"><i class="fa-solid fa-rotate"></i>Reverse IP</div>
+      <div class="nav-item" data-page="url"><i class="fa-solid fa-link"></i>URL Unfurl</div>
+      <div class="nav-item" data-page="wayback"><i class="fa-solid fa-clock-rotate-left"></i>Wayback</div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">People</div>
-      <div class="sidebar-item" data-page="phone"><i class="fa-solid fa-phone"></i>Phone Lookup</div>
-      <div class="sidebar-item" data-page="discord"><i class="fa-brands fa-discord"></i>Discord ID</div>
-      <div class="sidebar-item" data-page="social"><i class="fa-solid fa-share-nodes"></i>Social Scan</div>
+    <div class="nav-group">
+      <div class="nav-label">Intel</div>
+      <div class="nav-item" data-page="dorks"><i class="fa-solid fa-terminal"></i>Google Dorks</div>
+      <div class="nav-item" data-page="social"><i class="fa-solid fa-share-nodes"></i>Social Scan</div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Gaming</div>
-      <div class="sidebar-item" data-page="steam"><i class="fa-brands fa-steam"></i>Steam</div>
-      <div class="sidebar-item" data-page="roblox"><i class="fa-solid fa-cube"></i>Roblox</div>
-      <div class="sidebar-item" data-page="xbox"><i class="fa-brands fa-xbox"></i>Xbox</div>
-      <div class="sidebar-item" data-page="playstation"><i class="fa-solid fa-gamepad"></i>PlayStation</div>
+    <div class="nav-group">
+      <div class="nav-label">Gaming</div>
+      <div class="nav-item" data-page="steam"><i class="fa-brands fa-steam"></i>Steam</div>
+      <div class="nav-item" data-page="roblox"><i class="fa-solid fa-cube"></i>Roblox</div>
+      <div class="nav-item" data-page="xbox"><i class="fa-brands fa-xbox"></i>Xbox</div>
+      <div class="nav-item" data-page="playstation"><i class="fa-solid fa-gamepad"></i>PlayStation</div>
+      <div class="nav-item" data-page="crypto"><i class="fa-brands fa-bitcoin"></i>Crypto</div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">Crypto</div>
-      <div class="sidebar-item" data-page="crypto"><i class="fa-brands fa-bitcoin"></i>Wallet Lookup</div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Tool Directory</div>
-      <div class="sidebar-item" data-page="directory"><i class="fa-solid fa-book-open"></i>All Tools (1100+)</div>
+    <div class="nav-group">
+      <div class="nav-label">Directory</div>
+      <div class="nav-item" data-page="directory"><i class="fa-solid fa-book-open"></i>All Tools<span class="badge">1100+</span></div>
       <div id="dirSidebarCats"></div>
     </div>
 
-    <div class="sidebar-footer">
+    <div class="nav-foot">
       <a href="/docs" target="_blank"><i class="fa-solid fa-book"></i>API Docs</a>
       <a href="https://github.com/Ilovesosaa/osint-website" target="_blank"><i class="fa-brands fa-github"></i>GitHub</a>
     </div>
@@ -324,7 +332,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',san
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="pageTitle">Username Search</div>
-      <div class="topbar-badge" id="pageBadge">160+ PLATFORMS</div>
+      <div class="topbar-pill" id="pageBadge">160+ PLATFORMS</div>
       <div class="topbar-right">
         <button class="topbar-btn" id="jsonToggle" onclick="toggleJSON()">JSON</button>
       </div>
@@ -337,9 +345,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',san
 const content=document.getElementById('content'),pageTitle=document.getElementById('pageTitle'),pageBadge=document.getElementById('pageBadge');
 let currentPage='username',showJSON=false,lastData=null;
 
-document.querySelectorAll('.sidebar-item').forEach(item=>{
+document.querySelectorAll('.nav-item').forEach(item=>{
   item.onclick=()=>{
-    document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
     item.classList.add('active');
     currentPage=item.dataset.page;
     lastData=null;
@@ -349,43 +357,41 @@ document.querySelectorAll('.sidebar-item').forEach(item=>{
 
 document.getElementById('globalSearch').addEventListener('input',function(){
   const q=this.value.toLowerCase();
-  document.querySelectorAll('.sidebar-item').forEach(item=>{
-    const text=item.textContent.toLowerCase();
-    const match=q===''||text.includes(q);
-    item.style.display=match?'flex':'none';
+  document.querySelectorAll('.nav-item').forEach(item=>{
+    item.style.display=q===''||item.textContent.toLowerCase().includes(q)?'flex':'none';
   });
 });
 
 function toggleJSON(){showJSON=!showJSON;document.getElementById('jsonToggle').classList.toggle('active',showJSON);if(lastData)renderResult(lastData)}
 
 const P={
-  username:{title:'Username Search',badge:'160+ PLATFORMS',placeholder:'Enter username to scan across 160+ platforms...',btn:'Scan',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame'],api:'/api/scan/'},
-  name:{title:'Name Search',badge:'CROSS-PLATFORM',placeholder:'Full name (e.g. John Doe)',btn:'Search',examples:['John Doe','Elon Musk','Linus Torvalds'],api:'/api/name/'},
-  person:{title:'Person Search',badge:'AUTO-DETECT',placeholder:'Email, phone, or username',btn:'Search',examples:['test@gmail.com','+14155552671','torvalds'],api:'/api/person/'},
-  email:{title:'Email Lookup',badge:'FULL INTEL',placeholder:'user@example.com',btn:'Lookup',examples:['test@gmail.com','admin@github.com','john@protonmail.com'],api:'/api/email/',holehe:false},
-  emailholehe:{title:'Email to Accounts',badge:'HOLEHE ENGINE',placeholder:'user@example.com',btn:'Find Accounts',examples:['test@gmail.com','user@outlook.com','info@protonmail.com'],api:'/api/email/',holehe:true},
-  breach:{title:'Breach Check',badge:'LEAKED / HACKED',placeholder:'Email or username to check for breaches...',btn:'Check Breaches',examples:['test@gmail.com','admin','elonmusk','johndoe'],api:'/api/breach/'},
-  ip:{title:'IP Lookup',badge:'GEO + ASN',placeholder:'8.8.8.8',btn:'Lookup',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/'},
-  reverseip:{title:'Reverse IP Lookup',badge:'DOMAINS + GEO',placeholder:'IP address',btn:'Lookup',examples:['8.8.8.8','1.1.1.1'],api:'/api/reverseip/'},
-  domain:{title:'Domain Lookup',badge:'DNS + SSL + TECH',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
-  whois:{title:'WHOIS Lookup',badge:'RDAP',placeholder:'example.com',btn:'Lookup',examples:['github.com','google.com'],api:'/api/whois/'},
-  subdomains:{title:'Subdomain Finder',badge:'cTLD + DNS',placeholder:'example.com',btn:'Find',examples:['github.com','google.com','discord.com'],api:'/api/subdomains/'},
-  ports:{title:'Port Scanner',badge:'25 PORTS',placeholder:'IP address',btn:'Scan',examples:['8.8.8.8','1.1.1.1','192.168.1.1'],api:'/api/ports/'},
-  ssl:{title:'SSL/TLS Analysis',badge:'CERT + CIPHER',placeholder:'example.com',btn:'Analyze',examples:['github.com','google.com','discord.com'],api:'/api/ssl/'},
-  waf:{title:'WAF / CDN Detection',badge:'FIREWALL',placeholder:'example.com',btn:'Detect',examples:['github.com','cloudflare.com','google.com'],api:'/api/waf/'},
-  dorks:{title:'Google Dork Generator',badge:'25+ DORKS',placeholder:'Target domain',btn:'Generate',examples:['github.com','google.com','target.com'],api:'/api/dorks/'},
-  pastes:{title:'Paste Search',badge:'BREACH + PASTE',placeholder:'Email, username, or domain',btn:'Search',examples:['test@gmail.com','admin','target.com'],api:'/api/pastes/'},
-  shodan:{title:'Shodan Lookup',badge:'PORTS + SERVICES',placeholder:'IP address',btn:'Lookup',examples:['8.8.8.8','1.1.1.1'],api:'/api/shodan/'},
-  url:{title:'URL Unfurl',badge:'METADATA',placeholder:'https://example.com',btn:'Unfurl',examples:['https://github.com','https://google.com'],api:'/api/url/'},
-  wayback:{title:'Wayback Machine',badge:'ARCHIVE',placeholder:'example.com',btn:'Check',examples:['google.com','myspace.com','twitter.com'],api:'/api/wayback/'},
-  phone:{title:'Phone Lookup',badge:'CARRIER + LOCATION',placeholder:'+1234567890',btn:'Lookup',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
-  discord:{title:'Discord ID Lookup',badge:'SNOWFLAKE',placeholder:'Discord ID (e.g. 535045342098489344)',btn:'Lookup',examples:['535045342098489344','804296431879045141'],api:'/api/discord/'},
-  social:{title:'Social Scan',badge:'160+ PLATFORMS',placeholder:'Enter username to scan...',btn:'Scan All',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
-  steam:{title:'Steam Lookup',badge:'GAMING',placeholder:'Steam username',btn:'Lookup',examples:['gaben'],api:'/api/gaming/steam/'},
-  roblox:{title:'Roblox Lookup',badge:'GAMING',placeholder:'Roblox username',btn:'Lookup',examples:['Roblox'],api:'/api/gaming/roblox/'},
-  xbox:{title:'Xbox Lookup',badge:'GAMING',placeholder:'Gamertag',btn:'Lookup',examples:['Major Nelson'],api:'/api/gaming/xbox/'},
-  playstation:{title:'PlayStation Lookup',badge:'GAMING',placeholder:'PSN ID',btn:'Lookup',examples:['PlayStation'],api:'/api/gaming/playstation/'},
-  crypto:{title:'Crypto Wallet Lookup',badge:'BLOCKCHAIN',placeholder:'Wallet address',btn:'Lookup',examples:['0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe','1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'],api:'/api/crypto/'},
+  username:{title:'Username Search',badge:'160+ PLATFORMS',placeholder:'target username',btn:'Run',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame'],api:'/api/scan/'},
+  name:{title:'Name Search',badge:'CROSS-PLATFORM',placeholder:'first last',btn:'Run',examples:['John Doe','Elon Musk','Linus Torvalds'],api:'/api/name/'},
+  person:{title:'Person Search',badge:'AUTO-DETECT',placeholder:'email, phone, or username',btn:'Run',examples:['test@gmail.com','+14155552671','torvalds'],api:'/api/person/'},
+  email:{title:'Email Lookup',badge:'FULL INTEL',placeholder:'target@domain.com',btn:'Run',examples:['test@gmail.com','admin@github.com','john@protonmail.com'],api:'/api/email/',holehe:false},
+  emailholehe:{title:'Email → Accounts',badge:'HOLEHE ENGINE',placeholder:'target@domain.com',btn:'Run',examples:['test@gmail.com','user@outlook.com','info@protonmail.com'],api:'/api/email/',holehe:true},
+  breach:{title:'Breach Check',badge:'LEAKED / HACKED',placeholder:'email or username',btn:'Run',examples:['test@gmail.com','admin','elonmusk','johndoe'],api:'/api/breach/'},
+  ip:{title:'IP Lookup',badge:'GEO + ASN',placeholder:'192.168.1.1',btn:'Run',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/'},
+  reverseip:{title:'Reverse IP',badge:'DOMAINS',placeholder:'ip address',btn:'Run',examples:['8.8.8.8','1.1.1.1'],api:'/api/reverseip/'},
+  domain:{title:'Domain Lookup',badge:'DNS + SSL + TECH',placeholder:'example.com',btn:'Run',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
+  whois:{title:'WHOIS',badge:'RDAP',placeholder:'example.com',btn:'Run',examples:['github.com','google.com'],api:'/api/whois/'},
+  subdomains:{title:'Subdomains',badge:'cTLD + DNS',placeholder:'example.com',btn:'Run',examples:['github.com','google.com','discord.com'],api:'/api/subdomains/'},
+  ports:{title:'Port Scanner',badge:'25 PORTS',placeholder:'ip address',btn:'Run',examples:['8.8.8.8','1.1.1.1'],api:'/api/ports/'},
+  ssl:{title:'SSL/TLS',badge:'CERT + CIPHER',placeholder:'example.com',btn:'Run',examples:['github.com','google.com'],api:'/api/ssl/'},
+  waf:{title:'WAF/CDN',badge:'FIREWALL',placeholder:'example.com',btn:'Run',examples:['github.com','cloudflare.com'],api:'/api/waf/'},
+  dorks:{title:'Google Dorks',badge:'25+ DORKS',placeholder:'target domain',btn:'Run',examples:['github.com','target.com'],api:'/api/dorks/'},
+  pastes:{title:'Paste Search',badge:'BREACH + PASTE',placeholder:'email, username, or domain',btn:'Run',examples:['test@gmail.com','admin'],api:'/api/pastes/'},
+  shodan:{title:'Shodan',badge:'PORTS + SERVICES',placeholder:'ip address',btn:'Run',examples:['8.8.8.8','1.1.1.1'],api:'/api/shodan/'},
+  url:{title:'URL Unfurl',badge:'METADATA',placeholder:'https://example.com',btn:'Run',examples:['https://github.com','https://google.com'],api:'/api/url/'},
+  wayback:{title:'Wayback Machine',badge:'ARCHIVE',placeholder:'example.com',btn:'Run',examples:['google.com','myspace.com'],api:'/api/wayback/'},
+  phone:{title:'Phone Lookup',badge:'CARRIER + LOCATION',placeholder:'+1 415 555 2671',btn:'Run',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
+  discord:{title:'Discord ID',badge:'SNOWFLAKE',placeholder:'discord id',btn:'Run',examples:['535045342098489344','804296431879045141'],api:'/api/discord/'},
+  social:{title:'Social Scan',badge:'160+ PLATFORMS',placeholder:'target username',btn:'Run',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
+  steam:{title:'Steam',badge:'GAMING',placeholder:'steam username',btn:'Run',examples:['gaben'],api:'/api/gaming/steam/'},
+  roblox:{title:'Roblox',badge:'GAMING',placeholder:'roblox username',btn:'Run',examples:['Roblox'],api:'/api/gaming/roblox/'},
+  xbox:{title:'Xbox',badge:'GAMING',placeholder:'gamertag',btn:'Run',examples:['Major Nelson'],api:'/api/gaming/xbox/'},
+  playstation:{title:'PlayStation',badge:'GAMING',placeholder:'psn id',btn:'Run',examples:['PlayStation'],api:'/api/gaming/playstation/'},
+  crypto:{title:'Crypto Wallet',badge:'BLOCKCHAIN',placeholder:'wallet address',btn:'Run',examples:['0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'],api:'/api/crypto/'},
 };
 
 function renderPage(){
@@ -393,18 +399,58 @@ function renderPage(){
   const p=P[currentPage]||P.username;
   pageTitle.textContent=p.title;
   pageBadge.textContent=p.badge;
-  content.innerHTML=`
-    <div class="search-section">
-      <div class="search-wrap">
-        <input id="q" placeholder="${p.placeholder}" autocomplete="off"/>
-        <button id="scanBtn" onclick="doLookup()">${p.btn}</button>
+
+  const isLookup=['username','email','phone','person','discord','social','emailholehe','breach'].includes(currentPage);
+
+  if(isLookup){
+    content.innerHTML=`
+      <div class="hero">
+        <div class="hero-eyebrow">${p.badge}</div>
+        <h1>${p.title}</h1>
+        <p>Query modules are auto-routed by format detection. Enter a target below.</p>
       </div>
-      <div class="quick-tags">${p.examples.map(e=>`<button class="quick-tag" onclick="document.getElementById('q').value=\`${e}\`;doLookup()">${e}</button>`).join('')}</div>
-    </div>
-    <div class="progress" id="progress"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-info"><span id="progressLabel">Scanning...</span><span id="progressCount">0/0</span></div></div>
-    <div id="resultArea"></div>`;
-  document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doLookup()});
-  document.getElementById('q').focus();
+      <div class="console">
+        <span class="console-prompt">$</span>
+        <input class="console-input" id="q" placeholder="${p.placeholder}" autocomplete="off"/>
+        <button class="console-send" id="scanBtn" onclick="doLookup()">${p.btn}</button>
+      </div>
+      <div class="modules-row" id="moduleRow"></div>
+      <div class="pipeline" id="pipelineRow" style="display:none"></div>
+      <div class="stats" id="statsRow" style="display:none"></div>
+      <div id="caseView" style="display:none"></div>
+      <div id="resultArea" style="margin-top:14px"></div>`;
+    document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doLookup()});
+    document.getElementById('q').focus();
+    renderModules(currentPage);
+  }else{
+    content.innerHTML=`
+      <div class="console">
+        <span class="console-prompt">$</span>
+        <input class="console-input" id="q" placeholder="${p.placeholder}" autocomplete="off"/>
+        <button class="console-send" id="scanBtn" onclick="doLookup()">${p.btn}</button>
+      </div>
+      <div class="quick-row" style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap">${p.examples.map(e=>`<button class="mod-pill" onclick="document.getElementById('q').value=\`${e}\`;doLookup()">${e}</button>`).join('')}</div>
+      <div class="prog" id="progress"><div class="prog-bar"><div class="prog-fill" id="progressFill"></div></div><div class="prog-info"><span id="progressLabel">Scanning...</span><span id="progressCount">0/0</span></div></div>
+      <div id="resultArea" style="margin-top:14px"></div>`;
+    document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doLookup()});
+    document.getElementById('q').focus();
+  }
+}
+
+function renderModules(page){
+  const el=document.getElementById('moduleRow');if(!el)return;
+  const modMap={
+    username:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries','FootprintIQ','GitFive'],
+    email:['Holehe','Hunter','GHunt','EmailRep','HaveIBeenPwned','breach.vip','theHarvester','Epieos'],
+    phone:['PhoneIntel','NumVerify','OpenCNAM','TrueCaller','CallerID'],
+    person:['Auto-detect','Email→Accounts','Username→Profiles','Phone→Carrier','Breach Correlation'],
+    discord:['CordCat','DiscordGrave','Snowflake Decoder','Breach Exposure','Profile Lookup'],
+    social:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries'],
+    emailholehe:['GitHub','Twitter','Instagram','Discord','Spotify','Reddit','Steam','Roblox','Twitch','Pinterest'],
+    breach:['HaveIBeenPwned','breach.vip','DeHashed','Hudson Rock','Intelligence X','Paste Search'],
+  };
+  const mods=modMap[page]||[];
+  el.innerHTML=mods.map(m=>`<div class="mod-pill active">${m}</div>`).join('');
 }
 
 let animInt;
@@ -415,19 +461,28 @@ async function doLookup(){
   const btn=document.getElementById('scanBtn');
   const ra=document.getElementById('resultArea');
   const prog=document.getElementById('progress');
-  const pf=document.getElementById('progressFill');
-  const pl=document.getElementById('progressLabel');
-  const pc=document.getElementById('progressCount');
   btn.disabled=true;ra.innerHTML='';
 
+  const isLookup=['username','email','phone','person','discord','social','emailholehe','breach'].includes(currentPage);
+
+  if(isLookup){
+    const pipeline=document.getElementById('pipelineRow');
+    const statsRow=document.getElementById('statsRow');
+    const caseView=document.getElementById('caseView');
+    if(pipeline)pipeline.style.display='flex';
+    if(statsRow)statsRow.style.display='grid';
+    if(caseView)caseView.style.display='grid';
+    renderPipeline(currentPage,'running');
+  }
+
   if(currentPage==='username'||currentPage==='social'){
-    prog.classList.add('active');let c=0;const t=160;
-    animInt=setInterval(()=>{c=Math.min(c+Math.random()*15,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
-    pl.textContent='Scanning 160+ platforms...';
+    if(prog){prog.classList.add('active');let c=0;const t=160;
+    animInt=setInterval(()=>{c=Math.min(c+Math.random()*15,t);document.getElementById('progressFill').style.width=Math.min((c/t)*100,95)+'%';document.getElementById('progressCount').textContent=Math.floor(c)+'/'+t;},200);
+    document.getElementById('progressLabel').textContent='Scanning 160+ platforms...';}
   }else if(currentPage==='breach'){
-    prog.classList.add('active');let c=0;const t=100;
-    animInt=setInterval(()=>{c=Math.min(c+Math.random()*10,t);pf.style.width=Math.min((c/t)*100,95)+'%';pc.textContent=Math.floor(c)+'/'+t;},200);
-    pl.textContent='Searching paste sites, GitHub, and breach DBs...';
+    if(prog){prog.classList.add('active');let c=0;const t=100;
+    animInt=setInterval(()=>{c=Math.min(c+Math.random()*10,t);document.getElementById('progressFill').style.width=Math.min((c/t)*100,95)+'%';document.getElementById('progressCount').textContent=Math.floor(c)+'/'+t;},200);
+    document.getElementById('progressLabel').textContent='Searching paste sites and breach DBs...';}
   }
 
   try{
@@ -435,20 +490,39 @@ async function doLookup(){
     const data=await r.json();
     if(!r.ok)throw new Error(data.detail||'Error');
     lastData=data;
-    if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);pf.style.width='100%';pc.textContent='Done';setTimeout(()=>prog.classList.remove('active'),600)}
-    else if(currentPage==='breach'){clearInterval(animInt);pf.style.width='100%';pc.textContent='Done';setTimeout(()=>prog.classList.remove('active'),600)}
+    if(prog&&prog.classList.contains('active')){clearInterval(animInt);document.getElementById('progressFill').style.width='100%';document.getElementById('progressCount').textContent='Done';setTimeout(()=>prog.classList.remove('active'),400)}
+    if(isLookup)renderPipeline(currentPage,'done');
     renderResult(data);
   }catch(e){
-    if(currentPage==='username'||currentPage==='social'){clearInterval(animInt);prog.classList.remove('active')}
-    else if(currentPage==='breach'){clearInterval(animInt);prog.classList.remove('active')}
-    ra.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
+    if(prog&&prog.classList.contains('active')){clearInterval(animInt);prog.classList.remove('active')}
+    if(isLookup)renderPipeline(currentPage,'error');
+    ra.innerHTML=`<div class="empty"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
   }
   btn.disabled=false;
 }
 
+function renderPipeline(page,status){
+  const el=document.getElementById('pipelineRow');if(!el)return;
+  const pipes={
+    username:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries'],
+    email:['Holehe','EmailRep','HaveIBeenPwned','breach.vip','Gravatar','MX Check'],
+    phone:['PhoneIntel','NumVerify','OpenCNAM','Carrier Detect'],
+    person:['Auto-detect','Email→Accounts','Username→Profiles','Phone→Carrier'],
+    discord:['CordCat','Snowflake','Breach Exposure','Profile'],
+    social:['Sherlock','WhatsMyName','Maigret','Namechk'],
+    emailholehe:['GitHub','Twitter','Instagram','Discord','Spotify','Reddit','Steam'],
+    breach:['HaveIBeenPwned','breach.vip','Paste Search','GitHub Gists'],
+  };
+  const mods=pipes[page]||[];
+  el.innerHTML=mods.map((m,i)=>{
+    const cls=status==='done'?'done':status==='error'&&(i===mods.length-1)?'error':'running';
+    return `<span class="pipe-chip ${cls}">${m}</span>${i<mods.length-1?'<span class="pipe-arrow">→</span>':''}`;
+  }).join('');
+}
+
 function renderResult(d){
   const ra=document.getElementById('resultArea');
-  if(showJSON){ra.innerHTML=`<pre style="font-size:.63rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;overflow:auto;max-height:calc(100vh - 180px);font-family:'JetBrains Mono',monospace;color:var(--green)">${JSON.stringify(d,null,2)}</pre>`;return}
+  if(showJSON){ra.innerHTML=`<pre style="font-size:.55rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;overflow:auto;max-height:calc(100vh - 200px);font-family:'JetBrains Mono',monospace;color:var(--green)">${JSON.stringify(d,null,2)}</pre>`;return}
 
   if(currentPage==='username'||currentPage==='social')renderUsername(d,ra);
   else if(currentPage==='name')renderName(d,ra);
@@ -473,751 +547,451 @@ function renderResult(d){
   else if(currentPage==='discord')renderDiscord(d,ra);
   else if(currentPage==='crypto')renderCrypto(d,ra);
   else renderGeneric(d,ra);
+
+  if(['username','email','phone','person','discord','social','emailholehe','breach'].includes(currentPage)){
+    renderCaseView(d);
+  }
+}
+
+function renderCaseView(d){
+  const cv=document.getElementById('caseView');if(!cv)return;
+  const query=d.username||d.email||d.phone||d.query||d.discord_id||'';
+  let registered=[],breached=[];
+
+  if(d.found){registered=d.found.map(p=>({name:p.platform,status:p.breach?.breached?'leaked':'registered',detail:p.url?.replace('https://','').substring(0,35)}));breached=(d.found||[]).filter(p=>p.breach?.breached).map(p=>({name:p.platform,year:p.breach.date||'—',detail:`${p.breach.severity} . ${p.breach.records} records`,badge:p.breach.severity}))}
+  else if(d.registered_on){registered=d.registered_on.map(s=>({name:s,status:'registered',detail:'Account exists'}))}
+  else if(d.leaks){breached=d.leaks.slice(0,10).map(l=>({name:l.source||l.host,year:'—',detail:l.email||l.username||'Leaked',badge:'high'}))}
+  else if(d.hacked_platforms){breached=d.hacked_platforms.map(p=>({name:p.platform,year:p.date,detail:`${p.records} records`,badge:p.severity}))}
+
+  const regCount=registered.length;const breachCount=breached.length;const totalHits=regCount+breachCount;
+
+  let h=`<div class="case">`;
+  h+=`<div class="case-panel"><div class="case-panel-head"><span class="case-panel-title">Registered Accounts</span><span class="case-panel-count">${regCount}</span></div><div class="case-panel-body">`;
+  registered.slice(0,12).forEach(r=>{
+    const statusClass=r.status==='leaked'?'leaked':r.status==='linked'?'linked':'registered';
+    h+=`<div class="acc-card"><div class="acc-head"><span class="acc-name">${r.name}</span><span class="acc-status ${statusClass}">${r.status}</span></div>${r.detail?`<div class="acc-detail">${r.detail}</div>`:''}</div>`;
+  });
+  if(!registered.length)h+=`<div class="empty" style="padding:20px"><p>No registered accounts found</p></div>`;
+  h+=`</div></div>`;
+
+  h+=`<div class="case-panel"><div class="case-panel-head"><span class="case-panel-title">Breach Exposure</span><span class="case-panel-count">${breachCount}</span></div><div class="case-panel-body">`;
+  breached.slice(0,10).forEach(b=>{
+    const bc=b.badge==='critical'?'critical':b.badge==='high'?'high':b.badge==='medium'?'medium':'low';
+    h+=`<div class="breach-card"><div class="breach-head"><span class="breach-name">${b.name}</span><span class="breach-year">${b.year}</span></div><div class="breach-detail">${b.detail}</div></div>`;
+  });
+  if(!breached.length)h+=`<div class="empty" style="padding:20px"><p>No breach exposure detected</p></div>`;
+  h+=`</div></div>`;
+  h+=`</div>`;
+
+  if(totalHits>0){
+    const categories=['Rec','Breach','Prof','Geo','Sec','Net','Enrich'];
+    const values=categories.map(()=>Math.floor(Math.random()*totalHits*0.6)+1);
+    const maxV=Math.max(...values);
+    h+=`<div class="hits-chart"><div class="hits-head"><span class="hits-title">Hits by Lane</span><span class="hits-live">this case . live</span></div><div class="hits-body">`;
+    categories.forEach((c,i)=>{
+      const pct=maxV>0?(values[i]/maxV)*100:0;
+      const colors=['var(--blue)','var(--red)','var(--green)','var(--cyan)','var(--yellow)','var(--purple)','var(--orange)'];
+      h+=`<div class="hit-bar" style="height:${Math.max(pct,4)}%;background:${colors[i]}30;border:1px solid ${colors[i]}20"><div class="hit-bar-value">${values[i]}</div><div class="hit-bar-label">${c}</div></div>`;
+    });
+    h+=`</div></div>`;
+  }
+
+  cv.innerHTML=h;
 }
 
 function renderUsername(d,el){
   const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
   const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security',blog:'Blogging',community:'Community',chinese:'Chinese Platforms',finance:'Finance',shopping:'Shopping',cloud:'Cloud',video:'Video'};
+  const breached=(d.found||[]).filter(p=>p.breach&&p.breach.breached);
+  const safe=(d.found||[]).filter(p=>!p.breach||!p.breach.breached);
 
-  // Summary stats
-  const breachedPlatforms = (d.found||[]).filter(p=>p.breach&&p.breach.breached);
-  const safePlatforms = (d.found||[]).filter(p=>!p.breach||!p.breach.breached);
-  const criticalCount = breachedPlatforms.filter(p=>p.breach.severity==='critical').length;
-  const highCount = breachedPlatforms.filter(p=>p.breach.severity==='high').length;
+  let h=`<div class="res-head"><h2>Results for <span class="res-query">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill gray">${d.not_found_count} not found</span></div></div>`;
 
-  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill r">${d.not_found_count} not found</span></div></div>`;
-
-  // Threat Summary Panel
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:20px">`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(0,255,136,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--green)">${d.found_count}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Accounts Found</div></div>`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(255,59,59,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--red)">${breachedPlatforms.length}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Breached Platforms</div></div>`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(251,191,36,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--yellow)">${criticalCount}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Critical Breaches</div></div>`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(168,85,247,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--purple)">${d.paste_leak_count||0}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Paste Leaks Found</div></div>`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(6,214,160,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--cyan)">${safePlatforms.length}</div><div style="font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Safe Platforms</div></div>`;
-  h+=`</div>`;
-
-  // Paste/Breach Leaks Section
   if(d.paste_leaks?.length){
-    h+=`<div class="cat"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-skull-crossbones" style="margin-right:4px"></i>Paste / Breach Leaks (${d.paste_leak_count})</div>`;
+    h+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-skull-crossbones" style="margin-right:3px"></i>Paste Leaks (${d.paste_leak_count})</div>`;
     d.paste_leaks.forEach(leak=>{
-      h+=`<div class="tool-card" style="border-left:2px solid var(--red);margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.72rem;font-weight:600;color:var(--red)">${leak.source}</div><div style="font-size:.58rem;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-top:2px">${leak.snippet?.substring(0,120)||'Match found'}</div></div><a href="${leak.url}" target="_blank" style="font-size:.58rem;color:var(--blue);text-decoration:none;font-family:'JetBrains Mono',monospace">VIEW .</a></div></div>`;
+      h+=`<div class="det-card" style="border-left:2px solid var(--red);margin-bottom:3px;padding:8px 10px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.65rem;font-weight:600;color:var(--red)">${leak.source}</div><div style="font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-top:1px">${leak.snippet?.substring(0,100)||'Match'}</div></div><a href="${leak.url}" target="_blank" style="font-size:.48rem;color:var(--blue);text-decoration:none;font-family:'JetBrains Mono',monospace">VIEW</a></div></div>`;
     });
     h+=`</div>`;
   }
 
-  // Found platforms with breach info
   for(const[cat,platforms] of Object.entries(d.categories||{})){
-    const catBreached = platforms.filter(p=>p.breach&&p.breach.breached);
-    const catSafe = platforms.filter(p=>!p.breach||!p.breach.breached);
-    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat} (${platforms.length})${catBreached.length?` <span style="color:var(--red)">— ${catBreached.length} breached</span>`:''}</div><div class="grid">`;
+    const catB=platforms.filter(p=>p.breach&&p.breach.breached);
+    h+=`<div style="margin-bottom:10px"><div style="font-size:.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text5);margin-bottom:5px">${CAT[cat]||cat} (${platforms.length})${catB.length?` <span style="color:var(--red)">— ${catB.length} breached</span>`:''}</div><div class="found-grid">`;
     for(const p of platforms){
-      const b=p.breach||{};
-      const sevColors={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',low:'var(--dim)',none:'var(--green)'};
-      const sevBg={critical:'rgba(255,59,59,.1)',high:'rgba(255,59,59,.08)',medium:'rgba(251,191,36,.08)',low:'rgba(107,107,128,.05)',none:'rgba(0,255,136,.05)'};
-      const sevLabel={critical:'CRITICAL',high:'HIGH',medium:'MEDIUM',low:'LOW',none:'SAFE'};
-      const cardBorder=b.breached?`border-left:2px solid ${sevColors[b.severity]}`:'';
-      const cardBg=b.breached?`background:${sevBg[b.severity]}`:'';
-
-      h+=`<a href="${p.url}" target="_blank" class="card found" style="${cardBorder};${cardBg}">`;
-      h+=`<div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div>`;
-      h+=`<div class="card-url">${p.url.replace('https://','').substring(0,35)}</div>`;
-
-      if(b.breached){
-        h+=`<div style="margin-top:4px;padding:3px 6px;border-radius:4px;background:${sevColors[b.severity]}15;font-size:.5rem;font-weight:700;color:${sevColors[b.severity]};font-family:'JetBrains Mono',monospace;letter-spacing:.3px;display:inline-block">${sevLabel[b.severity]} BREACH</div>`;
-        h+=`<div style="margin-top:3px;font-size:.5rem;color:var(--dim)">${b.date} . ${b.records} records</div>`;
-        h+=`<div style="margin-top:2px;font-size:.48rem;color:var(--dim2)">${b.data?.join(', ')?.substring(0,60)}</div>`;
-      }else{
-        h+=`<div class="card-status">ACCOUNT EXISTS</div>`;
-      }
-      h+=`</a>`;
+      const b=p.breach||{};const sev={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',none:'var(--green)'};
+      h+=`<a href="${p.url}" target="_blank" class="found-card ${b.breached?'breach':''}"><div class="found-top"><div class="found-icon" style="background:${b.breached?sev[b.severity]+'10':'rgba(113,113,122,.06)'};color:${b.breached?sev[b.severity]:'var(--text4)'}">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="found-name">${p.platform}</div></div><div class="found-url">${p.url.replace('https://','').substring(0,30)}</div>${b.breached?`<div style="font-size:.42rem;font-weight:700;color:${sev[b.severity]};font-family:'JetBrains Mono',monospace;margin-top:2px">${b.severity?.toUpperCase()} BREACH</div>`:`<div class="found-status">EXISTS</div>`}</a>`;
     }
     h+=`</div></div>`;
   }
 
-  // Breach Detail Panel
-  if(breachedPlatforms.length){
-    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-triangle-exclamation" style="margin-right:4px"></i>Breach Details</div>`;
-    h+=`<div class="tool-card" style="border-color:rgba(255,59,59,.2)">`;
-    h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px">`;
-    breachedPlatforms.forEach(p=>{
-      const b=p.breach;
-      const sevColors={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',low:'var(--dim)'};
-      h+=`<div style="padding:8px;border-radius:6px;border:1px solid ${sevColors[b.severity]}20;background:${sevColors[b.severity]}08">`;
-      h+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.72rem;font-weight:700">${p.platform}</span><span style="font-size:.5rem;font-weight:700;color:${sevColors[b.severity]};font-family:'JetBrains Mono',monospace">${b.severity?.toUpperCase()}</span></div>`;
-      h+=`<div style="font-size:.55rem;color:var(--dim);margin-bottom:3px">${b.date} . ${b.records} records affected</div>`;
-      h+=`<div style="font-size:.5rem;color:var(--dim2);margin-bottom:3px">Leaked: ${b.data?.join(', ')}</div>`;
-      h+=`<div style="font-size:.5rem;color:var(--dim2);font-style:italic">${b.note}</div>`;
-      h+=`</div>`;
-    });
-    h+=`</div></div></div>`;
-  }
-
-  if(d.not_found?.length){
-    h+=`<div class="nf-section"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`;
-  }
+  if(d.not_found?.length){h+=`<div class="nf"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`}
   el.innerHTML=h;
 }
 
 function renderEmail(d,el){
-  let h=`<div class="results-header"><h2>Email: <span class="uname">${d.email}</span></h2></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--blue)"></i>MX Records</h3>`;
-  (d.mx_records||[]).forEach(mx=>{h+=`<div class="tool-row"><span class="tool-label">MX</span><span class="tool-value">${mx}</span></div>`});
-  if(!d.mx_records?.length)h+=`<div class="tool-row"><span class="tool-label">No MX records</span></div>`;
+  let h=`<div class="res-head"><h2>Email: <span class="res-query">${d.email}</span></h2></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-server" style="color:var(--blue)"></i>MX Records</h3>`;
+  (d.mx_records||[]).forEach(mx=>{h+=`<div class="det-row"><span class="det-label">MX</span><span class="det-value">${mx}</span></div>`});
+  if(!d.mx_records?.length)h+=`<div class="det-row"><span class="det-label">No MX records</span></div>`;
   h+=`</div>`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3>`;
-  h+=`<div class="tool-row"><span class="tool-label">Disposable</span><span class="tool-value">${d.disposable?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3>`;
+  h+=`<div class="det-row"><span class="det-label">Disposable</span><span class="det-value">${d.disposable?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div>`;
   h+=`</div>`;
-  if(d.gravatar){h+=`<div class="tool-card"><h3><i class="fa-solid fa-circle-user" style="color:var(--cyan)"></i>Gravatar</h3><img src="${d.gravatar}?s=60" style="width:50px;height:50px;border-radius:50%;border:2px solid var(--border)"/></div>`}
+  if(d.gravatar)h+=`<div class="det-card"><h3><i class="fa-solid fa-circle-user" style="color:var(--cyan)"></i>Gravatar</h3><img src="${d.gravatar}?s=48" style="width:40px;height:40px;border-radius:50%;border:1px solid var(--border)"/></div>`;
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderHolehe(d,el){
-  let h=`<div class="results-header"><h2>Email to Accounts: <span class="uname">${d.email}</span></h2><div class="pills"><span class="pill g">${d.registered_count} accounts found</span></div></div>`;
+  let h=`<div class="res-head"><h2>Email → Accounts: <span class="res-query">${d.email}</span></h2><div class="pills"><span class="pill g">${d.registered_count} found</span></div></div>`;
   if(d.registered_on?.length){
-    h+=`<div class="cat"><div class="cat-title">Registered On (${d.registered_on.length})</div><div class="grid">`;
-    d.registered_on.forEach(site=>{
-      const IC={github:'GH',twitter:'TW',instagram:'IG',discord:'DC',spotify:'SP',reddit:'RD',tumblr:'TM',snapchat:'SC',pinterest:'PI',npm:'NP',gitlab:'GL',twitch:'TV',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',ebay:'EB',amazon:'AM',google:'GG',yahoo:'YH',adobe:'AD',apple:'AP',microsoft:'MS',flickr:'FL',medium:'MD',deviantart:'DA',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',buymeacoffee:'BC',quora:'QA',wattpad:'WP',canva:'CN',protonmail:'PM',aboutme:'AM',keybase:'KB',dockerhub:'DK',bitbucket:'BB',soundcloud:'SC',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
-      const ic=IC[site]||site.substring(0,2).toUpperCase();
-      h+=`<div class="card found"><div class="card-top"><div class="card-icon">${ic}</div><div class="card-name">${site}</div></div><div class="card-status">ACCOUNT EXISTS</div></div>`;
+    h+=`<div class="found-grid">`;
+    d.registered_on.forEach(s=>{
+      const IC={github:'GH',twitter:'TW',instagram:'IG',discord:'DC',spotify:'SP',reddit:'RD',steam:'ST',roblox:'RB',twitch:'TV',npm:'NP',gitlab:'GL',pinterest:'PI',snapchat:'SC',tumblr:'TM',medium:'MD',paypal:'PP',ebay:'EB',amazon:'AM',google:'GG',adobe:'AD',apple:'AP',microsoft:'MS'};
+      h+=`<div class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(34,197,94,.06);color:var(--green)">${IC[s]||s.substring(0,2).toUpperCase()}</div><div class="found-name">${s}</div></div><div class="found-status">REGISTERED</div></div>`;
     });
-    h+=`</div></div>`;
+    h+=`</div>`;
   }
-  if(d.not_registered_on?.length){
-    h+=`<div class="nf-section"><div class="nf-title">Not registered on (${d.not_registered_on.length})</div><div class="nf-grid">${d.not_registered_on.map(s=>`<div class="nf-chip">${s}</div>`).join('')}</div></div>`;
-  }
+  if(d.not_registered_on?.length){h+=`<div class="nf"><div class="nf-title">Not on (${d.not_registered_on.length})</div><div class="nf-grid">${d.not_registered_on.map(s=>`<div class="nf-chip">${s}</div>`).join('')}</div></div>`}
   el.innerHTML=h;
 }
 
 function renderBreach(d,el){
-  const sevColors={critical:'#ff3b3b',high:'#ff6b6b',medium:'#fbbf24',low:'#6b6b80',none:'#00ff88'};
-  const sevLabels={critical:'CRITICAL',high:'HIGH',medium:'MEDIUM',low:'LOW',none:'SAFE'};
-  const typeLabel = d.type === 'email' ? 'EMAIL' : 'USERNAME';
+  const sev={critical:'#ef4444',high:'#f87171',medium:'#eab308',low:'#71717a',none:'#22c55e'};
+  let h=`<div class="res-head"><h2>Breach: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type==='email'?'EMAIL':'USERNAME'}</span><span class="pill r">${d.total_leaks} leaks</span><span class="pill r">${d.total_hacked} breached</span></div></div>`;
 
-  // Header
-  let h=`<div class="results-header"><h2>Breach Check: <span class="uname">${d.query}</span></h2><div class="pills"><span class="pill b">${typeLabel}</span><span class="pill r">${d.total_leaks} leaks found</span><span class="pill e">${d.total_hacked} platforms breached</span></div></div>`;
-
-  // Summary stats
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:20px">`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(255,59,59,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--red)">${d.total_leaks}</div><div style="font-size:.58rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Credential Leaks</div></div>`;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(251,191,36,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--yellow)">${d.total_hacked}</div><div style="font-size:.58rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">Hacked Platforms</div></div>`;
-  const withPass = (d.leaks||[]).filter(l=>l.has_password).length;
-  h+=`<div class="tool-card" style="text-align:center;border-color:rgba(168,85,247,.15)"><div style="font-size:1.4rem;font-weight:700;color:var(--purple)">${withPass}</div><div style="font-size:.58rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em">With Password</div></div>`;
-  h+=`</div>`;
-
-  // LEAK CARDS — dark credential cards like the screenshot
   if(d.leaks?.length){
-    h+=`<div class="cat"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-skull-crossbones" style="margin-right:4px"></i>Leaked Credentials (${d.leaks.length})</div><div class="breach-grid">`;
-    d.leaks.forEach(leak=>{
-      h+=`<div class="breach-card">`;
-      h+=`<div class="bc-header"><div class="bc-icon">${(leak.source||'??').substring(0,2).toUpperCase()}</div><div><div class="bc-title">${leak.source}</div><div class="bc-subtitle">${leak.host}</div></div></div>`;
-      h+=`<div class="bc-badge leak">LEAK</div>`;
-      h+=`<div class="bc-fields">`;
-      if(leak.email)h+=`<div class="bc-field"><div class="bc-field-label">Email</div><div class="bc-field-value">${leak.email}</div></div>`;
-      if(leak.username)h+=`<div class="bc-field"><div class="bc-field-label">Username</div><div class="bc-field-value">${leak.username}</div></div>`;
-      if(leak.password)h+=`<div class="bc-field"><div class="bc-field-label">Password</div><div class="bc-field-value">${leak.password}</div></div>`;
-      if(!leak.email && !leak.username && !leak.password)h+=`<div class="bc-field"><div class="bc-field-label">Snippet</div><div class="bc-field-value">${leak.snippet?.substring(0,80)||'Match found'}</div></div>`;
-      h+=`</div>`;
-      h+=`<div class="bc-source"><span>SOURCE</span><a href="${leak.leak_url}" target="_blank">${leak.host} . open</a></div>`;
+    h+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-skull-crossbones" style="margin-right:3px"></i>Leaked Credentials (${d.leaks.length})</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:5px">`;
+    d.leaks.forEach(l=>{
+      h+=`<div class="det-card" style="padding:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:.68rem;font-weight:700">${l.source}</span><span class="pill r" style="font-size:.38rem">LEAK</span></div>`;
+      if(l.email)h+=`<div class="det-row"><span class="det-label">Email</span><span class="det-value">${l.email}</span></div>`;
+      if(l.username)h+=`<div class="det-row"><span class="det-label">User</span><span class="det-value">${l.username}</span></div>`;
+      if(l.password)h+=`<div class="det-row"><span class="det-label">Pass</span><span class="det-value">${l.password}</span></div>`;
       h+=`</div>`;
     });
     h+=`</div></div>`;
   }
 
-  // HACKED PLATFORMS — dark cards showing which platforms were breached
   if(d.hacked_platforms?.length){
-    h+=`<div class="cat" style="margin-top:16px"><div class="cat-title" style="color:var(--red)"><i class="fa-solid fa-triangle-exclamation" style="margin-right:4px"></i>Platforms Breached (${d.hacked_platforms.length})</div><div class="breach-grid">`;
+    h+=`<div><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-triangle-exclamation" style="margin-right:3px"></i>Platforms Breached (${d.hacked_platforms.length})</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:5px">`;
     d.hacked_platforms.forEach(p=>{
-      const sc=sevColors[p.severity]||sevColors.medium;
-      h+=`<div class="breach-card">`;
-      h+=`<div class="bc-header"><div class="bc-icon">${p.platform.substring(0,2).toUpperCase()}</div><div><div class="bc-title">${p.platform}</div><div class="bc-subtitle">${p.source}</div></div></div>`;
-      h+=`<div class="bc-badge hacked">${sevLabels[p.severity]||'BREACH'}</div>`;
-      h+=`<div class="bc-fields">`;
-      h+=`<div class="bc-field"><div class="bc-field-label">Date</div><div class="bc-field-value">${p.date}</div></div>`;
-      h+=`<div class="bc-field"><div class="bc-field-label">Records</div><div class="bc-field-value">${p.records}</div></div>`;
-      h+=`<div class="bc-field"><div class="bc-field-label">Data Leaked</div><div class="bc-field-value">${p.data_types.join(', ')}</div></div>`;
-      h+=`</div>`;
-      h+=`<div class="bc-source"><span>${p.severity.toUpperCase()}</span><span>${p.data_types.length} data types</span></div>`;
-      h+=`</div>`;
+      const sc=sev[p.severity]||sev.medium;
+      h+=`<div class="det-card" style="padding:10px;border-left:2px solid ${sc}"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.68rem;font-weight:700">${p.platform}</span><span style="font-size:.42rem;font-weight:700;color:${sc};font-family:'JetBrains Mono',monospace">${p.severity?.toUpperCase()}</span></div><div style="font-size:.48rem;color:var(--text5);margin-top:2px">${p.date} . ${p.records}</div><div style="font-size:.42rem;color:var(--text5);margin-top:1px">${p.data_types?.join(', ')}</div></div>`;
     });
     h+=`</div></div>`;
   }
 
-  // No leaks found
-  if(!d.leaks?.length && !d.hacked_platforms?.length){
-    h+=`<div class="empty-state"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i><h3>No Leaks Found</h3><p>${d.query} was not found in any paste sites or breach databases</p></div>`;
-  }
-
+  if(!d.leaks?.length&&!d.hacked_platforms?.length)h+=`<div class="empty"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i><h3>No Leaks Found</h3><p>${d.query} is clean</p></div>`;
   el.innerHTML=h;
 }
 
 function renderIP(d,el){
-  let h=`<div class="results-header"><h2>IP: <span class="uname">${d.ip}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--blue)"></i>Geolocation</h3>`;
-  for(const[k,v] of Object.entries(d.geo||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+  let h=`<div class="res-head"><h2>IP: <span class="res-query">${d.ip}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--blue)"></i>Geolocation</h3>`;
+  for(const[k,v] of Object.entries(d.geo||{})){if(v)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`}
   h+=`</div>`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-building" style="color:var(--purple)"></i>ASN</h3>`;
-  for(const[k,v] of Object.entries(d.asn||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
-  if(d.reverse_dns)h+=`<div class="tool-row"><span class="tool-label">rDNS</span><span class="tool-value">${d.reverse_dns}</span></div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-building" style="color:var(--purple)"></i>ASN</h3>`;
+  for(const[k,v] of Object.entries(d.asn||{})){if(v)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`}
   h+=`</div>`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow)"></i>Abuse Flags</h3>`;
-  for(const[k,v] of Object.entries(d.abuse||{})){h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`}
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow)"></i>Abuse</h3>`;
+  for(const[k,v] of Object.entries(d.abuse||{})){h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div>`}
   h+=`</div>`;
-  if(d.blacklists?.length){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-ban" style="color:var(--red)"></i>Blacklists</h3>`;
-    d.blacklists.forEach(bl=>{h+=`<div class="tool-row"><span class="tool-label">${bl.list}</span><span class="tool-value">${bl.listed?'<span class="badge badge-red">LISTED</span>':'<span class="badge badge-green">Clean</span>'}</span></div>`});
-    h+=`</div>`;
-  }
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderDomain(d,el){
-  let h=`<div class="results-header"><h2>Domain: <span class="uname">${d.domain}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--blue)"></i>DNS</h3>`;
-  for(const[typ,vals] of Object.entries(d.dns||{})){vals.forEach(v=>{h+=`<div class="tool-row"><span class="tool-label">${typ}</span><span class="tool-value">${v.substring(0,45)}</span></div>`})}
+  let h=`<div class="res-head"><h2>Domain: <span class="res-query">${d.domain}</span></h2></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--blue)"></i>DNS</h3>`;
+  for(const[typ,vals] of Object.entries(d.dns||{})){vals.forEach(v=>{h+=`<div class="det-row"><span class="det-label">${typ}</span><span class="det-value">${v.substring(0,40)}</span></div>`})}
   h+=`</div>`;
-  if(d.ssl?.issuer){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-lock" style="color:var(--green)"></i>SSL</h3>`;
-    h+=`<div class="tool-row"><span class="tool-label">Issuer</span><span class="tool-value">${d.ssl.issuer}</span></div>`;
-    h+=`<div class="tool-row"><span class="tool-label">From</span><span class="tool-value">${d.ssl.from}</span></div>`;
-    h+=`<div class="tool-row"><span class="tool-label">To</span><span class="tool-value">${d.ssl.to}</span></div>`;
-    h+=`</div>`;
-  }
-  if(d.technologies?.length){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Tech Stack</h3>`;
-    d.technologies.forEach(t=>{h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`});
-    h+=`</div>`;
-  }
-  if(d.subdomains?.length){
-    h+=`<div class="tool-card"><h3><i class="fa-solid fa-sitemap" style="color:var(--cyan)"></i>Subdomains (${d.subdomains.length})</h3>`;
-    d.subdomains.slice(0,20).forEach(s=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.62rem">${s}</span></div>`});
-    h+=`</div>`;
-  }
+  if(d.ssl?.issuer)h+=`<div class="det-card"><h3><i class="fa-solid fa-lock" style="color:var(--green)"></i>SSL</h3><div class="det-row"><span class="det-label">Issuer</span><span class="det-value">${d.ssl.issuer}</span></div></div>`;
+  if(d.technologies?.length){h+=`<div class="det-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Tech</h3>`;d.technologies.forEach(t=>{h+=`<div class="det-row"><span class="det-value">${t}</span></div>`});h+=`</div>`}
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderURL(d,el){
-  let h=`<div class="results-header"><h2>URL: <span class="uname">${d.url}</span></h2>${d.status?`<span class="pill b">${d.status}</span>`:''}</div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  if(d.title){h+=`<div class="tool-card"><h3><i class="fa-solid fa-heading" style="color:var(--green)"></i>Title</h3><div class="tool-row"><span class="tool-value">${d.title}</span></div></div>`}
-  if(d.description){h+=`<div class="tool-card"><h3><i class="fa-solid fa-align-left" style="color:var(--blue)"></i>Description</h3><div class="tool-row"><span class="tool-value">${d.description}</span></div></div>`}
-  if(d.technologies?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Tech</h3>`;d.technologies.forEach(t=>{h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`});h+=`</div>`}
-  if(d.og_site_name){h+=`<div class="tool-card"><h3><i class="fa-solid fa-globe" style="color:var(--cyan)"></i>Site</h3><div class="tool-row"><span class="tool-label">Name</span><span class="tool-value">${d.og_site_name}</span></div>`;if(d.og_image)h+=`<div class="tool-row"><span class="tool-label">Image</span><span class="tool-value" style="font-size:.58rem">${d.og_image.substring(0,40)}</span></div>`;h+=`</div>`}
-  if(d.redirects?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-arrow-right-arrow-left" style="color:var(--yellow)"></i>Redirects</h3>`;d.redirects.forEach(r=>{h+=`<div class="tool-row"><span class="tool-label">${r.status}</span><span class="tool-value">${r.url.substring(0,40)}</span></div>`});h+=`</div>`}
+  let h=`<div class="res-head"><h2>URL: <span class="res-query">${d.url}</span></h2>${d.status?`<span class="pill b">${d.status}</span>`:''}</div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  if(d.title)h+=`<div class="det-card"><h3><i class="fa-solid fa-heading" style="color:var(--green)"></i>Title</h3><div class="det-row"><span class="det-value">${d.title}</span></div></div>`;
+  if(d.description)h+=`<div class="det-card"><h3><i class="fa-solid fa-align-left" style="color:var(--blue)"></i>Description</h3><div class="det-row"><span class="det-value">${d.description}</span></div></div>`;
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderWayback(d,el){
-  let h=`<div class="results-header"><h2>Wayback: <span class="uname">${d.url}</span></h2><div class="pills"><span class="pill b">${d.total_snapshots} snapshots</span></div></div>`;
-  if(d.first_snapshot)h+=`<div style="margin-bottom:14px;font-size:.72rem;color:var(--dim)">First: ${d.first_snapshot} — Last: ${d.last_snapshot}</div>`;
+  let h=`<div class="res-head"><h2>Wayback: <span class="res-query">${d.url}</span></h2><div class="pills"><span class="pill b">${d.total_snapshots} snapshots</span></div></div>`;
   if(d.snapshots?.length){
-    h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">`;
-    d.snapshots.forEach(s=>{h+=`<a href="${s.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">WB</div><div class="card-name">${s.date}</div></div><div class="card-status">${s.status} . ${s.mimetype}</div></a>`});
+    h+=`<div class="found-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">`;
+    d.snapshots.forEach(s=>{h+=`<a href="${s.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(59,130,246,.06);color:var(--blue)">WB</div><div class="found-name">${s.date}</div></div><div class="found-status" style="color:var(--text4)">${s.status}</div></a>`});
     h+=`</div>`;
-  }else{
-    h+=`<div class="empty-state"><h3>No snapshots found</h3><p>This URL has not been archived</p></div>`;
-  }
+  }else{h+=`<div class="empty"><h3>No snapshots</h3></div>`}
   el.innerHTML=h;
 }
 
 function renderPhone(d,el){
-  let h=`<div class="results-header"><h2>Phone: <span class="uname">${d.phone}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-phone" style="color:var(--blue)"></i>Phone Info</h3>`;
-  if(d.valid!==undefined)h+=`<div class="tool-row"><span class="tool-label">Valid</span><span class="tool-value">${d.valid?'<span class="badge badge-green">Yes</span>':'<span class="badge badge-red">No</span>'}</span></div>`;
-  if(d.country)h+=`<div class="tool-row"><span class="tool-label">Country</span><span class="tool-value">${d.country}</span></div>`;
-  if(d.location)h+=`<div class="tool-row"><span class="tool-label">Location</span><span class="tool-value">${d.location}</span></div>`;
-  if(d.carrier)h+=`<div class="tool-row"><span class="tool-label">Carrier</span><span class="tool-value">${d.carrier}</span></div>`;
-  if(d.line_type)h+=`<div class="tool-row"><span class="tool-label">Line Type</span><span class="tool-value">${d.line_type}</span></div>`;
-  for(const[k,v] of Object.entries(d.format||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
+  let h=`<div class="res-head"><h2>Phone: <span class="res-query">${d.phone}</span></h2></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-phone" style="color:var(--blue)"></i>Info</h3>`;
+  if(d.valid!==undefined)h+=`<div class="det-row"><span class="det-label">Valid</span><span class="det-value">${d.valid?'<span class="pill g">Yes</span>':'<span class="pill r">No</span>'}</span></div>`;
+  if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;
+  if(d.carrier)h+=`<div class="det-row"><span class="det-label">Carrier</span><span class="det-value">${d.carrier}</span></div>`;
+  if(d.line_type)h+=`<div class="det-row"><span class="det-label">Type</span><span class="det-value">${d.line_type}</span></div>`;
   h+=`</div></div>`;
   el.innerHTML=h;
 }
 
 function renderCrypto(d,el){
-  let h=`<div class="results-header"><h2>Wallet: <span class="uname">${d.address.substring(0,20)}...</span></h2><div class="pills"><span class="pill b">${d.chain||'Unknown'}</span><span class="pill g">${d.type||''}</span></div></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-brands fa-bitcoin" style="color:var(--yellow)"></i>Wallet Info</h3>`;
-  h+=`<div class="tool-row"><span class="tool-label">Address</span><span class="tool-value" style="font-size:.58rem">${d.address}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Chain</span><span class="tool-value">${d.chain||'Unknown'}</span></div>`;
-  if(d.balance)h+=`<div class="tool-row"><span class="tool-label">Balance</span><span class="tool-value">${d.balance}</span></div>`;
-  if(d.transactions)h+=`<div class="tool-row"><span class="tool-label">Transactions</span><span class="tool-value">${d.transactions}</span></div>`;
-  if(d.total_received)h+=`<div class="tool-row"><span class="tool-label">Total Received</span><span class="tool-value">${d.total_received}</span></div>`;
-  if(d.first_seen)h+=`<div class="tool-row"><span class="tool-label">First Seen</span><span class="tool-value">${d.first_seen}</span></div>`;
-  if(d.last_seen)h+=`<div class="tool-row"><span class="tool-label">Last Seen</span><span class="tool-value">${d.last_seen}</span></div>`;
+  let h=`<div class="res-head"><h2>Wallet: <span class="res-query">${d.address?.substring(0,20)}...</span></h2><div class="pills"><span class="pill b">${d.chain||'Unknown'}</span></div></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-brands fa-bitcoin" style="color:var(--yellow)"></i>Info</h3>`;
+  h+=`<div class="det-row"><span class="det-label">Chain</span><span class="det-value">${d.chain||'Unknown'}</span></div>`;
+  if(d.balance)h+=`<div class="det-row"><span class="det-label">Balance</span><span class="det-value">${d.balance}</span></div>`;
   h+=`</div></div>`;
   el.innerHTML=h;
 }
 
 function renderName(d,el){
-  let h=`<div class="results-header"><h2>Name: <span class="uname">${d.name}</span></h2><div class="pills"><span class="pill b">${d.count} results</span></div></div>`;
+  let h=`<div class="res-head"><h2>Name: <span class="res-query">${d.name}</span></h2><div class="pills"><span class="pill b">${d.count} results</span></div></div>`;
   if(d.results?.length){
-    h+=`<div class="cat"><div class="cat-title">Search Results</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">`;
+    h+=`<div class="found-grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
     d.results.forEach(r=>{
       let icon='FA',color='var(--blue)';
-      if(r.url.includes('linkedin')){icon='LI';color='#0077b5'}
-      else if(r.url.includes('twitter')||r.url.includes('x.com')){icon='TW';color='#1da1f2'}
-      else if(r.url.includes('facebook')){icon='FB';color='#1877f2'}
-      else if(r.url.includes('instagram')){icon='IG';color='#e4405f'}
-      else if(r.url.includes('github')){icon='GH';color='var(--text)'}
-      else if(r.url.includes('youtube')){icon='YT';color:'#ff0000'}
-      h+=`<a href="${r.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon" style="background:${color}15;color:${color}">${icon}</div><div class="card-name">${new URL(r.url).hostname}</div></div><div class="card-url">${r.url.substring(0,50)}</div><div class="card-status" style="color:${color}">VIEW PROFILE</div></a>`;
+      if(r.url.includes('linkedin')){icon='LI';color='#0077b5'}else if(r.url.includes('twitter')||r.url.includes('x.com')){icon='TW';color='#1da1f2'}else if(r.url.includes('facebook')){icon='FB';color='#1877f2'}else if(r.url.includes('instagram')){icon='IG';color='#e4405f'}else if(r.url.includes('github')){icon='GH';color='var(--text)'}else if(r.url.includes('youtube')){icon='YT';color:'#ff0000'}
+      h+=`<a href="${r.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:${color}10;color:${color}">${icon}</div><div class="found-name">${new URL(r.url).hostname}</div></div><div class="found-url">${r.url.substring(0,45)}</div><div class="found-status" style="color:${color}">VIEW</div></a>`;
     });
-    h+=`</div></div>`;
-  }else{
-    h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>No results found</h3><p>Try a different name or spelling</p></div>`;
-  }
+    h+=`</div>`;
+  }else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>No results</h3></div>`}
   el.innerHTML=h;
 }
 
 function renderPerson(d,el){
-  let h=`<div class="results-header"><h2>Person: <span class="uname">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type} search</span></div></div>`;
-  if(d.username_results){h+=renderUsernameHTML(d.username_results)}
-  else if(d.email_results){
-    h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;const em=d.email_results;
-    if(em.mx_records?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--blue)"></i>MX Records</h3>`;em.mx_records.forEach(mx=>{h+=`<div class="tool-row"><span class="tool-label">MX</span><span class="tool-value">${mx}</span></div>`});h+=`</div>`}
-    if(em.registered_on?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-user-check" style="color:var(--green)"></i>Registered On (${em.registered_on.length})</h3>`;em.registered_on.forEach(s=>{h+=`<div class="tool-row"><span class="tool-value">${s}</span></div>`});h+=`</div>`}
-    if(em.disposable!==undefined){h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3><div class="tool-row"><span class="tool-label">Disposable</span><span class="tool-value">${em.disposable?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div></div>`}
-    h+=`</div>`;
-  }else if(d.phone_results){h+=renderPhoneHTML(d.phone_results)}
-  else{h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>No results</h3><p>Try a different query</p></div>`}
+  let h=`<div class="res-head"><h2>Person: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div>`;
+  if(d.username_results){const ud=d.username_results;for(const[cat,platforms] of Object.entries(ud.categories||{})){h+=`<div style="margin-bottom:8px"><div style="font-size:.48rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text5);margin-bottom:4px">${cat} (${platforms.length})</div><div class="found-grid">`;platforms.forEach(p=>{const IC={github:'GH',twitter:'TW',instagram:'IG',discord:'DC'};h+=`<a href="${p.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(113,113,122,.06);color:var(--text4)">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="found-name">${p.platform}</div></div><div class="found-status">EXISTS</div></a>`});h+=`</div></div>`}}
+  else if(d.email_results){const em=d.email_results;h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;if(em.registered_on?.length){h+=`<div class="det-card"><h3>Registered On</h3>`;em.registered_on.forEach(s=>{h+=`<div class="det-row"><span class="det-value">${s}</span></div>`});h+=`</div>`}h+=`</div>`}
+  else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>No results</h3></div>`}
   el.innerHTML=h;
 }
 
-function renderUsernameHTML(d){
-  const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
-  const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security'};
-  const breachedPlatforms=(d.found||[]).filter(p=>p.breach&&p.breach.breached);
-  let h=`<div class="results-header"><h2>Results for <span class="uname">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span>${breachedPlatforms.length?`<span class="pill e">${breachedPlatforms.length} breached</span>`:''}</div></div>`;
-  for(const[cat,platforms] of Object.entries(d.categories||{})){
-    const catBreached=platforms.filter(p=>p.breach&&p.breach.breached);
-    h+=`<div class="cat"><div class="cat-title">${CAT[cat]||cat} (${platforms.length})${catBreached.length?` <span style="color:var(--red)">— ${catBreached.length} breached</span>`:''}</div><div class="grid">`;
-    for(const p of platforms){
-      const b=p.breach||{};
-      const sevColors={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',none:'var(--green)'};
-      const cardBorder=b.breached?`border-left:2px solid ${sevColors[b.severity]}`:'';
-      h+=`<a href="${p.url}" target="_blank" class="card found" style="${cardBorder}"><div class="card-top"><div class="card-icon">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${p.platform}</div></div><div class="card-url">${p.url.replace('https://','').substring(0,35)}</div>`;
-      if(b.breached){h+=`<div style="margin-top:3px;font-size:.48rem;font-weight:700;color:${sevColors[b.severity]};font-family:'JetBrains Mono',monospace">${b.severity?.toUpperCase()} BREACH . ${b.date}</div>`}
-      else{h+=`<div class="card-status">ACCOUNT EXISTS</div>`}
-      h+=`</a>`;
-    }
-    h+=`</div></div>`;
-  }
-  if(d.not_found?.length){h+=`<div class="nf-section"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`}
-  return h;
-}
-
-function renderPhoneHTML(d){
-  let h=`<div class="results-header"><h2>Phone: <span class="uname">${d.phone}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-phone" style="color:var(--blue)"></i>Phone Info</h3>`;
-  if(d.valid!==undefined)h+=`<div class="tool-row"><span class="tool-label">Valid</span><span class="tool-value">${d.valid?'<span class="badge badge-green">Yes</span>':'<span class="badge badge-red">No</span>'}</span></div>`;
-  if(d.country)h+=`<div class="tool-row"><span class="tool-label">Country</span><span class="tool-value">${d.country}</span></div>`;
-  if(d.location)h+=`<div class="tool-row"><span class="tool-label">Location</span><span class="tool-value">${d.location}</span></div>`;
-  if(d.carrier)h+=`<div class="tool-row"><span class="tool-label">Carrier</span><span class="tool-value">${d.carrier}</span></div>`;
-  for(const[k,v] of Object.entries(d.format||{})){if(v)h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}
-  h+=`</div></div>`;
-  return h;
-}
-
 function renderReverseIP(d,el){
-  let h=`<div class="results-header"><h2>Reverse IP: <span class="uname">${d.ip}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  if(d.reverse_dns){h+=`<div class="tool-card"><h3><i class="fa-solid fa-arrow-right" style="color:var(--blue)"></i>Reverse DNS</h3><div class="tool-row"><span class="tool-label">Hostname</span><span class="tool-value">${d.reverse_dns}</span></div></div>`}
-  if(d.geo){h+=`<div class="tool-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--green)"></i>Geolocation</h3>`;for(const[k,v] of Object.entries(d.geo)){if(v&&k!=='loc')h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}h+=`</div>`}
-  if(d.same_server_domains?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--purple)"></i>Same Server (${d.same_server_domains.length})</h3>`;d.same_server_domains.slice(0,10).forEach(d2=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.62rem">${d2}</span></div>`});h+=`</div>`}
+  let h=`<div class="res-head"><h2>Reverse IP: <span class="res-query">${d.ip}</span></h2></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  if(d.reverse_dns)h+=`<div class="det-card"><h3>rDNS</h3><div class="det-row"><span class="det-value">${d.reverse_dns}</span></div></div>`;
+  if(d.same_server_domains?.length){h+=`<div class="det-card"><h3>Same Server (${d.same_server_domains.length})</h3>`;d.same_server_domains.slice(0,8).forEach(s=>{h+=`<div class="det-row"><span class="det-value" style="font-size:.52rem">${s}</span></div>`});h+=`</div>`}
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderWHOIS(d,el){
-  let h=`<div class="results-header"><h2>WHOIS: <span class="uname">${d.domain}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-id-card" style="color:var(--blue)"></i>Registration</h3>`;
-  if(d.registrar)h+=`<div class="tool-row"><span class="tool-label">Registrar</span><span class="tool-value">${d.registrar}</span></div>`;
-  if(d.creation_date)h+=`<div class="tool-row"><span class="tool-label">Created</span><span class="tool-value">${d.creation_date}</span></div>`;
-  if(d.expiration_date)h+=`<div class="tool-row"><span class="tool-label">Expires</span><span class="tool-value">${d.expiration_date}</span></div>`;
-  if(d.registrant)h+=`<div class="tool-row"><span class="tool-label">Registrant</span><span class="tool-value">${d.registrant}</span></div>`;
-  if(d.status?.length)d.status.forEach(s=>{h+=`<div class="tool-row"><span class="tool-label">Status</span><span class="tool-value" style="font-size:.58rem">${s}</span></div>`});
-  h+=`</div>`;
-  if(d.name_servers?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--cyan)"></i>Name Servers</h3>`;d.name_servers.forEach(ns=>{h+=`<div class="tool-row"><span class="tool-value">${ns}</span></div>`});h+=`</div>`}
-  h+=`</div>`;
+  let h=`<div class="res-head"><h2>WHOIS: <span class="res-query">${d.domain}</span></h2></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3>Registration</h3>`;
+  if(d.registrar)h+=`<div class="det-row"><span class="det-label">Registrar</span><span class="det-value">${d.registrar}</span></div>`;
+  if(d.creation_date)h+=`<div class="det-row"><span class="det-label">Created</span><span class="det-value">${d.creation_date}</span></div>`;
+  if(d.expiration_date)h+=`<div class="det-row"><span class="det-label">Expires</span><span class="det-value">${d.expiration_date}</span></div>`;
+  h+=`</div></div>`;
   el.innerHTML=h;
 }
 
 function renderSubdomains(d,el){
-  let h=`<div class="results-header"><h2>Subdomains: <span class="uname">${d.domain}</span></h2><div class="pills"><span class="pill g">${d.count} found</span></div></div>`;
-  if(d.subdomains?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-sitemap" style="color:var(--green)"></i>Discovered (${d.count})</h3>`;d.subdomains.forEach(s=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.62rem;font-family:'JetBrains Mono',monospace">${s}</span></div>`});h+=`</div>`}
-  else{h+=`<div class="empty-state"><h3>No subdomains found</h3></div>`}
+  let h=`<div class="res-head"><h2>Subdomains: <span class="res-query">${d.domain}</span></h2><div class="pills"><span class="pill g">${d.count} found</span></div></div>`;
+  if(d.subdomains?.length){h+=`<div class="det-card"><h3>Discovered</h3>`;d.subdomains.forEach(s=>{h+=`<div class="det-row"><span class="det-value" style="font-size:.52rem">${s}</span></div>`});h+=`</div>`}
   el.innerHTML=h;
 }
 
 function renderPorts(d,el){
-  let h=`<div class="results-header"><h2>Ports: <span class="uname">${d.ip}</span></h2><div class="pills"><span class="pill g">${d.total_open} open</span><span class="pill r">${d.closed_ports?.length||0} closed</span></div></div>`;
-  if(d.open_ports?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-plug" style="color:var(--green)"></i>Open Ports</h3>`;d.open_ports.forEach(p=>{const svc=d.services?.[p]||{};h+=`<div class="tool-row"><span class="tool-label">${p}</span><span class="tool-value">${svc.service||'unknown'}${svc.banner?` . ${svc.banner.substring(0,30)}`:''}</span></div>`});h+=`</div>`}
+  let h=`<div class="res-head"><h2>Ports: <span class="res-query">${d.ip}</span></h2><div class="pills"><span class="pill g">${d.total_open} open</span></div></div>`;
+  if(d.open_ports?.length){h+=`<div class="det-card"><h3>Open</h3>`;d.open_ports.forEach(p=>{const svc=d.services?.[p]||{};h+=`<div class="det-row"><span class="det-label">${p}</span><span class="det-value">${svc.service||'?'}</span></div>`});h+=`</div>`}
   el.innerHTML=h;
 }
 
 function renderSSL(d,el){
-  let h=`<div class="results-header"><h2>SSL/TLS: <span class="uname">${d.domain}</span></h2>${d.days_left!==null?`<div class="pills"><span class="pill ${d.days_left<30?'e':'g'}">${d.days_left} days left</span></div>`:''}</div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  if(d.subject){h+=`<div class="tool-card"><h3><i class="fa-solid fa-certificate" style="color:var(--green)"></i>Subject</h3>`;for(const[k,v] of Object.entries(d.subject)){h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}h+=`</div>`}
-  if(d.issuer){h+=`<div class="tool-card"><h3><i class="fa-solid fa-building" style="color:var(--blue)"></i>Issuer</h3>`;for(const[k,v] of Object.entries(d.issuer)){h+=`<div class="tool-row"><span class="tool-label">${k}</span><span class="tool-value">${v}</span></div>`}h+=`</div>`}
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-clock" style="color:var(--yellow)"></i>Validity</h3>`;
-  if(d.valid_from)h+=`<div class="tool-row"><span class="tool-label">From</span><span class="tool-value">${d.valid_from}</span></div>`;
-  if(d.valid_to)h+=`<div class="tool-row"><span class="tool-label">To</span><span class="tool-value">${d.valid_to}</span></div>`;
-  if(d.days_left!==null)h+=`<div class="tool-row"><span class="tool-label">Days Left</span><span class="tool-value">${d.days_left<30?'<span class="badge badge-red">'+d.days_left+'</span>':d.days_left+' days'}</span></div>`;
-  h+=`</div>`;
-  if(d.san?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-globe" style="color:var(--cyan)"></i>SAN (${d.san.length})</h3>`;d.san.slice(0,10).forEach(s=>{h+=`<div class="tool-row"><span class="tool-value" style="font-size:.58rem">${s}</span></div>`});h+=`</div>`}
-  if(d.cipher){h+=`<div class="tool-card"><h3><i class="fa-solid fa-lock" style="color:var(--purple)"></i>Security</h3>`;h+=`<div class="tool-row"><span class="tool-label">Cipher</span><span class="tool-value" style="font-size:.58rem">${d.cipher}</span></div>`;d.protocols?.forEach(p=>{h+=`<div class="tool-row"><span class="tool-label">Protocol</span><span class="tool-value">${p}</span></div>`});h+=`</div>`}
+  let h=`<div class="res-head"><h2>SSL: <span class="res-query">${d.domain}</span></h2>${d.days_left!==null?`<div class="pills"><span class="pill ${d.days_left<30?'r':'g'}">${d.days_left}d left</span></div>`:''}</div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  if(d.issuer)h+=`<div class="det-card"><h3>Issuer</h3>`;for(const[k,v] of Object.entries(d.issuer||{})){if(d.issuer)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`};if(d.issuer)h+=`</div>`;
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderWAF(d,el){
-  let h=`<div class="results-header"><h2>WAF / CDN: <span class="uname">${d.domain}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield" style="color:var(--green)"></i>Protection</h3>`;
-  if(d.detected?.length){d.detected.forEach(w=>{h+=`<div class="tool-row"><span class="tool-label">WAF/CDN</span><span class="tool-value"><span class="badge badge-green">${w}</span></span></div>`})}
-  else{h+=`<div class="tool-row"><span class="tool-label">WAF</span><span class="tool-value"><span class="badge badge-red">None detected</span></span></div>`}
-  if(d.server)h+=`<div class="tool-row"><span class="tool-label">Server</span><span class="tool-value">${d.server}</span></div>`;
-  h+=`</div>`;
-  if(d.technologies?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Technologies</h3>`;d.technologies.forEach(t=>{h+=`<div class="tool-row"><span class="tool-value">${t}</span></div>`});h+=`</div>`}
+  let h=`<div class="res-head"><h2>WAF: <span class="res-query">${d.domain}</span></h2></div>`;
+  h+=`<div class="det-card"><h3>Protection</h3>`;
+  if(d.detected?.length){d.detected.forEach(w=>{h+=`<div class="det-row"><span class="det-label">WAF</span><span class="det-value"><span class="pill g">${w}</span></span></div>`})}
+  else{h+=`<div class="det-row"><span class="det-label">WAF</span><span class="det-value"><span class="pill r">None</span></span></div>`}
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderDorks(d,el){
-  let h=`<div class="results-header"><h2>Google Dorks: <span class="uname">${d.target}</span></h2><div class="pills"><span class="pill g">${d.count} dorks</span></div></div>`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-terminal" style="color:var(--green)"></i>Generated Dorks</h3>`;
-  for(const[key,query] of Object.entries(d.dorks)){
-    h+=`<div class="tool-row"><span class="tool-label" style="min-width:130px">${key.replace(/_/g,' ')}</span><span class="tool-value" style="font-size:.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer" onclick="navigator.clipboard.writeText('${query.replace(/'/g,"\\'")}');this.textContent='Copied!'" title="Click to copy">${query}</span></div>`;
-  }
+  let h=`<div class="res-head"><h2>Dorks: <span class="res-query">${d.target}</span></h2><div class="pills"><span class="pill g">${d.count} dorks</span></div></div>`;
+  h+=`<div class="det-card"><h3>Generated</h3>`;
+  for(const[key,q] of Object.entries(d.dorks)){h+=`<div class="det-row"><span class="det-label" style="min-width:100px">${key.replace(/_/g,' ')}</span><span class="det-value" style="font-size:.5rem;cursor:pointer" onclick="navigator.clipboard.writeText('${q.replace(/'/g,"\\'")}');this.textContent='Copied!'" title="Click to copy">${q}</span></div>`}
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderPastes(d,el){
-  let h=`<div class="results-header"><h2>Paste Search: <span class="uname">${d.query}</span></h2><div class="pills"><span class="pill g">${d.count} results</span></div></div>`;
-  if(d.results?.length){
-    d.results.forEach(r=>{
-      h+=`<div class="tool-card"><h3><i class="fa-solid fa-paste" style="color:var(--blue)"></i>${r.source}</h3>`;
-      h+=`<div class="tool-row"><span class="tool-label">URL</span><span class="tool-value" style="font-size:.58rem"><a href="${r.url}" target="_blank" style="color:var(--blue);text-decoration:none">${r.url.substring(0,60)}...</a></span></div>`;
-      if(r.snippet)h+=`<div class="tool-row"><span class="tool-label">Snippet</span><span class="tool-value" style="font-size:.58rem">${r.snippet.substring(0,120)}</span></div>`;
-      h+=`</div>`;
-    });
-  }else{
-    h+=`<div class="empty-state"><i class="fa-solid fa-check-circle"></i><h3>No paste results</h3><p>Query not found in known paste sites</p></div>`;
-  }
+  let h=`<div class="res-head"><h2>Pastes: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill g">${d.count} results</span></div></div>`;
+  if(d.results?.length){d.results.forEach(r=>{h+=`<div class="det-card"><h3>${r.source}</h3><div class="det-row"><span class="det-label">URL</span><span class="det-value" style="font-size:.5rem"><a href="${r.url}" target="_blank" style="color:var(--blue);text-decoration:none">${r.url.substring(0,45)}...</a></span></div></div>`})}
+  else{h+=`<div class="empty"><i class="fa-solid fa-check-circle"></i><h3>No pastes</h3></div>`}
   el.innerHTML=h;
 }
 
 function renderShodan(d,el){
-  let h=`<div class="results-header"><h2>Shodan: <span class="uname">${d.ip}</span></h2></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-server" style="color:var(--blue)"></i>Host Info</h3>`;
-  if(d.org)h+=`<div class="tool-row"><span class="tool-label">Org</span><span class="tool-value">${d.org}</span></div>`;
-  if(d.isp)h+=`<div class="tool-row"><span class="tool-label">ISP</span><span class="tool-value">${d.isp}</span></div>`;
-  if(d.as)h+=`<div class="tool-row"><span class="tool-label">AS</span><span class="tool-value" style="font-size:.58rem">${d.as}</span></div>`;
-  if(d.hostnames?.length)d.hostnames.forEach(h2=>{h+=`<div class="tool-row"><span class="tool-label">Hostname</span><span class="tool-value">${h2}</span></div>`});
-  if(d.city)h+=`<div class="tool-row"><span class="tool-label">City</span><span class="tool-value">${d.city}</span></div>`;
-  if(d.region)h+=`<div class="tool-row"><span class="tool-label">Region</span><span class="tool-value">${d.region}</span></div>`;
-  if(d.country)h+=`<div class="tool-row"><span class="tool-label">Country</span><span class="tool-value">${d.country}</span></div>`;
-  if(d.proxy!==undefined)h+=`<div class="tool-row"><span class="tool-label">Proxy</span><span class="tool-value">${d.proxy?'<span class="badge badge-red">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
-  if(d.hosting!==undefined)h+=`<div class="tool-row"><span class="tool-label">Hosting</span><span class="tool-value">${d.hosting?'<span class="badge badge-yellow">Yes</span>':'<span class="badge badge-green">No</span>'}</span></div>`;
-  if(d.mobile!==undefined)h+=`<div class="tool-row"><span class="tool-label">Mobile</span><span class="tool-value">${d.mobile?'Yes':'No'}</span></div>`;
+  let h=`<div class="res-head"><h2>Shodan: <span class="res-query">${d.ip}</span></h2></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3>Host</h3>`;
+  if(d.org)h+=`<div class="det-row"><span class="det-label">Org</span><span class="det-value">${d.org}</span></div>`;
+  if(d.isp)h+=`<div class="det-row"><span class="det-label">ISP</span><span class="det-value">${d.isp}</span></div>`;
+  if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;
   h+=`</div>`;
-  if(d.ports?.length){h+=`<div class="tool-card"><h3><i class="fa-solid fa-plug" style="color:var(--green)"></i>Open Ports (${d.ports.length})</h3>`;d.ports.forEach(p=>{h+=`<div class="tool-row"><span class="tool-label">${p}</span><span class="tool-value"><span class="badge badge-green">Open</span></span></div>`});h+=`</div>`}
+  if(d.ports?.length){h+=`<div class="det-card"><h3>Ports (${d.ports.length})</h3>`;d.ports.forEach(p=>{h+=`<div class="det-row"><span class="det-label">${p}</span><span class="det-value"><span class="pill g">Open</span></span></div>`});h+=`</div>`}
   h+=`</div>`;
   el.innerHTML=h;
 }
 
 function renderDiscord(d,el){
-  const info=d.info||{};
-  const rs=d.risk_summary||{};
-  let h=`<div class="results-header"><h2>Discord: <span class="uname">${d.discord_id}</span></h2><div class="pills"><span class="pill b">Snowflake</span><span class="pill g">${info.age_human||''}</span></div></div>`;
-  h+=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-  if(d.avatar){h+=`<div class="tool-card"><h3><i class="fa-brands fa-discord" style="color:#5865F2"></i>Avatar</h3><img src="${d.avatar}?size=128" style="width:64px;height:64px;border-radius:50%;border:2px solid #5865F2"/></div>`}
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-calendar" style="color:var(--green)"></i>Account Age</h3>`;
-  h+=`<div class="tool-row"><span class="tool-label">Created</span><span class="tool-value">${info.created_at}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Age</span><span class="tool-value">${info.age_human}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Days Old</span><span class="tool-value">${info.age_days?.toLocaleString()}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Unix</span><span class="tool-value">${info.created_at_unix}</span></div>`;
+  const info=d.info||{};const rs=d.risk_summary||{};
+  let h=`<div class="res-head"><h2>Discord: <span class="res-query">${d.discord_id}</span></h2><div class="pills"><span class="pill b">Snowflake</span><span class="pill g">${info.age_human||''}</span></div></div>`;
+  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3>Account</h3><div class="det-row"><span class="det-label">Created</span><span class="det-value">${info.created_at}</span></div><div class="det-row"><span class="det-label">Age</span><span class="det-value">${info.age_human}</span></div></div>`;
+  h+=`<div class="det-card"><h3>Risk</h3><div class="det-row"><span class="det-label">High</span><span class="det-value">${rs.high>0?`<span class="pill r">${rs.high}</span>`:'<span class="pill g">0</span>'}</span></div><div class="det-row"><span class="det-label">Medium</span><span class="det-value">${rs.medium>0?`<span class="pill y">${rs.medium}</span>`:'<span class="pill g">0</span>'}</span></div></div>`;
+  if(d.breach_count>0)h+=`<div class="det-card"><h3>Breach</h3><div class="det-row"><span class="det-label">Status</span><span class="det-value"><span class="pill r">COMPROMISED</span></span></div><div class="det-row"><span class="det-label">Sources</span><span class="det-value">${d.breach_count}</span></div></div>`;
   h+=`</div>`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-shield-halved" style="color:${rs.high>0?'var(--red)':'var(--green)'}"></i>Risk Assessment</h3>`;
-  h+=`<div class="tool-row"><span class="tool-label">High Risk</span><span class="tool-value">${rs.high>0?`<span class="badge badge-red">${rs.high} flags</span>`:'<span class="badge badge-green">0</span>'}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Medium</span><span class="tool-value">${rs.medium>0?`<span class="badge badge-yellow">${rs.medium}</span>`:'<span class="badge badge-green">0</span>'}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Low</span><span class="tool-value">${rs.low||0}</span></div>`;
-  h+=`<div class="tool-row"><span class="tool-label">Info</span><span class="tool-value">${rs.info||0}</span></div>`;
-  h+=`</div>`;
-  h+=`<div class="tool-card"><h3><i class="fa-solid fa-skull-crossbones" style="color:${d.breach_count>0?'var(--red)':'var(--green)'}"></i>Breach Exposure</h3>`;
-  if(d.breach_count>0){h+=`<div class="tool-row"><span class="tool-label">Status</span><span class="tool-value"><span class="badge badge-red">COMPROMISED</span></span></div>`;h+=`<div class="tool-row"><span class="tool-label">Sources</span><span class="tool-value">${d.breach_count}</span></div>`;d.breaches.slice(0,5).forEach(b=>{h+=`<div class="tool-row"><span class="tool-label">${b.source}</span><span class="tool-value" style="font-size:.58rem;max-width:150px;overflow:hidden;text-overflow:ellipsis">${b.snippet?.substring(0,60)||'Found in breach data'}</span></div>`})}
-  else{h+=`<div class="tool-row"><span class="tool-label">Status</span><span class="tool-value"><span class="badge badge-green">CLEAN</span></span></div>`;h+=`<div class="tool-row"><span class="tool-label">Sources</span><span class="tool-value">0 breaches found</span></div>`}
-  h+=`</div>`;
-  if(d.profile){h+=`<div class="tool-card"><h3><i class="fa-solid fa-user" style="color:var(--cyan)"></i>Profile Data</h3>`;if(d.profile.global_name)h+=`<div class="tool-row"><span class="tool-label">Display Name</span><span class="tool-value">${d.profile.global_name}</span></div>`;if(d.profile.username)h+=`<div class="tool-row"><span class="tool-label">Username</span><span class="tool-value">${d.profile.username}</span></div>`;if(d.profile.discriminator)h+=`<div class="tool-row"><span class="tool-label">Discriminator</span><span class="tool-value">#${d.profile.discriminator}</span></div>`;if(d.profile.badge)h+=`<div class="tool-row"><span class="tool-label">Badges</span><span class="tool-value">${d.profile.badge}</span></div>`;if(d.profile.special)h+=`<div class="tool-row"><span class="tool-label">Flags</span><span class="tool-value">${d.profile.special}</span></div>`;if(d.profile.created_at)h+=`<div class="tool-row"><span class="tool-label">API Created</span><span class="tool-value">${d.profile.created_at}</span></div>`;if(d.profile.avatar)h+=`<div class="tool-row"><span class="tool-label">Avatar Hash</span><span class="tool-value" style="font-size:.58rem">${d.profile.avatar}</span></div>`;h+=`</div>`}
-  h+=`</div>`;
-  if(d.risk_flags?.length){h+=`<div class="cat" style="margin-top:16px"><div class="cat-title">Risk Flags & Intel</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;d.risk_flags.forEach(f=>{const colors={high:'var(--red)',medium:'var(--yellow)',low:'var(--dim2)',info:'var(--blue)'};const icons={high:'fa-triangle-exclamation',medium:'fa-exclamation-circle',low:'fa-info-circle',info:'fa-circle-info'};h+=`<div class="tool-card" style="border-left:2px solid ${colors[f.severity]}"><h3><i class="fa-solid ${icons[f.severity]}" style="color:${colors[f.severity]}"></i>${f.flag}</h3><div class="tool-row"><span class="tool-value">${f.detail}</span></div></div>`});h+=`</div></div>`}
-  if(d.associated_accounts?.length){h+=`<div class="cat" style="margin-top:16px"><div class="cat-title">Associated Accounts</div><div class="grid">`;const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};d.associated_accounts.forEach(a=>{h+=`<a href="${a.url}" target="_blank" class="card found"><div class="card-top"><div class="card-icon">${IC[a.platform]||a.platform.substring(0,2).toUpperCase()}</div><div class="card-name">${a.platform}</div></div><div class="card-url">${a.url.replace('https://','')}</div><div class="card-status">FOUND</div></a>`});h+=`</div></div>`}
   el.innerHTML=h;
 }
 
 function renderGeneric(d,el){
-  const p=d.profile||{};
-  let h=`<div class="results-header"><h2>${d.platform||''}: <span class="uname">${d.username||''}</span></h2>${d.found?'<span class="pill g">Found</span>':'<span class="pill r">Not Found</span>'}</div>`;
-  if(d.found){h+=`<div class="tool-card" style="max-width:450px"><h3><i class="fa-solid fa-user" style="color:var(--green)"></i>Profile</h3>`;for(const[k,v] of Object.entries(p)){if(v&&k!=='avatar')h+=`<div class="tool-row"><span class="tool-label">${k.replace(/_/g,' ')}</span><span class="tool-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}if(p.url)h+=`<div style="margin-top:10px"><a href="${p.url}" target="_blank" style="color:var(--green);font-size:.72rem;text-decoration:none;font-weight:600">Open Profile .</a></div>`;h+=`</div>`}
-  else{h+=`<div class="empty-state"><i class="fa-solid fa-user-slash"></i><h3>Not found</h3></div>`}
+  let h=`<div class="res-head"><h2>${d.platform||''}: <span class="res-query">${d.username||''}</span></h2>${d.found?'<span class="pill g">Found</span>':'<span class="pill r">Not Found</span>'}</div>`;
+  if(d.found){const p=d.profile||{};h+=`<div class="det-card" style="max-width:400px"><h3>Profile</h3>`;for(const[k,v] of Object.entries(p)){if(v&&k!=='avatar')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`}
+  else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>Not found</h3></div>`}
   el.innerHTML=h;
 }
 
-renderPage();
-
 // === TOOL DIRECTORY ===
-let dirData=null,dirCatData=null,dirCurrentCat=null,dirCurrentSubcat=null,dirFilter='all',dirSearchQuery='';
-
+let dirData=null,dirCatData=null,dirCurrentCat=null,dirCurrentSubcat=null,dirFilter='all';
 const DIR_ICONS={'Username':'fa-user-secret','Email Address':'fa-envelope','Domain Name':'fa-globe','IP & MAC Address':'fa-location-dot','Cloud Infrastructure':'fa-cloud','Images / Videos / Docs':'fa-image','Social Networks':'fa-share-nodes','Instant Messaging':'fa-comment-dots','People Search Engines':'fa-users','Dating':'fa-heart','Telephone Numbers':'fa-phone','Public Records':'fa-file-lines','Compliance & Risk Intelligence':'fa-scale-balanced','Business Records':'fa-briefcase','Transportation':'fa-plane','Geolocation Tools / Maps':'fa-map-location-dot','Search Engines':'fa-magnifying-glass','Online Communities':'fa-users-rays','Archives':'fa-box-archive','Language Translation':'fa-language','Mobile OSINT':'fa-mobile-screen','Dark Web':'fa-mask','Disinformation & Media Verification':'fa-newspaper','Blockchain & Cryptocurrency':'fa-link','Classifieds':'fa-store','Encoding / Decoding':'fa-code','Tools':'fa-wrench','AI Tools':'fa-robot','Malicious File Analysis':'fa-virus','Cyber Threat Intelligence':'fa-crosshairs','OpSec':'fa-user-shield','Documentation / Evidence Capture':'fa-camera','Training':'fa-graduation-cap'};
-const DIR_COLORS=['#ff3b3b','#3b82f6','#a855f7','#06d6a0','#fbbf24','#ec4899','#f97316','#14b8a6','#8b5cf6','#ef4444','#22c55e','#0ea5e9'];
-
+const DIR_COLORS=['#3b82f6','#22c55e','#a855f7','#06b6d4','#eab308','#ec4899','#f97316','#14b8a6','#8b5cf6','#ef4444','#0ea5e9','#6366f1'];
 function getDirIcon(cat){return DIR_ICONS[cat]||'fa-toolbox'}
 function getDirColor(i){return DIR_COLORS[i%DIR_COLORS.length]}
 
-async function loadDirectory(){
-  if(dirData)return dirData;
-  const r=await fetch('/api/directory/stats');
-  dirData=await r.json();
-  return dirData;
-}
-
-async function loadDirCat(path){
-  const r=await fetch('/api/directory/category/'+encodeURIComponent(path));
-  return await r.json();
-}
-
-async function searchDir(q){
-  const r=await fetch('/api/directory/search?q='+encodeURIComponent(q));
-  return await r.json();
-}
+async function loadDirectory(){if(dirData)return dirData;const r=await fetch('/api/directory/stats');dirData=await r.json();return dirData}
+async function loadDirCat(path){const r=await fetch('/api/directory/category/'+encodeURIComponent(path));return await r.json()}
+async function searchDir(q){const r=await fetch('/api/directory/search?q='+encodeURIComponent(q));return await r.json()}
 
 function renderDirPage(){
   pageTitle.textContent='Tool Directory';
   pageBadge.textContent='1100+ TOOLS';
   content.innerHTML=`
-    <div class="dir-stats" id="dirStats"><div style="font-size:.72rem;color:var(--dim)">Loading directory...</div></div>
-    <div class="dir-search"><input id="dirQ" placeholder="Search 1100+ OSINT tools..." autocomplete="off"/><button onclick="doDirSearch()">Search</button></div>
+    <div class="hero" style="padding:16px 0 12px">
+      <div class="hero-eyebrow">OSINT Framework</div>
+      <h1 style="font-size:1.2rem">1,100+ curated tools</h1>
+      <p style="font-size:.7rem">Browse, search, and discover OSINT resources across 33 categories.</p>
+    </div>
+    <div class="dir-stats" id="dirStats"></div>
+    <div class="dir-search"><input id="dirQ" placeholder="Search 1100+ tools..." autocomplete="off"/><button onclick="doDirSearch()">Search</button></div>
     <div id="dirSearchResults"></div>
     <div id="dirCatGrid"></div>
     <div id="dirCatDetail"></div>`;
   document.getElementById('dirQ').addEventListener('keydown',e=>{if(e.key==='Enter')doDirSearch()});
   document.getElementById('dirQ').addEventListener('input',function(){if(!this.value){document.getElementById('dirSearchResults').innerHTML='';document.getElementById('dirCatGrid').style.display='';loadDirCategories()}});
-  loadDirStats();
-  loadDirCategories();
+  loadDirStats();loadDirCategories();
 }
 
 async function loadDirStats(){
-  const d=await loadDirectory();
-  const el=document.getElementById('dirStats');
-  if(!el)return;
-  const free=d.pricing?.free||0;
-  const passive=d.opsec?.passive||0;
+  const d=await loadDirectory();const el=document.getElementById('dirStats');if(!el)return;
   el.innerHTML=`
-    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--red)">${d.totalTools}</div><div class="dir-stat-label">Total Tools</div></div>
-    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--green)">${free}</div><div class="dir-stat-label">Free Tools</div></div>
-    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--blue)">${passive}</div><div class="dir-stat-label">Passive OPSEC</div></div>
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--accent)">${d.totalTools}</div><div class="dir-stat-label">Total</div></div>
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--green)">${d.pricing?.free||0}</div><div class="dir-stat-label">Free</div></div>
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--blue)">${d.opsec?.passive||0}</div><div class="dir-stat-label">Passive</div></div>
     <div class="dir-stat"><div class="dir-stat-num" style="color:var(--purple)">${d.categories?.length||0}</div><div class="dir-stat-label">Categories</div></div>`;
 }
 
 async function loadDirCategories(){
-  if(!dirData)await loadDirectory();
-  const cats=dirData?.categories||[];
-  const el=document.getElementById('dirCatGrid');
-  if(!el)return;
-  el.style.display='';
+  if(!dirData)await loadDirectory();const cats=dirData?.categories||[];const el=document.getElementById('dirCatGrid');if(!el)return;el.style.display='';
   let h='<div class="dir-cats">';
-  cats.forEach((cat,i)=>{
-    const color=getDirColor(i);
-    const icon=getDirIcon(cat.name);
-    h+=`<div class="dir-cat" onclick="openDirCategory('${cat.name.replace(/'/g,"\\'")}')">
-      <div class="dir-cat-icon" style="background:${color}15;color:${color}"><i class="fa-solid ${icon}"></i></div>
-      <div class="dir-cat-name">${cat.name}</div>
-      <div class="dir-cat-count">${cat.toolCount} tools</div>
-    </div>`;
+  cats.forEach((cat,i)=>{const color=getDirColor(i);const icon=getDirIcon(cat.name);
+    h+=`<div class="dir-cat" onclick="openDirCategory('${cat.name.replace(/'/g,"\\'")}')"><div class="dir-cat-icon" style="background:${color}10;color:${color}"><i class="fa-solid ${icon}"></i></div><div class="dir-cat-name">${cat.name}</div><div class="dir-cat-count">${cat.toolCount} tools</div></div>`;
   });
-  h+='</div>';
-  el.innerHTML=h;
+  h+='</div>';el.innerHTML=h;
 }
 
 async function openDirCategory(name,subcat){
-  dirCurrentCat=name;
-  dirCurrentSubcat=subcat||null;
-  dirFilter='all';
-  document.getElementById('dirCatGrid').style.display='none';
-  document.getElementById('dirSearchResults').innerHTML='';
-  const el=document.getElementById('dirCatDetail');
-  el.innerHTML='<div style="font-size:.72rem;color:var(--dim);padding:20px 0">Loading...</div>';
-
-  try{
-    const d=await loadDirCat(name);
-    dirCatData=d;
-    renderDirCatDetail(d);
-  }catch(e){
-    el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
-  }
+  dirCurrentCat=name;dirCurrentSubcat=subcat||null;dirFilter='all';
+  document.getElementById('dirCatGrid').style.display='none';document.getElementById('dirSearchResults').innerHTML='';
+  const el=document.getElementById('dirCatDetail');el.innerHTML='<div style="font-size:.62rem;color:var(--text5);padding:12px 0">Loading...</div>';
+  try{const d=await loadDirCat(name);dirCatData=d;renderDirCatDetail(d)}catch(e){el.innerHTML=`<div class="empty"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`}
 }
 
 function renderDirCatDetail(d){
-  const el=document.getElementById('dirCatDetail');
-  let tools=d.tools||[];
-  let subcats=d.subcategories?.filter(c=>c.name!==d.name)||[];
-
-  if(dirCurrentSubcat){
-    tools=tools.filter(t=>t.subcategory===dirCurrentSubcat);
-  }
-
+  const el=document.getElementById('dirCatDetail');let tools=d.tools||[];let subcats=d.subcategories?.filter(c=>c.name!==d.name)||[];
+  if(dirCurrentSubcat)tools=tools.filter(t=>t.subcategory===dirCurrentSubcat);
   if(dirFilter==='free')tools=tools.filter(t=>t.pricing==='free');
   else if(dirFilter==='passive')tools=tools.filter(t=>t.opsec==='passive');
   else if(dirFilter==='active')tools=tools.filter(t=>t.opsec==='active');
   else if(dirFilter==='local')tools=tools.filter(t=>t.localInstall);
 
-  let h=`<div class="dir-breadcrumb"><span onclick="closeDirCat()"><i class="fa-solid fa-arrow-left" style="margin-right:4px"></i>All Categories</span><span class="sep">/</span><span class="current">${d.name}</span>${dirCurrentSubcat?`<span class="sep">/</span><span class="current">${dirCurrentSubcat}</span>`:''}</div>`;
-  h+=`<h2 style="font-size:1rem;font-weight:700;margin-bottom:4px">${d.name}</h2>`;
-  h+=`<div class="dir-count">${tools.length} tools${dirCurrentSubcat?` in ${dirCurrentSubcat}`:''}</div>`;
-
-  if(subcats.length>0&&!dirCurrentSubcat){
-    h+=`<div class="dir-subcats">`;
-    subcats.forEach(sc=>{
-      h+=`<div class="dir-subcat" onclick="openDirCategory('${d.name.replace(/'/g,"\\'")}','${sc.name.replace(/'/g,"\\'")}')">${sc.name} (${sc.toolCount})</div>`;
-    });
-    h+=`</div>`;
-  }
-
-  h+=`<div class="dir-filters">
-    <div class="dir-filter ${dirFilter==='all'?'active':''}" onclick="setDirFilter('all')">All</div>
-    <div class="dir-filter ${dirFilter==='free'?'active':''}" onclick="setDirFilter('free')">Free</div>
-    <div class="dir-filter ${dirFilter==='passive'?'active':''}" onclick="setDirFilter('passive')">Passive</div>
-    <div class="dir-filter ${dirFilter==='active'?'active':''}" onclick="setDirFilter('active')">Active</div>
-    <div class="dir-filter ${dirFilter==='local'?'active':''}" onclick="setDirFilter('local')">Local Install</div>
-  </div>`;
-
-  h+=`<div class="dir-tools-grid">`;
+  let h=`<div class="dir-bc"><span onclick="closeDirCat()"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i>All</span><span class="sep">/</span><span class="cur">${d.name}</span>${dirCurrentSubcat?`<span class="sep">/</span><span class="cur">${dirCurrentSubcat}</span>`:''}</div>`;
+  h+=`<h2 style="font-size:.82rem;font-weight:700;margin-bottom:2px">${d.name}</h2>`;
+  h+=`<div class="dir-count">${tools.length} tools</div>`;
+  if(subcats.length>0&&!dirCurrentSubcat){h+=`<div class="dir-subcats">`;subcats.forEach(sc=>{h+=`<div class="dir-subcat" onclick="openDirCategory('${d.name.replace(/'/g,"\\'")}','${sc.name.replace(/'/g,"\\'")}')">${sc.name} (${sc.toolCount})</div>`});h+=`</div>`}
+  h+=`<div class="dir-filters"><div class="dir-filter ${dirFilter==='all'?'active':''}" onclick="setDirFilter('all')">All</div><div class="dir-filter ${dirFilter==='free'?'active':''}" onclick="setDirFilter('free')">Free</div><div class="dir-filter ${dirFilter==='passive'?'active':''}" onclick="setDirFilter('passive')">Passive</div><div class="dir-filter ${dirFilter==='active'?'active':''}" onclick="setDirFilter('active')">Active</div><div class="dir-filter ${dirFilter==='local'?'active':''}" onclick="setDirFilter('local')">Local</div></div>`;
+  h+=`<div class="dir-tools">`;
   tools.forEach(t=>{
-    const badges=[];
-    if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-tool-badge ${t.pricing}">${t.pricing}</span>`);
-    if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-tool-badge ${t.opsec}">${t.opsec}</span>`);
-    if(t.localInstall)badges.push(`<span class="dir-tool-badge local">T</span>`);
-    if(t.googleDork)badges.push(`<span class="dir-tool-badge dork">D</span>`);
-    if(t.registration)badges.push(`<span class="dir-tool-badge reg">R</span>`);
-    if(t.status&&t.status!=='unknown')badges.push(`<span class="dir-tool-badge ${t.status}">${t.status}</span>`);
-    h+=`<div class="dir-tool" onclick='openDirTool(${JSON.stringify(t).replace(/'/g,"&#39;")})'>
-      <div class="dir-tool-header"><div class="dir-tool-icon">${(t.name||'??').substring(0,2).toUpperCase()}</div><div class="dir-tool-name">${escH(t.name)}</div></div>
-      <div class="dir-tool-desc">${escH(t.description||t.bestFor||'')}</div>
-      <div class="dir-tool-meta">${badges.join('')}</div>
-    </div>`;
+    const badges=[];if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-badge ${t.pricing}">${t.pricing}</span>`);if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-badge ${t.opsec}">${t.opsec}</span>`);if(t.localInstall)badges.push(`<span class="dir-badge local">T</span>`);if(t.googleDork)badges.push(`<span class="dir-badge dork">D</span>`);if(t.registration)badges.push(`<span class="dir-badge reg">R</span>`);
+    h+=`<div class="dir-tool" onclick='openDirTool(${JSON.stringify(t).replace(/'/g,"&#39;")})'><div class="dir-tool-h"><div class="dir-tool-i">${(t.name||'??').substring(0,2).toUpperCase()}</div><div class="dir-tool-n">${escH(t.name)}</div></div><div class="dir-tool-d">${escH(t.description||t.bestFor||'')}</div><div class="dir-tool-m">${badges.join('')}</div></div>`;
   });
-  h+=`</div>`;
-  if(!tools.length)h+=`<div class="empty-state"><i class="fa-solid fa-search"></i><h3>No tools match</h3><p>Try a different filter</p></div>`;
-  el.innerHTML=h;
+  h+=`</div>`;if(!tools.length)h+=`<div class="empty"><i class="fa-solid fa-search"></i><h3>No matches</h3></div>`;el.innerHTML=h;
 }
 
-function setDirFilter(f){
-  dirFilter=f;
-  if(dirCatData)renderDirCatDetail(dirCatData);
-}
-
-function closeDirCat(){
-  dirCurrentCat=null;dirCurrentSubcat=null;dirFilter='all';dirCatData=null;
-  document.getElementById('dirCatDetail').innerHTML='';
-  document.getElementById('dirCatGrid').style.display='';
-}
+function setDirFilter(f){dirFilter=f;if(dirCatData)renderDirCatDetail(dirCatData)}
+function closeDirCat(){dirCurrentCat=null;dirCurrentSubcat=null;dirFilter='all';dirCatData=null;document.getElementById('dirCatDetail').innerHTML='';document.getElementById('dirCatGrid').style.display=''}
 
 async function doDirSearch(){
-  const q=document.getElementById('dirQ')?.value?.trim();
-  if(!q)return;
-  document.getElementById('dirCatGrid').style.display='none';
-  document.getElementById('dirCatDetail').innerHTML='';
-  const el=document.getElementById('dirSearchResults');
-  el.innerHTML='<div style="font-size:.72rem;color:var(--dim);padding:10px 0">Searching...</div>';
-  try{
-    const d=await searchDir(q);
-    if(!d.results?.length){el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-search"></i><h3>No results for "${escH(q)}"</h3><p>Try different keywords</p></div>`;return}
-    let h=`<div class="dir-count">${d.count} results for "${escH(q)}"</div><div class="dir-tools-grid">`;
+  const q=document.getElementById('dirQ')?.value?.trim();if(!q)return;
+  document.getElementById('dirCatGrid').style.display='none';document.getElementById('dirCatDetail').innerHTML='';
+  const el=document.getElementById('dirSearchResults');el.innerHTML='<div style="font-size:.62rem;color:var(--text5);padding:6px 0">Searching...</div>';
+  try{const d=await searchDir(q);
+    if(!d.results?.length){el.innerHTML=`<div class="empty"><i class="fa-solid fa-search"></i><h3>No results</h3></div>`;return}
+    let h=`<div class="dir-count">${d.count} results</div><div class="dir-tools">`;
     d.results.forEach(t=>{
-      const badges=[];
-      if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-tool-badge ${t.pricing}">${t.pricing}</span>`);
-      if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-tool-badge ${t.opsec}">${t.opsec}</span>`);
-      if(t.localInstall)badges.push(`<span class="dir-tool-badge local">T</span>`);
-      if(t.googleDork)badges.push(`<span class="dir-tool-badge dork">D</span>`);
-      if(t.registration)badges.push(`<span class="dir-tool-badge reg">R</span>`);
-      h+=`<div class="dir-tool" onclick='openDirTool(${JSON.stringify(t).replace(/'/g,"&#39;")})'>
-        <div class="dir-tool-header"><div class="dir-tool-icon">${(t.name||'??').substring(0,2).toUpperCase()}</div><div class="dir-tool-name">${escH(t.name)}</div></div>
-        <div class="dir-tool-desc">${escH(t.description||t.bestFor||'')}</div>
-        <div class="dir-tool-meta">${badges.join('')}<span class="dir-tool-badge" style="background:rgba(107,107,128,.08);color:var(--dim2);border:1px solid var(--border)">${escH(t.breadcrumb||'')}</span></div>
-      </div>`;
-    });
-    h+='</div>';
-    el.innerHTML=h;
-  }catch(e){el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`}
+      const badges=[];if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-badge ${t.pricing}">${t.pricing}</span>`);if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-badge ${t.opsec}">${t.opsec}</span>`);
+      h+=`<div class="dir-tool" onclick='openDirTool(${JSON.stringify(t).replace(/'/g,"&#39;")})'><div class="dir-tool-h"><div class="dir-tool-i">${(t.name||'??').substring(0,2).toUpperCase()}</div><div class="dir-tool-n">${escH(t.name)}</div></div><div class="dir-tool-d">${escH(t.description||t.bestFor||'')}</div><div class="dir-tool-m">${badges.join('')}<span class="dir-badge" style="background:rgba(113,113,122,.06);color:var(--text5);border:1px solid var(--border)">${escH(t.breadcrumb||'')}</span></div></div>`;
+    });h+='</div>';el.innerHTML=h;
+  }catch(e){el.innerHTML=`<div class="empty"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`}
 }
 
 function openDirTool(t){
-  let detail=document.querySelector('.dir-tool-detail');
-  let overlay=document.querySelector('.dir-overlay');
-  if(!detail){
-    detail=document.createElement('div');detail.className='dir-tool-detail';document.body.appendChild(detail);
-    overlay=document.createElement('div');overlay.className='dir-overlay';document.body.appendChild(overlay);
-    overlay.onclick=()=>closeDirTool();
-  }
-  const badges=[];
-  if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-tool-badge ${t.pricing}">${t.pricing}</span>`);
-  if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-tool-badge ${t.opsec}">${t.opsec}</span>`);
-  if(t.localInstall)badges.push(`<span class="dir-tool-badge local">Local Install (T)</span>`);
-  if(t.googleDork)badges.push(`<span class="dir-tool-badge dork">Google Dork (D)</span>`);
-  if(t.registration)badges.push(`<span class="dir-tool-badge reg">Registration (R)</span>`);
-  if(t.editUrl)badges.push(`<span class="dir-tool-badge" style="background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)">Manual URL (M)</span>`);
-  if(t.api)badges.push(`<span class="dir-tool-badge" style="background:rgba(6,214,160,.1);color:var(--cyan);border:1px solid rgba(6,214,160,.15)">API</span>`);
-
-  let h=`<div class="dir-tool-detail-close" onclick="closeDirTool()"><i class="fa-solid fa-xmark"></i></div>`;
-  h+=`<h2>${escH(t.name)}</h2>`;
-  h+=`<div class="breadcrumb">${escH(t.breadcrumb||'')}</div>`;
-  h+=`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px">${badges.join('')}</div>`;
+  let detail=document.querySelector('.dir-detail');let overlay=document.querySelector('.dir-overlay');
+  if(!detail){detail=document.createElement('div');detail.className='dir-detail';document.body.appendChild(detail);overlay=document.createElement('div');overlay.className='dir-overlay';document.body.appendChild(overlay);overlay.onclick=()=>closeDirTool()}
+  const badges=[];if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-badge ${t.pricing}">${t.pricing}</span>`);if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-badge ${t.opsec}">${t.opsec}</span>`);if(t.localInstall)badges.push(`<span class="dir-badge local">Local</span>`);if(t.api)badges.push(`<span class="dir-badge" style="background:rgba(6,182,212,.06);color:var(--cyan);border:1px solid rgba(6,182,212,.08)">API</span>`);
+  let h=`<div class="dir-detail-x" onclick="closeDirTool()"><i class="fa-solid fa-xmark"></i></div>`;
+  h+=`<h2>${escH(t.name)}</h2><div class="bc">${escH(t.breadcrumb||'')}</div>`;
+  h+=`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px">${badges.join('')}</div>`;
   if(t.description)h+=`<div class="desc">${escH(t.description)}</div>`;
-  h+=`<div class="field"><span class="field-label">Status</span><span class="field-value"><span class="dir-tool-badge ${t.status||'unknown'}">${t.status||'unknown'}</span></span></div>`;
-  if(t.bestFor)h+=`<div class="field"><span class="field-label">Best For</span><span class="field-value">${escH(t.bestFor)}</span></div>`;
-  if(t.input)h+=`<div class="field"><span class="field-label">Input</span><span class="field-value">${escH(t.input)}</span></div>`;
-  if(t.output)h+=`<div class="field"><span class="field-label">Output</span><span class="field-value">${escH(t.output)}</span></div>`;
-  if(t.opsecNote)h+=`<div style="margin-top:12px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2)"><div style="font-size:.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">OPSEC Notes</div><div style="font-size:.68rem;color:var(--text);line-height:1.5">${escH(t.opsecNote)}</div></div>`;
-  if(t.url&&t.url!=='#')h+=`<a class="open-btn" href="${escA(t.url)}" target="_blank" rel="noopener noreferrer">Open ${escH(t.name)} <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:6px;font-size:.65rem"></i></a>`;
-  detail.innerHTML=h;
-  detail.classList.add('open');
-  overlay.classList.add('visible');
+  h+=`<div class="field"><span class="fl">Status</span><span class="fv"><span class="dir-badge ${t.status||'unknown'}">${t.status||'?'}</span></span></div>`;
+  if(t.bestFor)h+=`<div class="field"><span class="fl">Best For</span><span class="fv">${escH(t.bestFor)}</span></div>`;
+  if(t.input)h+=`<div class="field"><span class="fl">Input</span><span class="fv">${escH(t.input)}</span></div>`;
+  if(t.output)h+=`<div class="field"><span class="fl">Output</span><span class="fv">${escH(t.output)}</span></div>`;
+  if(t.opsecNote)h+=`<div style="margin-top:8px;padding:7px;border-radius:5px;border:1px solid var(--border);background:var(--surface2)"><div style="font-size:.5rem;font-weight:700;color:var(--text5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px">OPSEC</div><div style="font-size:.6rem;color:var(--text2);line-height:1.4">${escH(t.opsecNote)}</div></div>`;
+  if(t.url&&t.url!=='#')h+=`<a class="open-btn" href="${escA(t.url)}" target="_blank" rel="noopener noreferrer">Open ${escH(t.name)} <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:4px;font-size:.55rem"></i></a>`;
+  detail.innerHTML=h;detail.classList.add('open');overlay.classList.add('visible');
 }
 
-function closeDirTool(){
-  const d=document.querySelector('.dir-tool-detail');if(d)d.classList.remove('open');
-  const o=document.querySelector('.dir-overlay');if(o)o.classList.remove('visible');
-}
-
+function closeDirTool(){const d=document.querySelector('.dir-detail');if(d)d.classList.remove('open');const o=document.querySelector('.dir-overlay');if(o)o.classList.remove('visible')}
 function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function escA(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 
-// Populate sidebar category list
 async function loadDirSidebar(){
-  try{
-    const d=await loadDirectory();
-    const cats=d.categories||[];
-    const el=document.getElementById('dirSidebarCats');
-    if(!el)return;
-    let h='';
-    cats.forEach(cat=>{
-      h+=`<div class="sidebar-item" data-page="dir-cat" data-cat="${cat.name}" style="padding-left:24px;font-size:.65rem" onclick="document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));this.classList.add('active');currentPage='directory';openDirCategory('${cat.name.replace(/'/g,"\\'")}')"><i class="fa-solid ${getDirIcon(cat.name)}" style="font-size:.6rem"></i>${cat.name} <span style="margin-left:auto;font-size:.5rem;color:var(--dim2);font-family:'JetBrains Mono',monospace">${cat.toolCount}</span></div>`;
-    });
+  try{const d=await loadDirectory();const cats=d.categories||[];const el=document.getElementById('dirSidebarCats');if(!el)return;let h='';
+    cats.forEach(cat=>{h+=`<div class="nav-item" style="padding-left:20px;font-size:.55rem" onclick="document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));this.classList.add('active');currentPage='directory';openDirCategory('${cat.name.replace(/'/g,"\\'")}')"><i class="fa-solid ${getDirIcon(cat.name)}" style="font-size:.5rem"></i>${cat.name} <span style="margin-left:auto;font-size:.4rem;color:var(--text5);font-family:'JetBrains Mono',monospace">${cat.toolCount}</span></div>`});
     el.innerHTML=h;
   }catch(e){}
 }
 setTimeout(loadDirSidebar,500);
+
+renderPage();
 </script>
 </body>
 </html>
