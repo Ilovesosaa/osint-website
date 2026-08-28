@@ -8,7 +8,7 @@ from .tools import router as tools_router
 from .directory import router as directory_router
 from .doxtools import router as doxtools_router
 
-app = FastAPI(title="Error404 DOXNOSINT", version="5.0.0")
+app = FastAPI(title="Error404 DOXNOSINT", version="5.0.0", docs_url=None, redoc_url=None)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(scan_router)
 app.include_router(tools_router)
@@ -26,6 +26,10 @@ if os.path.exists(static_dir):
     @app.get("/")
     async def index():
         return FileResponse(os.path.join(static_dir, "index.html"))
+
+    @app.get("/docs")
+    async def docs():
+        return FileResponse(os.path.join(static_dir, "docs.html"))
 
 @app.middleware("http")
 async def spa_fallback(request: Request, call_next):

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error404 DOXNOSINT — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0e;--bg-elevated:#0c0c0f;--surface:#101014;--surface-raised:#16161c;--surface-hover:#1a1a22;
+  --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.12);
+  --text:#fafafa;--text-secondary:#a1a1aa;--text-dim:#737380;--text-muted:#525252;
+  --accent:#6366f1;--accent-dim:rgba(99,102,241,0.15);--accent-rgb:99,102,241;
+  --radius:16px;--radius-lg:20px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text-secondary);font-family:var(--font-sans);font-size:14px;line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:var(--text);text-decoration:none}
+a:hover{color:#ececf1}
+
+/* ambient glow */
+.atmosphere{pointer-events:none;position:fixed;inset:0;z-index:0}
+.atmosphere::before{content:'';position:absolute;width:900px;height:480px;top:-120px;left:-120px;background:radial-gradient(ellipse,rgba(var(--accent-rgb),0.08),transparent 70%)}
+.atmosphere::after{content:'';position:absolute;width:600px;height:400px;top:60px;right:-100px;background:radial-gradient(ellipse,rgba(var(--accent-rgb),0.05),transparent 70%)}
+
+.shell{position:relative;z-index:1;min-height:100vh}
+
+/* top nav */
+.topnav{position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);background:rgba(10,10,14,0.85);backdrop-filter:blur(16px)}
+.topnav-inner{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--text)}
+.topnav-brand .logo{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
+.topnav-links{display:flex;gap:6px}
+.topnav-links a{padding:7px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--text-dim);transition:all .2s}
+.topnav-links a:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.topnav-links a.active{color:var(--text);background:rgba(255,255,255,0.06)}
+
+/* main layout */
+.main-wrap{max-width:1200px;margin:0 auto;padding:32px 24px 80px;display:grid;gap:40px;grid-template-columns:220px 1fr}
+@media(max-width:1024px){.main-wrap{grid-template-columns:1fr}.sidebar{display:none!important}}
+
+/* sidebar */
+.sidebar{position:sticky;top:72px;align-self:start}
+.sidebar-card{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);padding:8px}
+.sidebar-label{padding:10px 12px 6px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim)}
+.sidebar-link{display:block;padding:8px 12px;border-radius:12px;font-size:12px;font-family:var(--font-mono);color:var(--text-muted);transition:all .18s}
+.sidebar-link:hover{color:var(--text-secondary);background:rgba(255,255,255,0.03)}
+.sidebar-link.active{color:var(--accent);background:var(--accent-dim)}
+
+/* hero */
+.hero{border-bottom:1px solid var(--border);padding-bottom:40px;margin-bottom:8px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset-x:0;top:0;height:260px;background:radial-gradient(75% 65% at 28% 0,rgba(99,102,241,0.06),transparent 72%),radial-gradient(45% 45% at 88% 8%,rgba(99,102,241,0.04),transparent 68%);pointer-events:none}
+.hero-eyebrow{position:relative;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim)}
+.hero h1{position:relative;margin-top:12px;font-size:clamp(1.85rem,4vw,2.75rem);font-weight:700;color:var(--text);letter-spacing:-.02em}
+.hero p{position:relative;margin-top:16px;max-width:600px;color:var(--text-secondary);line-height:1.7}
+.hero-btns{position:relative;margin-top:28px;display:flex;flex-wrap:wrap;gap:12px}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:9999px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;transition:transform .2s,opacity .2s;border:none;cursor:pointer}
+.btn-primary:hover{transform:translateY(-1px);opacity:.9;color:#fff}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:9999px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text-secondary);font-size:13px;font-weight:500;transition:all .2s;cursor:pointer}
+.btn-ghost:hover{border-color:var(--border-strong);color:var(--text);background:rgba(255,255,255,0.04);color:var(--text)}
+
+/* section */
+.doc-section{margin-top:44px;scroll-margin-top:80px}
+.section-head{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.section-head h2{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim);white-space:nowrap}
+.section-head .line{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.15),rgba(255,255,255,0.05),transparent)}
+.doc-section h3{color:var(--text);font-size:18px;font-weight:600;margin-bottom:8px}
+.doc-section>p{margin-bottom:16px}
+
+/* endpoint card */
+.ep-card{border:1px solid var(--border);border-radius:var(--radius-lg);background:linear-gradient(165deg,rgba(255,255,255,0.03) 0%,transparent 45%),var(--surface);margin:16px 0;overflow:hidden;box-shadow:inset 0 1px rgba(255,255,255,0.04)}
+.ep-header{border-bottom:1px solid var(--border);background:rgba(0,0,0,0.25);padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.method-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.method-badge.get{border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text-secondary)}
+.method-badge.post{border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff}
+.ep-path{font-family:var(--font-mono);font-size:14px;color:var(--text)}
+.ep-body{padding:16px 18px 18px;color:var(--text-secondary);font-size:14px;line-height:1.7}
+.ep-body p{margin-bottom:12px}
+
+/* code block */
+.code-block{position:relative;border-radius:14px;border:1px solid var(--border);background:var(--surface);overflow:hidden}
+.code-block pre{margin:0;padding:14px 16px;overflow-x:auto}
+.code-block code{font-family:var(--font-mono);font-size:12px;line-height:1.6;color:#d4d4d8}
+.code-block .copy-btn{position:absolute;top:8px;right:8px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text-dim);font-size:11px;cursor:pointer;transition:all .18s;font-family:var(--font-mono)}
+.code-block .copy-btn:hover{background:rgba(255,255,255,0.08);color:var(--text)}
+.code-block .kw{color:#c084fc}.code-block .str{color:#86efac}.code-block .cmt{color:#52525b}
+.code-block .url{color:var(--accent)}
+
+/* info table */
+.info-table{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);overflow:hidden;margin:16px 0}
+.info-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-row .label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim);white-space:nowrap}
+.info-row .value{font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);text-align:right;word-break:break-all}
+
+/* module grid */
+.mod-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.mod-card{border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(165deg,rgba(255,255,255,0.024) 0%,transparent 55%),var(--surface);padding:16px 18px;transition:all .22s;position:relative;overflow:hidden}
+.mod-card:hover{border-color:var(--border-strong);background:linear-gradient(165deg,rgba(255,255,255,0.04) 0%,transparent 55%),var(--surface-raised);transform:translateY(-2px);box-shadow:0 20px 48px rgba(0,0,0,0.35)}
+.mod-card h4{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--text)}
+.mod-card h4 i{font-size:13px;color:var(--accent)}
+.mod-card .path{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-top:4px}
+.mod-card .desc{font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5}
+
+/* pills */
+.pill{display:inline-block;padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:600}
+.pill.get{border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text-secondary)}
+
+/* footer */
+footer{border-top:1px solid rgba(255,255,255,0.06);background:var(--bg-elevated);margin-top:80px}
+.footer-inner{max-width:1200px;margin:0 auto;padding:48px 24px;display:grid;gap:48px;grid-template-columns:1.4fr 2fr}
+@media(max-width:768px){.footer-inner{grid-template-columns:1fr}}
+.footer-brand p{margin-top:12px;font-size:14px;color:var(--text-dim);max-width:320px;line-height:1.6}
+.footer-col h5{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim);margin-bottom:14px}
+.footer-col a{display:block;padding:4px 0;font-size:13px;color:var(--text-muted);transition:color .18s}
+.footer-col a:hover{color:var(--text)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.14)}
+</style>
+</head>
+<body>
+
+<div class="atmosphere" aria-hidden="true"></div>
+
+<div class="shell">
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="topnav-brand">
+      <div class="logo">4</div>
+      Error404 DOXNOSINT
+    </a>
+    <div class="topnav-links">
+      <a href="/">Console</a>
+      <a href="/docs" class="active">Docs</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <nav class="sidebar-card">
+    <p class="sidebar-label">On this page</p>
+    <a href="#start" class="sidebar-link active">Quick Start</a>
+    <a href="#architecture" class="sidebar-link">Architecture</a>
+    <a href="#modules" class="sidebar-link">Modules</a>
+    <a href="#endpoints" class="sidebar-link">Endpoints</a>
+    <a href="#errors" class="sidebar-link">Error Codes</a>
+    <a href="#support" class="sidebar-link">Support</a>
+  </nav>
+</aside>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Documentation</p>
+  <h1>Platform &amp; API Reference</h1>
+  <p>Integrate Error404 DOXNOSINT via the REST API or use the web console. All endpoints are free, open, and require no authentication.</p>
+  <div class="hero-btns">
+    <a href="/" class="btn-primary"><i class="fa-solid fa-terminal"></i> Open Console</a>
+    <a href="#endpoints" class="btn-ghost"><i class="fa-solid fa-book"></i> Jump to endpoints</a>
+  </div>
+</div>
+
+<!-- QUICK START -->
+<section id="start" class="doc-section">
+  <div class="section-head">
+    <h2>Quick Start</h2>
+    <div class="line"></div>
+  </div>
+  <p>All endpoints are <code style="font-family:var(--font-mono);background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-size:12px;color:var(--text-secondary)">GET</code> requests. No API key required. Base URL:</p>
+  <div class="code-block">
+    <pre><code><span class="cmt"># Production</span>
+<span class="url">https://osint-website-production.up.railway.app</span>
+
+<span class="cmt"># Local development</span>
+<span class="url">http://localhost:8000</span></code></pre>
+  </div>
+  <p style="margin-top:16px">Quick example — look up an email address:</p>
+  <div class="code-block">
+    <pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/email/user@example.com"</span></code></pre>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="doc-section">
+  <div class="section-head">
+    <h2>Architecture</h2>
+    <div class="line"></div>
+  </div>
+  <p>Error404 DOXNOSINT v5.0 is built on Python 3.11 + FastAPI with a single-page vanilla JS frontend. All lookups are performed server-side using open APIs, web scraping, and DNS resolution.</p>
+
+  <div class="info-table">
+    <div class="info-row"><span class="label">Runtime</span><span class="value">Python 3.11 + FastAPI</span></div>
+    <div class="info-row"><span class="label">Frontend</span><span class="value">Vanilla JS SPA (no framework)</span></div>
+    <div class="info-row"><span class="label">Deployment</span><span class="value">Docker + Railway</span></div>
+    <div class="info-row"><span class="label">Total Endpoints</span><span class="value">43 tool endpoints</span></div>
+    <div class="info-row"><span class="label">Platform Scans</span><span class="value">160+ platforms (username scanner)</span></div>
+    <div class="info-row"><span class="label">Auth</span><span class="value">None required — fully open</span></div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section id="modules" class="doc-section">
+  <div class="section-head">
+    <h2>Modules</h2>
+    <div class="line"></div>
+  </div>
+  <p>DOXNOSINT offers 43 specialized lookup modules across 8 categories.</p>
+
+  <h3 style="margin-top:24px">Core OSINT</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-solid fa-envelope"></i> Email OSINT</h4><div class="path">/api/email/{email}</div><div class="desc">60+ site checks, MX/SPF/DMARC records, Gravatar, disposable check</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-globe"></i> IP Lookup</h4><div class="path">/api/ip/{ip}</div><div class="desc">Geolocation, ASN, reverse DNS, 20+ RBL blacklist check</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-server"></i> Domain Lookup</h4><div class="path">/api/domain/{domain}</div><div class="desc">DNS records, SSL certs, tech detection, security headers</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-phone"></i> Phone Lookup</h4><div class="path">/api/phone/{phone}</div><div class="desc">Carrier, country, line type, E.164/international formatting</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-link"></i> URL Unfurl</h4><div class="path">/api/url/{url}</div><div class="desc">Title, meta, OG image, headers, tech stack, redirect chain</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-clock-rotate-left"></i> Wayback Machine</h4><div class="path">/api/wayback/{url}</div><div class="desc">Historical snapshots and archive links</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Network &amp; Infrastructure</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-solid fa-network-wired"></i> Reverse IP</h4><div class="path">/api/reverseip/{ip}</div><div class="desc">Reverse DNS, co-hosted domains via HackerTarget</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-lock"></i> SSL Analysis</h4><div class="path">/api/ssl/{domain}</div><div class="desc">TLS cert issuer, SAN, validity, protocol, cipher</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-shield-halved"></i> WAF Detection</h4><div class="path">/api/waf/{domain}</div><div class="desc">Cloudflare, Akamai, CloudFront, Fastly, Sucuri detection</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-plug"></i> Port Scanner</h4><div class="path">/api/ports/{ip}</div><div class="desc">Async TCP scan of 26 common ports with banner grabbing</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-satellite-dish"></i> Shodan-style Info</h4><div class="path">/api/shodan/{ip}</div><div class="desc">Org, ISP, geo, ASN, proxy/hosting flags + port scan</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-sitemap"></i> Subdomains</h4><div class="path">/api/subdomains/{domain}</div><div class="desc">Certificate Transparency + DNS brute-force (30 subs)</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">People &amp; Identity</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-solid fa-user-secret"></i> Username Scan</h4><div class="path">/api/scan/{username}</div><div class="desc">160+ platforms — find all accounts by username</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-user"></i> Discord ID</h4><div class="path">/api/discord/{id}</div><div class="desc">Snowflake decode, avatar, breach/scam database</div></div>
+    <div class="mod-card"><h4><i class="fa-brands fa-telegram"></i> Telegram</h4><div class="path">/api/telegram/{username}</div><div class="desc">Name, bio, photo via t.me scraping</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-user-ninja"></i> Doxbin</h4><div class="path">/api/doxbin/{query}</div><div class="desc">Doxbin.net entry search via search engines</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-magnifying-glass"></i> Dox Search</h4><div class="path">/api/doxsearch/{query}</div><div class="desc">Broad dox/leak search across paste sites</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-skull"></i> Shadow Leak</h4><div class="path">/api/shadowleak/{query}</div><div class="desc">Partial matches in public breach databases</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Breach &amp; Leak Intelligence</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-solid fa-database"></i> Breach Check</h4><div class="path">/api/breach/{query}</div><div class="desc">Paste sites, GitHub code, DuckDuckGo + 40+ known breaches</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-paste"></i> Paste Search</h4><div class="path">/api/pastes/{query}</div><div class="desc">Pastebin, Gists, paste.ee, dpaste, rentry.co</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-rotate-left"></i> Partial Recovery</h4><div class="path">/api/partialrecovery/{query}</div><div class="desc">Password recovery availability on 9 platforms</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-magnifying-glass-chart"></i> IntelX</h4><div class="path">/api/intelx/{query}</div><div class="desc">Intelligence X indexed results</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Gaming</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-brands fa-steam"></i> Steam</h4><div class="path">/api/gaming/steam/{username}</div><div class="desc">Profile, level, vanity URL</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-gamepad"></i> Roblox</h4><div class="path">/api/gaming/roblox/{username}</div><div class="desc">User ID, display name, profile</div></div>
+    <div class="mod-card"><h4><i class="fa-brands fa-xbox"></i> Xbox</h4><div class="path">/api/gaming/xbox/{username}</div><div class="desc">Gamertag, XUID lookup</div></div>
+    <div class="mod-card"><h4><i class="fa-brands fa-playstation"></i> PlayStation</h4><div class="path">/api/gaming/playstation/{username}</div><div class="desc">PSN ID, trophy count</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-cube"></i> Minecraft</h4><div class="path">/api/minecraft/{username}</div><div class="desc">UUID, skin/cape, name history via Mojang API</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-car"></i> FiveM</h4><div class="path">/api/fivem/{query}</div><div class="desc">FiveM forums, resources, CFX dumps</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Financial &amp; Business</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-solid fa-coins"></i> Crypto Wallet</h4><div class="path">/api/crypto/{address}</div><div class="desc">Chain detection, balance, tx count, first/last seen</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-id-card"></i> Fiscal Code</h4><div class="path">/api/fiscalcode/{cf}</div><div class="desc">Italian Codice Fiscale decoder — name, DOB, gender, municipality</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-building-columns"></i> VAT Validation</h4><div class="path">/api/vat/{vat}</div><div class="desc">EU VAT via VIES API — validity, company, address</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-landmark"></i> IBAN Intel</h4><div class="path">/api/iban/{iban}</div><div class="desc">MOD-97 validation, country/bank/account parsing</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-car-side"></i> VIN Lookup</h4><div class="path">/api/vin/{vin}</div><div class="desc">17-char VIN decode via NHTSA vPIC API</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-file-invoice"></i> Tax ID</h4><div class="path">/api/taxid/{id}</div><div class="desc">Auto-detect CF/VAT/IBAN/EIN and route</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-briefcase"></i> Business Search</h4><div class="path">/api/business/{query}</div><div class="desc">OpenCorporates + UK Companies House</div></div>
+    <div class="mod-card"><h4><i class="fa-brands fa-paypal"></i> PayPal Trace</h4><div class="path">/api/paypaltrace/{query}</div><div class="desc">Transaction logs, receipts, credentials</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Developer &amp; Code</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-brands fa-github"></i> GitHub OSINT</h4><div class="path">/api/github/{query}</div><div class="desc">Profile, repos, gists, events via GitHub API</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-folder-open"></i> Folder Intel</h4><div class="path">/api/folder/{path}</div><div class="desc">Directory leak and backup search</div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Search &amp; Dorking</h3>
+  <div class="mod-grid" style="margin-top:12px">
+    <div class="mod-card"><h4><i class="fa-solid fa-magnifying-glass"></i> Google Dorks</h4><div class="path">/api/dorks/{target}</div><div class="desc">23+ dork queries — login pages, APIs, backups, leaks</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-rotate"></i> WHOIS</h4><div class="path">/api/whois/{domain}</div><div class="desc">RDAP — registrar, dates, name servers, registrant</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-phone-volume"></i> Phone → Email</h4><div class="path">/api/phonetoemail/{phone}</div><div class="desc">Find emails from a phone number</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-phone-flip"></i> Email → Phone</h4><div class="path">/api/emailtophone/{email}</div><div class="desc">Find phones from an email address</div></div>
+    <div class="mod-card"><h4><i class="fa-brands fa-discord"></i> Discord Grave</h4><div class="path">/api/discordgrave/{query}</div><div class="desc">Deleted/banned Discord accounts</div></div>
+    <div class="mod-card"><h4><i class="fa-solid fa-gamepad"></i> FiveM Hunter</h4><div class="path">/api/fivemhunter/{query}</div><div class="desc">FiveM player identifiers and server info</div></div>
+  </div>
+</section>
+
+<!-- ENDPOINTS -->
+<section id="endpoints" class="doc-section">
+  <div class="section-head">
+    <h2>Endpoints</h2>
+    <div class="line"></div>
+  </div>
+
+  <!-- Health -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/health</span></div>
+    <div class="ep-body"><p>Health check. No authentication required. Returns version and status.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/health"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/email/{email}</span></div>
+    <div class="ep-body"><p>Full email OSINT. Checks 60+ sites for registration, validates MX/SPF/DMARC/DKIM records, disposable email detection, Gravatar profile lookup.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/email/user@example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- IP -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/ip/{ip}</span></div>
+    <div class="ep-body"><p>IP geolocation, ASN information, abuse contact, reverse DNS, and blacklist check against 20+ RBLs.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/ip/8.8.8.8"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Domain -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/domain/{domain}</span></div>
+    <div class="ep-body"><p>DNS records (A/AAAA/MX/TXT/NS/CNAME), SSL certificate transparency via crt.sh, technology detection, security header analysis.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/domain/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Phone -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/phone/{phone}</span></div>
+    <div class="ep-body"><p>Phone number validation, carrier identification, country, line type, formatting (E.164/international/national), timezone detection.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/phone/+14155552671"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- URL -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/url/{url:path}</span></div>
+    <div class="ep-body"><p>Extract title, meta description, OG image, favicon, response headers, technology stack detection, and full redirect chain.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/url/https://github.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Wayback -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/wayback/{url:path}</span></div>
+    <div class="ep-body"><p>Retrieves Wayback Machine snapshots for a URL including timestamps, HTTP status codes, and direct archive links.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/wayback/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Username Scan -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/scan/{username}</span></div>
+    <div class="ep-body"><p>Username enumeration across 160+ platforms. Async parallel scanning with found/not-found status for each platform.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/scan/johndoe"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Discord -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/discord/{discord_id}</span></div>
+    <div class="ep-body"><p>Decodes Discord snowflake ID (creation date, age, internal IDs), checks avatar/banner availability, breach and scam database lookups, risk analysis.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/discord/123456789012345678"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Reverse IP -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/reverseip/{ip}</span></div>
+    <div class="ep-body"><p>Reverse DNS resolution, geolocation info, and discovery of other domains hosted on the same IP via HackerTarget.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/reverseip/8.8.8.8"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- SSL -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/ssl/{domain}</span></div>
+    <div class="ep-body"><p>Connects to domain over TLS. Extracts certificate issuer, Subject Alternative Names, validity dates, days remaining, protocol version, and cipher suite.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/ssl/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- WAF -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/waf/{domain}</span></div>
+    <div class="ep-body"><p>Detects WAF/CDN providers (Cloudflare, Akamai, AWS CloudFront, Fastly, Sucuri, etc.) via HTTP header signatures, plus full technology stack fingerprinting.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/waf/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Dorks -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/dorks/{target}</span></div>
+    <div class="ep-body"><p>Generates 23+ Google dork queries for a target including filetypes, login pages, API endpoints, backup files, leaked data, configuration files, and more.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/dorks/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Ports -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/ports/{ip}</span></div>
+    <div class="ep-body"><p>Async TCP port scanner. Scans 26 common ports (21–27017) and grabs service banners from open ports.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/ports/8.8.8.8"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Pastes -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/pastes/{query}</span></div>
+    <div class="ep-body"><p>Searches Pastebin, GitHub Gists, paste.ee, dpaste.org, rentry.co, and DuckDuckGo for paste content matching the query.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/pastes/user@example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- WHOIS -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/whois/{domain}</span></div>
+    <div class="ep-body"><p>WHOIS via RDAP (Verisign + rdap.org). Returns registrar, creation/expiration dates, name servers, and registrant information.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/whois/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Subdomains -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/subdomains/{domain}</span></div>
+    <div class="ep-body"><p>Finds subdomains via crt.sh Certificate Transparency logs and DNS brute-force of 30 common subdomain prefixes.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/subdomains/example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Shodan -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/shodan/{ip}</span></div>
+    <div class="ep-body"><p>IP information (org, ISP, geo, ASN, proxy/hosting/mobile flags) plus live port scan of 22 common ports.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/shodan/8.8.8.8"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Breach -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/breach/{query}</span></div>
+    <div class="ep-body"><p>Searches paste sites, GitHub code search, and DuckDuckGo for leaked credentials. Includes a built-in database of 40+ known platform breaches.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/breach/user@example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Crypto -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/crypto/{address}</span></div>
+    <div class="ep-body"><p>Detects blockchain (ETH/BTC/TRX/ADA/XRP), fetches balance, transaction count, and first/last seen timestamps.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/crypto/0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Steam -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/gaming/steam/{username}</span></div>
+    <div class="ep-body"><p>Steam profile lookup by vanity name. Returns display name, level, and profile URL.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/gaming/steam/gabelogannewell"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Roblox -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/gaming/roblox/{username}</span></div>
+    <div class="ep-body"><p>Roblox user lookup via the Roblox API. Returns user ID, display name, and profile URL.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/gaming/roblox/Roblox"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Xbox -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/gaming/xbox/{username}</span></div>
+    <div class="ep-body"><p>Xbox gamertag lookup via xboxgamertag.com. Returns gamertag and XUID.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/gaming/xbox/MajorNelson"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- PlayStation -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/gaming/playstation/{username}</span></div>
+    <div class="ep-body"><p>PSN profile lookup via psnprofiles.com. Returns PSN online ID and trophy count.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/gaming/playstation/xxToraNExx"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Telegram -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/telegram/{username}</span></div>
+    <div class="ep-body"><p>Telegram user lookup via t.me page scraping. Returns name, bio, profile photo, with DuckDuckGo fallback.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/telegram/durov"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Doxbin -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/doxbin/{query}</span></div>
+    <div class="ep-body"><p>Searches for doxbin.net entries via DuckDuckGo and public mirrors.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/doxbin/johndoe"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Dox Search -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/doxsearch/{query}</span></div>
+    <div class="ep-body"><p>Broad dox and leak search across doxbin, pastebin, ghostbin, and general web via DuckDuckGo dorking.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/doxsearch/johndoe"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Fiscal Code -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/fiscalcode/{cf}</span></div>
+    <div class="ep-body"><p>Validates and decodes Italian Codice Fiscale (16-character). Extracts surname, first name, birth year/month/day, gender, and municipality code. Includes MOD-97 checksum validation.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/fiscalcode/RSSMRA85M01H501Z"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- VAT -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/vat/{vat_number}</span></div>
+    <div class="ep-body"><p>Validates EU VAT numbers via the VIES API. Returns validity status, company name, and address. Falls back to DuckDuckGo search.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/vat/IT12345678901"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- IBAN -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/iban/{iban}</span></div>
+    <div class="ep-body"><p>IBAN validation using MOD-97 checksum. Extracts country, bank code, and account number with country-specific parsing (IT/GB/DE). Includes breach database check.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/iban/GB29NWBK60161331926819"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- VIN -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/vin/{vin}</span></div>
+    <div class="ep-body"><p>Validates and decodes 17-character Vehicle Identification Numbers. Returns country, manufacturer, model year. Fetches full vehicle details from the NHTSA vPIC API.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/vin/WVWZZZ3CZWE123456"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Tax ID -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/taxid/{taxid}</span></div>
+    <div class="ep-body"><p>Auto-detects tax ID format and routes to the correct decoder: Italian Codice Fiscale, EU VAT number, IBAN, or US EIN.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/taxid/RSSMRA85M01H501Z"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Partial Recovery -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/partialrecovery/{query}</span></div>
+    <div class="ep-body"><p>Checks if an email or phone number can be used for password recovery on 9 major platforms including Instagram, Google, Apple, PayPal, and Uber.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/partialrecovery/user@gmail.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Phone to Email -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/phonetoemail/{phone}</span></div>
+    <div class="ep-body"><p>Searches DuckDuckGo and paste sites for email addresses associated with a given phone number.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/phonetoemail/+14155552671"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Email to Phone -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/emailtophone/{email}</span></div>
+    <div class="ep-body"><p>Searches DuckDuckGo and paste sites for phone numbers associated with a given email address.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/emailtophone/user@example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Shadow Leak -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/shadowleak/{query}</span></div>
+    <div class="ep-body"><p>Searches for partial matches in public breach and leak databases using DuckDuckGo dorking techniques.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/shadowleak/johndoe"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- FiveM Hunter -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/fivemhunter/{query}</span></div>
+    <div class="ep-body"><p>Searches FiveM and cfx.re databases for player identifiers, licenses, and associated server information.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/fivemhunter/player123"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Discord Grave -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/discordgrave/{query}</span></div>
+    <div class="ep-body"><p>Searches for deleted or banned Discord accounts and associated breach data via DuckDuckGo.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/discordgrave/olduser123"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- PayPal Trace -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/paypaltrace/{query}</span></div>
+    <div class="ep-body"><p>Searches for PayPal transaction logs, receipts, and credential dumps via DuckDuckGo dorking.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/paypaltrace/user@paypal.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- GitHub -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/github/{query}</span></div>
+    <div class="ep-body"><p>GitHub user profile (bio, email, location, followers), recent repositories, gists, and public events via the GitHub API.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/github/torvalds"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Minecraft -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/minecraft/{username}</span></div>
+    <div class="ep-body"><p>Mojang API lookup returning UUID, skin URL, cape URL, and name history from NameMC.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/minecraft/Notch"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- FiveM -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/fivem/{query}</span></div>
+    <div class="ep-body"><p>Searches FiveM forums, community resources, and CFX name dumps via DuckDuckGo.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/fivem/player123"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Business -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/business/{query}</span></div>
+    <div class="ep-body"><p>Searches OpenCorporates and UK Companies House for company registration data, officers, and filing history.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/business/acme%20corp"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- IntelX -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/intelx/{query}</span></div>
+    <div class="ep-body"><p>Searches for Intelligence X (intelx.io) indexed results including leaked data, breach dumps, and darknet intelligence.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/intelx/user@example.com"</span></code></pre></div>
+    </div>
+  </div>
+
+  <!-- Folder Intel -->
+  <div class="ep-card">
+    <div class="ep-header"><span class="method-badge get">GET</span><span class="ep-path">/api/folder/{path:path}</span></div>
+    <div class="ep-body"><p>Searches for folder and directory leaks, exposed backups, and database dumps matching a path pattern via DuckDuckGo.</p>
+      <div class="code-block"><pre><code><span class="kw">curl</span> <span class="str">"https://osint-website-production.up.railway.app/api/folder/var/www/html"</span></code></pre></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ERRORS -->
+<section id="errors" class="doc-section">
+  <div class="section-head">
+    <h2>Error Codes</h2>
+    <div class="line"></div>
+  </div>
+  <p>All errors return JSON with a consistent structure.</p>
+
+  <div class="info-table" style="margin-top:16px">
+    <div class="info-row"><span class="label">200</span><span class="value">Success — full response payload</span></div>
+    <div class="info-row"><span class="label">404</span><span class="value">Not found — endpoint does not exist</span></div>
+    <div class="info-row"><span class="label">422</span><span class="value">Validation error — bad path parameter</span></div>
+    <div class="info-row"><span class="label">500</span><span class="value">Server error — upstream API failure</span></div>
+  </div>
+
+  <p style="margin-top:16px">Error response format:</p>
+  <div class="code-block">
+    <pre><code>{
+  <span class="str">"detail"</span>: <span class="str">"Not Found"</span>
+}</code></pre>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support" class="doc-section">
+  <div class="section-head">
+    <h2>Support</h2>
+    <div class="line"></div>
+  </div>
+  <p>For issues, feature requests, or contributions:</p>
+  <div class="info-table" style="margin-top:16px">
+    <div class="info-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/Ilovesosaa/osint-website" style="color:var(--accent)">Ilovesosaa/osint-website</a></span></div>
+    <div class="info-row"><span class="label">Version</span><span class="value">5.0.0</span></div>
+    <div class="info-row"><span class="label">License</span><span class="value">Open Source</span></div>
+  </div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /main-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--text)">
+        <div class="logo" style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff">4</div>
+        Error404 DOXNOSINT
+      </a>
+      <p>Open-source OSINT toolkit. 43 specialized endpoints. 160+ platform scans. No API keys required.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+      <div>
+        <h5>Product</h5>
+        <a href="/">Console</a>
+        <a href="/docs">Documentation</a>
+        <a href="#modules">Modules</a>
+      </div>
+      <div>
+        <h5>Resources</h5>
+        <a href="#endpoints">API Reference</a>
+        <a href="#errors">Error Codes</a>
+        <a href="#architecture">Architecture</a>
+      </div>
+      <div>
+        <h5>Project</h5>
+        <a href="https://github.com/Ilovesosaa/osint-website" target="_blank">GitHub</a>
+        <a href="https://github.com/Ilovesosaa/osint-website/issues" target="_blank">Issues</a>
+        <a href="https://github.com/Ilovesosaa/osint-website/releases" target="_blank">Releases</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Sidebar active state
+const links=document.querySelectorAll('.sidebar-link');
+const sections=document.querySelectorAll('.doc-section, .hero');
+function updateSidebar(){
+  let current='';
+  sections.forEach(s=>{
+    const top=s.getBoundingClientRect().top;
+    if(top<200)current=s.id;
+  });
+  links.forEach(l=>{
+    l.classList.toggle('active',l.getAttribute('href')==='#'+current);
+  });
+}
+window.addEventListener('scroll',updateSidebar,{passive:true});
+
+// Copy buttons
+document.querySelectorAll('.code-block').forEach(block=>{
+  const btn=document.createElement('button');
+  btn.className='copy-btn';
+  btn.textContent='Copy';
+  btn.onclick=()=>{
+    const code=block.querySelector('code').textContent;
+    navigator.clipboard.writeText(code);
+    btn.textContent='Copied';
+    setTimeout(()=>btn.textContent='Copy',1500);
+  };
+  block.appendChild(btn);
+});
+
+// Smooth scroll for sidebar links
+links.forEach(l=>{
+  l.addEventListener('click',e=>{
+    e.preventDefault();
+    const target=document.querySelector(l.getAttribute('href'));
+    if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+
+</body>
+</html>
