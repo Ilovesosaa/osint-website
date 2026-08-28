@@ -172,7 +172,76 @@ html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',san
 .content>*{animation:fadeIn .3s ease}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
-@media(max-width:768px){.sidebar{display:none}}
+/* === DIRECTORY === */
+.dir-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:20px}
+.dir-stat{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);text-align:center;transition:all .2s}
+.dir-stat:hover{border-color:var(--border2);transform:translateY(-2px)}
+.dir-stat-num{font-size:1.6rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.dir-stat-label{font-size:.55rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+.dir-search{display:flex;gap:0;padding:4px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);transition:all .3s;margin-bottom:16px;overflow:hidden}
+.dir-search:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,59,59,.08)}
+.dir-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.85rem;padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-weight:500}
+.dir-search input::placeholder{color:var(--dim2)}
+.dir-search button{padding:10px 22px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.dir-search button:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(59,130,246,.3)}
+.dir-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:16px}
+.dir-cat{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.dir-cat:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+.dir-cat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--blue),var(--purple));opacity:0;transition:opacity .2s}
+.dir-cat:hover::before{opacity:1}
+.dir-cat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.dir-cat-name{font-size:.78rem;font-weight:700;letter-spacing:-.1px;margin-bottom:2px}
+.dir-cat-count{font-size:.6rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.dir-breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:.72rem;color:var(--dim)}
+.dir-breadcrumb span{cursor:pointer;transition:color .15s}
+.dir-breadcrumb span:hover{color:var(--red)}
+.dir-breadcrumb .sep{color:var(--dim2);cursor:default}
+.dir-breadcrumb .current{color:var(--text);font-weight:600}
+.dir-tool{padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);transition:all .2s;cursor:pointer;display:block;text-decoration:none;color:inherit}
+.dir-tool:hover{border-color:var(--border2);background:var(--surface3);transform:translateY(-1px)}
+.dir-tool-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dir-tool-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(59,130,246,.1);color:var(--blue)}
+.dir-tool-name{font-size:.75rem;font-weight:700;letter-spacing:-.1px}
+.dir-tool-desc{font-size:.62rem;color:var(--dim);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dir-tool-meta{display:flex;flex-wrap:wrap;gap:4px}
+.dir-tool-badge{padding:2px 6px;border-radius:4px;font-size:.48rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+.dir-tool-badge.free{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
+.dir-tool-badge.freemium{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
+.dir-tool-badge.paid{background:rgba(255,59,59,.1);color:var(--red);border:1px solid rgba(255,59,59,.15)}
+.dir-tool-badge.passive{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.15)}
+.dir-tool-badge.active{background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.15)}
+.dir-tool-badge.local{background:rgba(236,72,153,.1);color:var(--pink);border:1px solid rgba(236,72,153,.15)}
+.dir-tool-badge.dork{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
+.dir-tool-badge.reg{background:rgba(107,107,128,.15);color:var(--dim);border:1px solid rgba(107,107,128,.2)}
+.dir-tool-badge.live{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.15)}
+.dir-tool-badge.degraded{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)}
+.dir-tool-badge.down{background:rgba(255,59,59,.1);color:var(--red);border:1px solid rgba(255,59,59,.15)}
+.dir-tool-badge.unknown{background:rgba(107,107,128,.1);color:var(--dim);border:1px solid rgba(107,107,128,.15)}
+.dir-filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.dir-filter{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.63rem;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-weight:500}
+.dir-filter:hover{border-color:var(--blue);color:var(--blue);background:rgba(59,130,246,.05)}
+.dir-filter.active{background:rgba(59,130,246,.1);color:var(--blue);border-color:rgba(59,130,246,.3)}
+.dir-count{font-size:.63rem;color:var(--dim2);font-family:'JetBrains Mono',monospace;margin-bottom:12px}
+.dir-subcats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.dir-subcat{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--dim);font-size:.68rem;cursor:pointer;transition:all .2s;font-weight:500}
+.dir-subcat:hover{border-color:var(--blue);color:var(--text);background:var(--surface3)}
+.dir-subcat.active{background:rgba(59,130,246,.1);color:var(--blue);border-color:rgba(59,130,246,.3)}
+.dir-tool-detail{position:fixed;top:0;right:-480px;width:460px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:100;transition:right .3s;overflow-y:auto;padding:20px;box-shadow:-8px 0 30px rgba(0,0,0,.4)}
+.dir-tool-detail.open{right:0}
+.dir-tool-detail-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;transition:all .15s}
+.dir-tool-detail-close:hover{border-color:var(--red);color:var(--red)}
+.dir-tool-detail h2{font-size:1rem;font-weight:700;margin-bottom:4px;padding-right:36px}
+.dir-tool-detail .breadcrumb{font-size:.62rem;color:var(--dim);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.dir-tool-detail .desc{font-size:.75rem;color:var(--text);line-height:1.6;margin-bottom:14px}
+.dir-tool-detail .field{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.7rem}
+.dir-tool-detail .field-label{color:var(--dim);font-weight:500}
+.dir-tool-detail .field-value{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;font-size:.65rem}
+.dir-tool-detail .open-btn{display:block;width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s;font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;text-align:center;text-decoration:none;margin-top:16px}
+.dir-tool-detail .open-btn:hover{transform:scale(1.01);box-shadow:0 4px 20px rgba(59,130,246,.3)}
+.dir-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;opacity:0;pointer-events:none;transition:opacity .3s}
+.dir-overlay.visible{opacity:1;pointer-events:auto}
+.dir-tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+@media(max-width:768px){.sidebar{display:none}.dir-tool-detail{width:100%}}
 </style>
 </head>
 <body>
@@ -181,7 +250,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',san
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">D4</div>
-      <div><div class="sidebar-title">DOXNOSINT</div><div class="sidebar-ver">v3.0 // 160+ platforms</div></div>
+      <div><div class="sidebar-title">DOXNOSINT</div><div class="sidebar-ver">v4.0 // 160+ platforms + 1100+ tools</div></div>
     </div>
     <div class="sidebar-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search tools..."/></div>
 
@@ -238,6 +307,12 @@ html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',san
     <div class="sidebar-section">
       <div class="sidebar-label">Crypto</div>
       <div class="sidebar-item" data-page="crypto"><i class="fa-brands fa-bitcoin"></i>Wallet Lookup</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tool Directory</div>
+      <div class="sidebar-item" data-page="directory"><i class="fa-solid fa-book-open"></i>All Tools (1100+)</div>
+      <div id="dirSidebarCats"></div>
     </div>
 
     <div class="sidebar-footer">
@@ -314,6 +389,7 @@ const P={
 };
 
 function renderPage(){
+  if(currentPage==='directory'){renderDirPage();return}
   const p=P[currentPage]||P.username;
   pageTitle.textContent=p.title;
   pageBadge.textContent=p.badge;
@@ -899,6 +975,249 @@ function renderGeneric(d,el){
 }
 
 renderPage();
+
+// === TOOL DIRECTORY ===
+let dirData=null,dirCatData=null,dirCurrentCat=null,dirCurrentSubcat=null,dirFilter='all',dirSearchQuery='';
+
+const DIR_ICONS={'Username':'fa-user-secret','Email Address':'fa-envelope','Domain Name':'fa-globe','IP & MAC Address':'fa-location-dot','Cloud Infrastructure':'fa-cloud','Images / Videos / Docs':'fa-image','Social Networks':'fa-share-nodes','Instant Messaging':'fa-comment-dots','People Search Engines':'fa-users','Dating':'fa-heart','Telephone Numbers':'fa-phone','Public Records':'fa-file-lines','Compliance & Risk Intelligence':'fa-scale-balanced','Business Records':'fa-briefcase','Transportation':'fa-plane','Geolocation Tools / Maps':'fa-map-location-dot','Search Engines':'fa-magnifying-glass','Online Communities':'fa-users-rays','Archives':'fa-box-archive','Language Translation':'fa-language','Mobile OSINT':'fa-mobile-screen','Dark Web':'fa-mask','Disinformation & Media Verification':'fa-newspaper','Blockchain & Cryptocurrency':'fa-link','Classifieds':'fa-store','Encoding / Decoding':'fa-code','Tools':'fa-wrench','AI Tools':'fa-robot','Malicious File Analysis':'fa-virus','Cyber Threat Intelligence':'fa-crosshairs','OpSec':'fa-user-shield','Documentation / Evidence Capture':'fa-camera','Training':'fa-graduation-cap'};
+const DIR_COLORS=['#ff3b3b','#3b82f6','#a855f7','#06d6a0','#fbbf24','#ec4899','#f97316','#14b8a6','#8b5cf6','#ef4444','#22c55e','#0ea5e9'];
+
+function getDirIcon(cat){return DIR_ICONS[cat]||'fa-toolbox'}
+function getDirColor(i){return DIR_COLORS[i%DIR_COLORS.length]}
+
+async function loadDirectory(){
+  if(dirData)return dirData;
+  const r=await fetch('/api/directory/stats');
+  dirData=await r.json();
+  return dirData;
+}
+
+async function loadDirCat(path){
+  const r=await fetch('/api/directory/category/'+encodeURIComponent(path));
+  return await r.json();
+}
+
+async function searchDir(q){
+  const r=await fetch('/api/directory/search?q='+encodeURIComponent(q));
+  return await r.json();
+}
+
+function renderDirPage(){
+  pageTitle.textContent='Tool Directory';
+  pageBadge.textContent='1100+ TOOLS';
+  content.innerHTML=`
+    <div class="dir-stats" id="dirStats"><div style="font-size:.72rem;color:var(--dim)">Loading directory...</div></div>
+    <div class="dir-search"><input id="dirQ" placeholder="Search 1100+ OSINT tools..." autocomplete="off"/><button onclick="doDirSearch()">Search</button></div>
+    <div id="dirSearchResults"></div>
+    <div id="dirCatGrid"></div>
+    <div id="dirCatDetail"></div>`;
+  document.getElementById('dirQ').addEventListener('keydown',e=>{if(e.key==='Enter')doDirSearch()});
+  document.getElementById('dirQ').addEventListener('input',function(){if(!this.value){document.getElementById('dirSearchResults').innerHTML='';document.getElementById('dirCatGrid').style.display='';loadDirCategories()}});
+  loadDirStats();
+  loadDirCategories();
+}
+
+async function loadDirStats(){
+  const d=await loadDirectory();
+  const el=document.getElementById('dirStats');
+  if(!el)return;
+  const free=d.pricing?.free||0;
+  const passive=d.opsec?.passive||0;
+  el.innerHTML=`
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--red)">${d.totalTools}</div><div class="dir-stat-label">Total Tools</div></div>
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--green)">${free}</div><div class="dir-stat-label">Free Tools</div></div>
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--blue)">${passive}</div><div class="dir-stat-label">Passive OPSEC</div></div>
+    <div class="dir-stat"><div class="dir-stat-num" style="color:var(--purple)">${d.categories?.length||0}</div><div class="dir-stat-label">Categories</div></div>`;
+}
+
+async function loadDirCategories(){
+  if(!dirData)await loadDirectory();
+  const cats=dirData?.categories||[];
+  const el=document.getElementById('dirCatGrid');
+  if(!el)return;
+  el.style.display='';
+  let h='<div class="dir-cats">';
+  cats.forEach((cat,i)=>{
+    const color=getDirColor(i);
+    const icon=getDirIcon(cat.name);
+    h+=`<div class="dir-cat" onclick="openDirCategory('${cat.name.replace(/'/g,"\\'")}')">
+      <div class="dir-cat-icon" style="background:${color}15;color:${color}"><i class="fa-solid ${icon}"></i></div>
+      <div class="dir-cat-name">${cat.name}</div>
+      <div class="dir-cat-count">${cat.toolCount} tools</div>
+    </div>`;
+  });
+  h+='</div>';
+  el.innerHTML=h;
+}
+
+async function openDirCategory(name,subcat){
+  dirCurrentCat=name;
+  dirCurrentSubcat=subcat||null;
+  dirFilter='all';
+  document.getElementById('dirCatGrid').style.display='none';
+  document.getElementById('dirSearchResults').innerHTML='';
+  const el=document.getElementById('dirCatDetail');
+  el.innerHTML='<div style="font-size:.72rem;color:var(--dim);padding:20px 0">Loading...</div>';
+
+  try{
+    const d=await loadDirCat(name);
+    dirCatData=d;
+    renderDirCatDetail(d);
+  }catch(e){
+    el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+function renderDirCatDetail(d){
+  const el=document.getElementById('dirCatDetail');
+  let tools=d.tools||[];
+  let subcats=d.subcategories?.filter(c=>c.name!==d.name)||[];
+
+  if(dirCurrentSubcat){
+    tools=tools.filter(t=>t.subcategory===dirCurrentSubcat);
+  }
+
+  if(dirFilter==='free')tools=tools.filter(t=>t.pricing==='free');
+  else if(dirFilter==='passive')tools=tools.filter(t=>t.opsec==='passive');
+  else if(dirFilter==='active')tools=tools.filter(t=>t.opsec==='active');
+  else if(dirFilter==='local')tools=tools.filter(t=>t.localInstall);
+
+  let h=`<div class="dir-breadcrumb"><span onclick="closeDirCat()"><i class="fa-solid fa-arrow-left" style="margin-right:4px"></i>All Categories</span><span class="sep">/</span><span class="current">${d.name}</span>${dirCurrentSubcat?`<span class="sep">/</span><span class="current">${dirCurrentSubcat}</span>`:''}</div>`;
+  h+=`<h2 style="font-size:1rem;font-weight:700;margin-bottom:4px">${d.name}</h2>`;
+  h+=`<div class="dir-count">${tools.length} tools${dirCurrentSubcat?` in ${dirCurrentSubcat}`:''}</div>`;
+
+  if(subcats.length>0&&!dirCurrentSubcat){
+    h+=`<div class="dir-subcats">`;
+    subcats.forEach(sc=>{
+      h+=`<div class="dir-subcat" onclick="openDirCategory('${d.name.replace(/'/g,"\\'")}','${sc.name.replace(/'/g,"\\'")}')">${sc.name} (${sc.toolCount})</div>`;
+    });
+    h+=`</div>`;
+  }
+
+  h+=`<div class="dir-filters">
+    <div class="dir-filter ${dirFilter==='all'?'active':''}" onclick="setDirFilter('all')">All</div>
+    <div class="dir-filter ${dirFilter==='free'?'active':''}" onclick="setDirFilter('free')">Free</div>
+    <div class="dir-filter ${dirFilter==='passive'?'active':''}" onclick="setDirFilter('passive')">Passive</div>
+    <div class="dir-filter ${dirFilter==='active'?'active':''}" onclick="setDirFilter('active')">Active</div>
+    <div class="dir-filter ${dirFilter==='local'?'active':''}" onclick="setDirFilter('local')">Local Install</div>
+  </div>`;
+
+  h+=`<div class="dir-tools-grid">`;
+  tools.forEach(t=>{
+    const badges=[];
+    if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-tool-badge ${t.pricing}">${t.pricing}</span>`);
+    if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-tool-badge ${t.opsec}">${t.opsec}</span>`);
+    if(t.localInstall)badges.push(`<span class="dir-tool-badge local">T</span>`);
+    if(t.googleDork)badges.push(`<span class="dir-tool-badge dork">D</span>`);
+    if(t.registration)badges.push(`<span class="dir-tool-badge reg">R</span>`);
+    if(t.status&&t.status!=='unknown')badges.push(`<span class="dir-tool-badge ${t.status}">${t.status}</span>`);
+    h+=`<div class="dir-tool" onclick='openDirTool(${JSON.stringify(t).replace(/'/g,"&#39;")})'>
+      <div class="dir-tool-header"><div class="dir-tool-icon">${(t.name||'??').substring(0,2).toUpperCase()}</div><div class="dir-tool-name">${escH(t.name)}</div></div>
+      <div class="dir-tool-desc">${escH(t.description||t.bestFor||'')}</div>
+      <div class="dir-tool-meta">${badges.join('')}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+  if(!tools.length)h+=`<div class="empty-state"><i class="fa-solid fa-search"></i><h3>No tools match</h3><p>Try a different filter</p></div>`;
+  el.innerHTML=h;
+}
+
+function setDirFilter(f){
+  dirFilter=f;
+  if(dirCatData)renderDirCatDetail(dirCatData);
+}
+
+function closeDirCat(){
+  dirCurrentCat=null;dirCurrentSubcat=null;dirFilter='all';dirCatData=null;
+  document.getElementById('dirCatDetail').innerHTML='';
+  document.getElementById('dirCatGrid').style.display='';
+}
+
+async function doDirSearch(){
+  const q=document.getElementById('dirQ')?.value?.trim();
+  if(!q)return;
+  document.getElementById('dirCatGrid').style.display='none';
+  document.getElementById('dirCatDetail').innerHTML='';
+  const el=document.getElementById('dirSearchResults');
+  el.innerHTML='<div style="font-size:.72rem;color:var(--dim);padding:10px 0">Searching...</div>';
+  try{
+    const d=await searchDir(q);
+    if(!d.results?.length){el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-search"></i><h3>No results for "${escH(q)}"</h3><p>Try different keywords</p></div>`;return}
+    let h=`<div class="dir-count">${d.count} results for "${escH(q)}"</div><div class="dir-tools-grid">`;
+    d.results.forEach(t=>{
+      const badges=[];
+      if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-tool-badge ${t.pricing}">${t.pricing}</span>`);
+      if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-tool-badge ${t.opsec}">${t.opsec}</span>`);
+      if(t.localInstall)badges.push(`<span class="dir-tool-badge local">T</span>`);
+      if(t.googleDork)badges.push(`<span class="dir-tool-badge dork">D</span>`);
+      if(t.registration)badges.push(`<span class="dir-tool-badge reg">R</span>`);
+      h+=`<div class="dir-tool" onclick='openDirTool(${JSON.stringify(t).replace(/'/g,"&#39;")})'>
+        <div class="dir-tool-header"><div class="dir-tool-icon">${(t.name||'??').substring(0,2).toUpperCase()}</div><div class="dir-tool-name">${escH(t.name)}</div></div>
+        <div class="dir-tool-desc">${escH(t.description||t.bestFor||'')}</div>
+        <div class="dir-tool-meta">${badges.join('')}<span class="dir-tool-badge" style="background:rgba(107,107,128,.08);color:var(--dim2);border:1px solid var(--border)">${escH(t.breadcrumb||'')}</span></div>
+      </div>`;
+    });
+    h+='</div>';
+    el.innerHTML=h;
+  }catch(e){el.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><h3>Error</h3><p>${e.message}</p></div>`}
+}
+
+function openDirTool(t){
+  let detail=document.querySelector('.dir-tool-detail');
+  let overlay=document.querySelector('.dir-overlay');
+  if(!detail){
+    detail=document.createElement('div');detail.className='dir-tool-detail';document.body.appendChild(detail);
+    overlay=document.createElement('div');overlay.className='dir-overlay';document.body.appendChild(overlay);
+    overlay.onclick=()=>closeDirTool();
+  }
+  const badges=[];
+  if(t.pricing&&t.pricing!=='unknown')badges.push(`<span class="dir-tool-badge ${t.pricing}">${t.pricing}</span>`);
+  if(t.opsec&&t.opsec!=='unknown')badges.push(`<span class="dir-tool-badge ${t.opsec}">${t.opsec}</span>`);
+  if(t.localInstall)badges.push(`<span class="dir-tool-badge local">Local Install (T)</span>`);
+  if(t.googleDork)badges.push(`<span class="dir-tool-badge dork">Google Dork (D)</span>`);
+  if(t.registration)badges.push(`<span class="dir-tool-badge reg">Registration (R)</span>`);
+  if(t.editUrl)badges.push(`<span class="dir-tool-badge" style="background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.15)">Manual URL (M)</span>`);
+  if(t.api)badges.push(`<span class="dir-tool-badge" style="background:rgba(6,214,160,.1);color:var(--cyan);border:1px solid rgba(6,214,160,.15)">API</span>`);
+
+  let h=`<div class="dir-tool-detail-close" onclick="closeDirTool()"><i class="fa-solid fa-xmark"></i></div>`;
+  h+=`<h2>${escH(t.name)}</h2>`;
+  h+=`<div class="breadcrumb">${escH(t.breadcrumb||'')}</div>`;
+  h+=`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px">${badges.join('')}</div>`;
+  if(t.description)h+=`<div class="desc">${escH(t.description)}</div>`;
+  h+=`<div class="field"><span class="field-label">Status</span><span class="field-value"><span class="dir-tool-badge ${t.status||'unknown'}">${t.status||'unknown'}</span></span></div>`;
+  if(t.bestFor)h+=`<div class="field"><span class="field-label">Best For</span><span class="field-value">${escH(t.bestFor)}</span></div>`;
+  if(t.input)h+=`<div class="field"><span class="field-label">Input</span><span class="field-value">${escH(t.input)}</span></div>`;
+  if(t.output)h+=`<div class="field"><span class="field-label">Output</span><span class="field-value">${escH(t.output)}</span></div>`;
+  if(t.opsecNote)h+=`<div style="margin-top:12px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2)"><div style="font-size:.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">OPSEC Notes</div><div style="font-size:.68rem;color:var(--text);line-height:1.5">${escH(t.opsecNote)}</div></div>`;
+  if(t.url&&t.url!=='#')h+=`<a class="open-btn" href="${escA(t.url)}" target="_blank" rel="noopener noreferrer">Open ${escH(t.name)} <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:6px;font-size:.65rem"></i></a>`;
+  detail.innerHTML=h;
+  detail.classList.add('open');
+  overlay.classList.add('visible');
+}
+
+function closeDirTool(){
+  const d=document.querySelector('.dir-tool-detail');if(d)d.classList.remove('open');
+  const o=document.querySelector('.dir-overlay');if(o)o.classList.remove('visible');
+}
+
+function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escA(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+
+// Populate sidebar category list
+async function loadDirSidebar(){
+  try{
+    const d=await loadDirectory();
+    const cats=d.categories||[];
+    const el=document.getElementById('dirSidebarCats');
+    if(!el)return;
+    let h='';
+    cats.forEach(cat=>{
+      h+=`<div class="sidebar-item" data-page="dir-cat" data-cat="${cat.name}" style="padding-left:24px;font-size:.65rem" onclick="document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));this.classList.add('active');currentPage='directory';openDirCategory('${cat.name.replace(/'/g,"\\'")}')"><i class="fa-solid ${getDirIcon(cat.name)}" style="font-size:.6rem"></i>${cat.name} <span style="margin-left:auto;font-size:.5rem;color:var(--dim2);font-family:'JetBrains Mono',monospace">${cat.toolCount}</span></div>`;
+    });
+    el.innerHTML=h;
+  }catch(e){}
+}
+setTimeout(loadDirSidebar,500);
 </script>
 </body>
 </html>

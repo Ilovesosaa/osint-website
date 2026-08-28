@@ -5,11 +5,13 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from .scan import router as scan_router
 from .tools import router as tools_router
+from .directory import router as directory_router
 
 app = FastAPI(title="OSINT Hub", version="2.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(scan_router)
 app.include_router(tools_router)
+app.include_router(directory_router)
 
 @app.get("/api/health")
 async def health():
