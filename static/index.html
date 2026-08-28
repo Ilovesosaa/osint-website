@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inquire — Tools for online investigations</title>
-<meta name="description" content="Investigate emails, phones, usernames, and more. Breach data, account recovery, and phone intelligence in one console.">
+<title>Error404 DOXNOSINT — OSINT Investigation Platform</title>
+<meta name="description" content="OSINT investigation platform. Investigate emails, phones, usernames, dox data, financial intel, and more.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -15,120 +15,87 @@
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);--border3:rgba(255,255,255,.15);
   --text:#fafafa;--text2:#a1a1aa;--text3:#71717a;--text4:#52525b;--text5:#3f3f46;
   --blue:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--purple:#a855f7;--cyan:#06b6d4;--orange:#f97316;--pink:#ec4899;
-  --accent:#3b82f6;
+  --accent:#6366f1;--accent2:#a855f7;--gradient:linear-gradient(135deg,#6366f1,#a855f7);
+  --glow:0 0 20px rgba(99,102,241,.15);--glow-purple:0 0 20px rgba(168,85,247,.15);
 }
 html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',system-ui,sans-serif}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:4px}
 ::selection{background:var(--accent);color:#fff}
-
-/* === LAYOUT === */
 .shell{display:flex;height:100vh;position:relative}
-.nav{width:200px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.nav{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;transition:all .2s}
 .nav-head{padding:14px 12px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
-.nav-logo{width:28px;height:28px;border-radius:6px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.6rem}
-.nav-brand{font-weight:700;font-size:.78rem;letter-spacing:-.15px}
-.nav-brand span{color:var(--text4)}
+.nav-logo{width:28px;height:28px;border-radius:6px;background:var(--gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.65rem;font-family:'Space Grotesk',sans-serif;box-shadow:var(--glow-purple)}
+.nav-brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:-.15px;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-version{font-size:.38rem;font-family:'JetBrains Mono',monospace;color:var(--text5);letter-spacing:.05em;margin-top:1px}
 .nav-search{padding:8px 10px;position:relative}
-.nav-search input{width:100%;padding:6px 8px 6px 26px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.65rem;outline:none;font-family:'JetBrains Mono',monospace}
-.nav-search input:focus{border-color:var(--accent)}
+.nav-search input{width:100%;padding:6px 8px 6px 26px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.65rem;outline:none;font-family:'JetBrains Mono',monospace;transition:all .2s}
+.nav-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.08)}
 .nav-search i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text5);font-size:.55rem}
 .nav-group{padding:2px 6px}
 .nav-label{font-size:.44rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text5);padding:6px 6px 3px}
-.nav-item{display:flex;align-items:center;gap:6px;padding:4px 7px;border-radius:5px;color:var(--text4);font-size:.65rem;cursor:pointer;transition:all .1s;border:1px solid transparent;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:6px;padding:4px 7px;border-radius:5px;color:var(--text4);font-size:.65rem;cursor:pointer;transition:all .15s;border:1px solid transparent;font-weight:500}
 .nav-item:hover{background:var(--surface2);color:var(--text3);border-color:var(--border)}
-.nav-item.active{background:rgba(59,130,246,.06);color:var(--accent);border-color:rgba(59,130,246,.1);font-weight:600}
+.nav-item.active{background:rgba(99,102,241,.06);color:var(--accent);border-color:rgba(99,102,241,.12);font-weight:600}
 .nav-item i{width:13px;text-align:center;font-size:.58rem;flex-shrink:0}
 .nav-item .badge{margin-left:auto;font-size:.42rem;font-family:'JetBrains Mono',monospace;color:var(--text5);background:var(--surface2);padding:1px 4px;border-radius:3px}
 .nav-foot{margin-top:auto;padding:8px;border-top:1px solid var(--border)}
-.nav-foot a{display:flex;align-items:center;gap:5px;padding:4px 5px;border-radius:4px;color:var(--text5);font-size:.55rem;text-decoration:none;transition:all .1s}
+.nav-foot a{display:flex;align-items:center;gap:5px;padding:4px 5px;border-radius:4px;color:var(--text5);font-size:.55rem;text-decoration:none;transition:all .15s}
 .nav-foot a:hover{color:var(--text3);background:var(--surface2)}
-
-/* === MAIN === */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
 .topbar{height:40px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;background:var(--surface)}
-.topbar-title{font-weight:600;font-size:.75rem}
-.topbar-pill{padding:2px 6px;border-radius:3px;font-size:.45rem;font-weight:600;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace}
+.topbar-title{font-weight:600;font-size:.75rem;font-family:'Space Grotesk',sans-serif}
+.topbar-pill{padding:2px 6px;border-radius:3px;font-size:.45rem;font-weight:600;background:var(--gradient);color:#fff;font-family:'JetBrains Mono',monospace}
 .topbar-right{margin-left:auto;display:flex;gap:4px}
-.topbar-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.55rem;cursor:pointer;transition:all .1s;font-family:'JetBrains Mono',monospace}
+.topbar-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.55rem;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono',monospace}
 .topbar-btn:hover{border-color:var(--border2);color:var(--text3)}
+.topbar-btn.active{background:var(--gradient);color:#fff;border-color:transparent}
 .content{flex:1;overflow-y:auto;padding:14px 18px}
-
-/* === HERO === */
 .hero{padding:28px 0 20px;text-align:center}
-.hero-eyebrow{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.hero-eyebrow{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
 .hero h1{font-size:1.5rem;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:6px}
 .hero h1 em{font-style:italic;color:var(--text3);font-weight:400}
 .hero p{font-size:.75rem;color:var(--text3);max-width:440px;margin:0 auto;line-height:1.5}
-
-/* === CONSOLE === */
 .console{max-width:560px;margin:16px auto 0;position:relative}
 .console-input{width:100%;padding:11px 14px 11px 36px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:.8rem;outline:none;font-family:'JetBrains Mono',monospace;transition:all .2s}
-.console-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+.console-input:focus{border-color:var(--accent);box-shadow:var(--glow)}
 .console-input::placeholder{color:var(--text5)}
 .console-prompt{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text5);font-size:.7rem;font-family:'JetBrains Mono',monospace}
-.console-send{position:absolute;right:4px;top:50%;transform:translateY(-50%);padding:6px 14px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-weight:600;font-size:.65rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif}
-.console-send:hover{filter:brightness(1.1)}
+.console-send{position:absolute;right:4px;top:50%;transform:translateY(-50%);padding:6px 14px;border-radius:6px;border:none;background:var(--gradient);color:#fff;font-weight:600;font-size:.65rem;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.console-send:hover{filter:brightness(1.1);box-shadow:var(--glow-purple)}
 .console-send:disabled{opacity:.3;cursor:not-allowed}
-
-/* === MODULE PILLS === */
 .modules-row{display:flex;justify-content:center;gap:4px;margin-top:10px;flex-wrap:wrap;max-width:560px;margin-left:auto;margin-right:auto}
-.mod-pill{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.5rem;cursor:pointer;transition:all .1s;font-family:'JetBrains Mono',monospace;font-weight:500}
+.mod-pill{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.5rem;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono',monospace;font-weight:500}
 .mod-pill:hover{border-color:var(--accent);color:var(--accent)}
-.mod-pill.active{background:rgba(59,130,246,.06);color:var(--accent);border-color:rgba(59,130,246,.15)}
-
-/* === MODULE GRID === */
-.mod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-top:16px;max-width:700px;margin-left:auto;margin-right:auto}
-.mod-card{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .12s;text-align:center}
-.mod-card:hover{border-color:var(--border2);background:var(--surface2)}
-.mod-card.active{border-color:rgba(59,130,246,.2);background:rgba(59,130,246,.04)}
-.mod-card-icon{font-size:.7rem;color:var(--text4);margin-bottom:4px}
-.mod-card-name{font-size:.65rem;font-weight:600;margin-bottom:1px}
-.mod-card-desc{font-size:.48rem;color:var(--text5);line-height:1.3}
-.mod-card-count{font-size:.42rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-top:3px}
-
-/* === PIPELINE === */
+.mod-pill.active{background:rgba(99,102,241,.06);color:var(--accent);border-color:rgba(99,102,241,.15)}
 .pipeline{display:flex;align-items:center;gap:4px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.pipe-chip{padding:2px 7px;border-radius:3px;font-size:.42rem;font-weight:600;font-family:'JetBrains Mono',monospace;background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
-.pipe-chip.running{color:var(--accent);border-color:rgba(59,130,246,.2);animation:pulse 1.5s infinite}
+.pipe-chip{padding:2px 7px;border-radius:3px;font-size:.42rem;font-weight:600;font-family:'JetBrains Mono',monospace;background:var(--surface2);color:var(--text3);border:1px solid var(--border);transition:all .3s}
+.pipe-chip.running{color:var(--accent);border-color:rgba(99,102,241,.2);animation:pulse 1.5s infinite}
 .pipe-chip.done{color:var(--green);border-color:rgba(34,197,94,.15)}
 .pipe-chip.error{color:var(--red);border-color:rgba(239,68,68,.15)}
 .pipe-arrow{color:var(--text5);font-size:.4rem}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* === CASE VIEW === */
 .case{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
 .case-panel{border:1px solid var(--border);border-radius:8px;background:var(--surface);overflow:hidden}
 .case-panel-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .case-panel-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
 .case-panel-count{font-size:.45rem;font-family:'JetBrains Mono',monospace;color:var(--text5);background:var(--surface2);padding:2px 6px;border-radius:3px}
 .case-panel-body{padding:8px;max-height:400px;overflow-y:auto}
-
-/* === ACCOUNT CARD === */
-.acc-card{padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);margin-bottom:5px;transition:all .12s;cursor:pointer}
+.acc-card{padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);margin-bottom:5px;transition:all .15s;cursor:pointer}
 .acc-card:hover{border-color:var(--border2);background:var(--surface3)}
 .acc-head{display:flex;align-items:center;justify-content:space-between}
 .acc-name{font-size:.72rem;font-weight:700}
 .acc-status{padding:2px 6px;border-radius:3px;font-size:.42rem;font-weight:700;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.3px}
 .acc-status.registered{background:rgba(34,197,94,.08);color:var(--green);border:1px solid rgba(34,197,94,.1)}
-.acc-status.linked{background:rgba(59,130,246,.08);color:var(--blue);border:1px solid rgba(59,130,246,.1)}
+.acc-status.linked{background:rgba(99,102,241,.08);color:var(--accent);border:1px solid rgba(99,102,241,.1)}
 .acc-status.leaked{background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.1)}
-.acc-status.safe{background:rgba(113,113,122,.08);color:var(--text4);border:1px solid var(--border)}
 .acc-detail{font-size:.52rem;color:var(--text4);margin-top:3px;font-family:'JetBrains Mono',monospace}
-
-/* === BREACH CARD === */
-.breach-card{padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);margin-bottom:5px;transition:all .12s}
+.breach-card{padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);margin-bottom:5px;transition:all .15s}
 .breach-card:hover{border-color:var(--border2)}
 .breach-head{display:flex;align-items:center;justify-content:space-between}
 .breach-name{font-size:.72rem;font-weight:700}
 .breach-year{font-size:.45rem;color:var(--text5);font-family:'JetBrains Mono',monospace}
 .breach-detail{font-size:.52rem;color:var(--text4);margin-top:2px;font-family:'JetBrains Mono',monospace}
-.breach-badge{padding:2px 6px;border-radius:3px;font-size:.4rem;font-weight:700;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.3px}
-.breach-badge.critical{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.12)}
-.breach-badge.high{background:rgba(239,68,68,.06);color:#f87171;border:1px solid rgba(239,68,68,.08)}
-.breach-badge.medium{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
-.breach-badge.low{background:rgba(113,113,122,.06);color:var(--text4);border:1px solid var(--border)}
-
-/* === HITS CHART === */
 .hits-chart{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);overflow:hidden}
 .hits-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .hits-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
@@ -138,36 +105,30 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
 .hit-bar{flex:1;border-radius:3px 3px 0 0;transition:height .3s;min-width:20px;position:relative}
 .hit-bar-label{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:.38rem;color:var(--text5);font-family:'JetBrains Mono',monospace;white-space:nowrap}
 .hit-bar-value{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:.4rem;color:var(--text4);font-family:'JetBrains Mono',monospace}
-
-/* === STATS ROW === */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
 .stat{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);text-align:center}
 .stat-num{font-size:1.2rem;font-weight:700;font-family:'JetBrains Mono',monospace}
 .stat-label{font-size:.42rem;color:var(--text5);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
-
-/* === RESULTS HEADER === */
 .res-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .res-head h2{font-size:.85rem;font-weight:700}
-.res-query{color:var(--accent);font-family:'JetBrains Mono',monospace;background:rgba(59,130,246,.06);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid rgba(59,130,246,.1)}
+.res-query{color:var(--accent);font-family:'JetBrains Mono',monospace;background:rgba(99,102,241,.06);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid rgba(99,102,241,.1)}
 .pills{display:flex;gap:4px;flex-wrap:wrap}
 .pill{padding:2px 7px;border-radius:4px;font-size:.48rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.2px}
 .pill.g{background:rgba(34,197,94,.06);color:var(--green);border:1px solid rgba(34,197,94,.08)}
 .pill.r{background:rgba(239,68,68,.06);color:var(--red);border:1px solid rgba(239,68,68,.08)}
-.pill.b{background:rgba(59,130,246,.06);color:var(--blue);border:1px solid rgba(59,130,246,.08)}
+.pill.b{background:rgba(99,102,241,.06);color:var(--accent);border:1px solid rgba(99,102,241,.08)}
 .pill.y{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
+.pill.p{background:rgba(168,85,247,.06);color:var(--purple);border:1px solid rgba(168,85,247,.08)}
 .pill.gray{background:rgba(113,113,122,.06);color:var(--text4);border:1px solid var(--border)}
-
-/* === DETAIL ROWS === */
-.det-card{padding:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);margin-bottom:6px}
+.det-card{padding:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);margin-bottom:6px;transition:all .15s}
+.det-card:hover{border-color:var(--border2)}
 .det-card h3{font-size:.7rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:5px}
 .det-row{display:flex;justify-content:space-between;padding:3px 0;font-size:.6rem;border-bottom:1px solid var(--border)}
 .det-row:last-child{border:none}
 .det-label{color:var(--text4);font-weight:500}
 .det-value{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;font-size:.55rem}
-
-/* === FOUND GRID === */
 .found-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:5px}
-.found-card{padding:8px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface);transition:all .1s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.found-card{padding:8px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface);transition:all .15s;cursor:pointer;text-decoration:none;color:inherit;display:block}
 .found-card:hover{border-color:var(--border2);background:var(--surface2)}
 .found-top{display:flex;align-items:center;gap:6px}
 .found-icon{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.38rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace}
@@ -175,52 +136,44 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
 .found-url{font-size:.42rem;color:var(--text5);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace}
 .found-status{font-size:.42rem;margin-top:3px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--green)}
 .found-card.breach .found-status{color:var(--red)}
-
-/* === NF === */
 .nf{margin-top:10px}
 .nf-title{font-size:.48rem;font-weight:600;color:var(--text5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
 .nf-grid{display:flex;flex-wrap:wrap;gap:3px}
 .nf-chip{padding:3px 6px;border-radius:3px;border:1px solid var(--border);background:var(--surface);font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace}
-
-/* === PROGRESS === */
 .prog{display:none;margin-bottom:12px}.prog.active{display:block}
 .prog-bar{height:2px;background:var(--surface2);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s;width:0}
+.prog-fill{height:100%;background:var(--gradient);border-radius:2px;transition:width .3s;width:0}
 .prog-info{display:flex;justify-content:space-between;font-size:.52rem;color:var(--text5);margin-top:5px;font-family:'JetBrains Mono',monospace}
-
-/* === EMPTY === */
 .empty{text-align:center;padding:40px 16px;color:var(--text4)}
 .empty i{font-size:1.5rem;color:var(--text5);margin-bottom:8px;display:block}
 .empty h3{color:var(--text3);font-size:.8rem;font-weight:700}
 .empty p{font-size:.65rem;margin-top:3px;color:var(--text5)}
-
-/* === DIRECTORY === */
 .dir-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
 .dir-stat{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);text-align:center}
 .dir-stat-num{font-size:1.1rem;font-weight:700;font-family:'JetBrains Mono',monospace}
 .dir-stat-label{font-size:.42rem;color:var(--text5);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
 .dir-search{display:flex;gap:0;padding:3px;border-radius:6px;border:1px solid var(--border);background:var(--surface);margin-bottom:12px;overflow:hidden}
-.dir-search:focus-within{border-color:var(--accent)}
+.dir-search:focus-within{border-color:var(--accent);box-shadow:var(--glow)}
 .dir-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.75rem;padding:8px 10px;font-family:'JetBrains Mono',monospace}
 .dir-search input::placeholder{color:var(--text5)}
-.dir-search button{padding:8px 16px;border-radius:5px;border:none;background:var(--accent);color:#fff;font-weight:600;font-size:.65rem;cursor:pointer;font-family:'Inter',sans-serif}
+.dir-search button{padding:8px 16px;border-radius:5px;border:none;background:var(--gradient);color:#fff;font-weight:600;font-size:.65rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .dir-search button:hover{filter:brightness(1.1)}
 .dir-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin-bottom:12px}
-.dir-cat{padding:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .12s}
+.dir-cat{padding:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s}
 .dir-cat:hover{border-color:var(--border2);transform:translateY(-1px)}
 .dir-cat-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;margin-bottom:5px;font-family:'JetBrains Mono',monospace}
 .dir-cat-name{font-size:.68rem;font-weight:700;margin-bottom:1px}
 .dir-cat-count{font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace}
 .dir-bc{display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:.62rem;color:var(--text4)}
-.dir-bc span{cursor:pointer;transition:color .1s}
+.dir-bc span{cursor:pointer;transition:color .15s}
 .dir-bc span:hover{color:var(--accent)}
 .dir-bc .sep{color:var(--text5);cursor:default}
 .dir-bc .cur{color:var(--text);font-weight:600}
 .dir-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px}
-.dir-tool{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);transition:all .12s;cursor:pointer}
+.dir-tool{padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);transition:all .15s;cursor:pointer}
 .dir-tool:hover{border-color:var(--border2);background:var(--surface2)}
 .dir-tool-h{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.dir-tool-i{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.38rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(59,130,246,.06);color:var(--blue)}
+.dir-tool-i{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.38rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace;background:rgba(99,102,241,.06);color:var(--accent)}
 .dir-tool-n{font-size:.65rem;font-weight:700}
 .dir-tool-d{font-size:.52rem;color:var(--text4);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .dir-tool-m{display:flex;flex-wrap:wrap;gap:3px}
@@ -228,7 +181,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
 .dir-badge.free{background:rgba(34,197,94,.06);color:var(--green);border:1px solid rgba(34,197,94,.08)}
 .dir-badge.freemium{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
 .dir-badge.paid{background:rgba(239,68,68,.06);color:var(--red);border:1px solid rgba(239,68,68,.08)}
-.dir-badge.passive{background:rgba(59,130,246,.06);color:var(--blue);border:1px solid rgba(59,130,246,.08)}
+.dir-badge.passive{background:rgba(99,102,241,.06);color:var(--accent);border:1px solid rgba(99,102,241,.08)}
 .dir-badge.active{background:rgba(168,85,247,.06);color:var(--purple);border:1px solid rgba(168,85,247,.08)}
 .dir-badge.local{background:rgba(236,72,153,.06);color:var(--pink);border:1px solid rgba(236,72,153,.08)}
 .dir-badge.dork{background:rgba(234,179,8,.06);color:var(--yellow);border:1px solid rgba(234,179,8,.08)}
@@ -237,16 +190,16 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
 .dir-badge.down{background:rgba(239,68,68,.06);color:var(--red);border:1px solid rgba(239,68,68,.08)}
 .dir-badge.unknown{background:rgba(113,113,122,.06);color:var(--text5);border:1px solid var(--border)}
 .dir-filters{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
-.dir-filter{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.52rem;cursor:pointer;transition:all .1s;font-family:'JetBrains Mono',monospace;font-weight:500}
+.dir-filter{padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text4);font-size:.52rem;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono',monospace;font-weight:500}
 .dir-filter:hover{border-color:var(--accent);color:var(--accent)}
-.dir-filter.active{background:rgba(59,130,246,.06);color:var(--accent);border-color:rgba(59,130,246,.15)}
+.dir-filter.active{background:rgba(99,102,241,.06);color:var(--accent);border-color:rgba(99,102,241,.15)}
 .dir-count{font-size:.52rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-bottom:8px}
 .dir-subcats{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
-.dir-subcat{padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text4);font-size:.6rem;cursor:pointer;transition:all .1s;font-weight:500}
+.dir-subcat{padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text4);font-size:.6rem;cursor:pointer;transition:all .15s;font-weight:500}
 .dir-subcat:hover{border-color:var(--accent);color:var(--text2)}
 .dir-detail{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:100;transition:right .2s;overflow-y:auto;padding:16px;box-shadow:-6px 0 24px rgba(0,0,0,.4)}
 .dir-detail.open{right:0}
-.dir-detail-x{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);color:var(--text4);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.6rem}
+.dir-detail-x{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);color:var(--text4);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.6rem;transition:all .15s}
 .dir-detail-x:hover{border-color:var(--red);color:var(--red)}
 .dir-detail h2{font-size:.88rem;font-weight:700;margin-bottom:2px;padding-right:28px}
 .dir-detail .bc{font-size:.52rem;color:var(--text5);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
@@ -254,11 +207,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
 .dir-detail .field{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:.6rem}
 .dir-detail .fl{color:var(--text4);font-weight:500}
 .dir-detail .fv{color:var(--text);font-family:'JetBrains Mono',monospace;text-align:right;max-width:60%;font-size:.55rem}
-.dir-detail .open-btn{display:block;width:100%;padding:9px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-weight:700;font-size:.7rem;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif;text-align:center;text-decoration:none;margin-top:12px}
-.dir-detail .open-btn:hover{filter:brightness(1.1)}
+.dir-detail .open-btn{display:block;width:100%;padding:9px;border-radius:6px;border:none;background:var(--gradient);color:#fff;font-weight:700;font-size:.7rem;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;text-align:center;text-decoration:none;margin-top:12px}
+.dir-detail .open-btn:hover{filter:brightness(1.1);box-shadow:var(--glow-purple)}
 .dir-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;opacity:0;pointer-events:none;transition:opacity .2s}
 .dir-overlay.visible{opacity:1;pointer-events:auto}
-
 @media(max-width:768px){.nav{display:none}.case{grid-template-columns:1fr}.dir-detail{width:100%}.stats{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -266,27 +218,48 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
 <div class="shell">
   <aside class="nav">
     <div class="nav-head">
-      <div class="nav-logo">IQ</div>
-      <div><div class="nav-brand">inquire<span>.</span></div></div>
+      <div class="nav-logo">404</div>
+      <div><div class="nav-brand">Error404.</div><div class="nav-version">DOXNOSINT v5.0</div></div>
     </div>
     <div class="nav-search"><i class="fa-solid fa-magnifying-glass"></i><input id="globalSearch" placeholder="Search..."/></div>
-
     <div class="nav-group">
-      <div class="nav-label">Lookups</div>
+      <div class="nav-label">Core Lookups</div>
       <div class="nav-item active" data-page="username"><i class="fa-solid fa-user-secret"></i>Username<span class="badge">160+</span></div>
       <div class="nav-item" data-page="email"><i class="fa-solid fa-envelope"></i>Email</div>
       <div class="nav-item" data-page="phone"><i class="fa-solid fa-phone"></i>Phone</div>
       <div class="nav-item" data-page="person"><i class="fa-solid fa-magnifying-glass"></i>Person</div>
       <div class="nav-item" data-page="discord"><i class="fa-brands fa-discord"></i>Discord</div>
+      <div class="nav-item" data-page="telegram"><i class="fa-brands fa-telegram"></i>Telegram</div>
     </div>
-
     <div class="nav-group">
-      <div class="nav-label">Breach Intel</div>
-      <div class="nav-item" data-page="breach"><i class="fa-solid fa-triangle-exclamation"></i>Breach Check</div>
-      <div class="nav-item" data-page="emailholehe"><i class="fa-solid fa-link"></i>Email → Accounts</div>
-      <div class="nav-item" data-page="pastes"><i class="fa-solid fa-paste"></i>Paste Search</div>
+      <div class="nav-label">Dox Tools</div>
+      <div class="nav-item" data-page="doxbin"><i class="fa-solid fa-database"></i>Doxbin</div>
+      <div class="nav-item" data-page="doxsearch"><i class="fa-solid fa-search"></i>Dox Search</div>
+      <div class="nav-item" data-page="shadowleak"><i class="fa-solid fa-ghost"></i>Shadow Leak</div>
+      <div class="nav-item" data-page="discordgrave"><i class="fa-brands fa-discord"></i>Discord Grave</div>
+      <div class="nav-item" data-page="folder"><i class="fa-solid fa-folder-open"></i>Folder Intel</div>
+      <div class="nav-item" data-page="intelx"><i class="fa-solid fa-microscope"></i>IntelX</div>
     </div>
-
+    <div class="nav-group">
+      <div class="nav-label">Recovery</div>
+      <div class="nav-item" data-page="partialrecovery"><i class="fa-solid fa-user-lock"></i>Partial Recovery</div>
+      <div class="nav-item" data-page="phonetoemail"><i class="fa-solid fa-arrow-right"></i>Phone &#8594; Email</div>
+      <div class="nav-item" data-page="emailtophone"><i class="fa-solid fa-arrow-left"></i>Email &#8594; Phone</div>
+      <div class="nav-item" data-page="doordash"><i class="fa-solid fa-bag-shopping"></i>DoorDash</div>
+      <div class="nav-item" data-page="paypal"><i class="fa-brands fa-paypal"></i>PayPal</div>
+      <div class="nav-item" data-page="dataavoid"><i class="fa-solid fa-user-shield"></i>DataAvoid</div>
+      <div class="nav-item" data-page="stripe"><i class="fa-solid fa-credit-card"></i>Stripe</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Financial / Legal</div>
+      <div class="nav-item" data-page="fiscalcode"><i class="fa-solid fa-id-card"></i>Fiscal Code</div>
+      <div class="nav-item" data-page="vat"><i class="fa-solid fa-euro-sign"></i>VAT Search</div>
+      <div class="nav-item" data-page="iban"><i class="fa-solid fa-landmark"></i>IBAN Intel</div>
+      <div class="nav-item" data-page="vin"><i class="fa-solid fa-car"></i>VIN Lookup</div>
+      <div class="nav-item" data-page="taxid"><i class="fa-solid fa-file-invoice"></i>Tax ID Search</div>
+      <div class="nav-item" data-page="business"><i class="fa-solid fa-briefcase"></i>Business Search</div>
+      <div class="nav-item" data-page="paypaltrace"><i class="fa-solid fa-money-bill-transfer"></i>PayPal Trace</div>
+    </div>
     <div class="nav-group">
       <div class="nav-label">Network</div>
       <div class="nav-item" data-page="ip"><i class="fa-solid fa-location-dot"></i>IP Lookup</div>
@@ -301,41 +274,33 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,s
       <div class="nav-item" data-page="url"><i class="fa-solid fa-link"></i>URL Unfurl</div>
       <div class="nav-item" data-page="wayback"><i class="fa-solid fa-clock-rotate-left"></i>Wayback</div>
     </div>
-
     <div class="nav-group">
-      <div class="nav-label">Intel</div>
-      <div class="nav-item" data-page="dorks"><i class="fa-solid fa-terminal"></i>Google Dorks</div>
-      <div class="nav-item" data-page="social"><i class="fa-solid fa-share-nodes"></i>Social Scan</div>
-    </div>
-
-    <div class="nav-group">
-      <div class="nav-label">Gaming</div>
+      <div class="nav-label">Gaming / Social</div>
+      <div class="nav-item" data-page="github"><i class="fa-brands fa-github"></i>GitHub</div>
+      <div class="nav-item" data-page="minecraft"><i class="fa-solid fa-cube"></i>Minecraft</div>
+      <div class="nav-item" data-page="fivem"><i class="fa-solid fa-car"></i>FiveM</div>
+      <div class="nav-item" data-page="fivemhunter"><i class="fa-solid fa-crosshairs"></i>FiveM Hunter</div>
       <div class="nav-item" data-page="steam"><i class="fa-brands fa-steam"></i>Steam</div>
-      <div class="nav-item" data-page="roblox"><i class="fa-solid fa-cube"></i>Roblox</div>
       <div class="nav-item" data-page="xbox"><i class="fa-brands fa-xbox"></i>Xbox</div>
       <div class="nav-item" data-page="playstation"><i class="fa-solid fa-gamepad"></i>PlayStation</div>
       <div class="nav-item" data-page="crypto"><i class="fa-brands fa-bitcoin"></i>Crypto</div>
+      <div class="nav-item" data-page="breach"><i class="fa-solid fa-triangle-exclamation"></i>Breach Check</div>
     </div>
-
     <div class="nav-group">
       <div class="nav-label">Directory</div>
-      <div class="nav-item" data-page="directory"><i class="fa-solid fa-book-open"></i>All Tools<span class="badge">1100+</span></div>
+      <div class="nav-item" data-page="directory"><i class="fa-solid fa-book"></i>All Tools<span class="badge">1100+</span></div>
       <div id="dirSidebarCats"></div>
     </div>
-
     <div class="nav-foot">
       <a href="/docs" target="_blank"><i class="fa-solid fa-book"></i>API Docs</a>
       <a href="https://github.com/Ilovesosaa/osint-website" target="_blank"><i class="fa-brands fa-github"></i>GitHub</a>
     </div>
   </aside>
-
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="pageTitle">Username Search</div>
       <div class="topbar-pill" id="pageBadge">160+ PLATFORMS</div>
-      <div class="topbar-right">
-        <button class="topbar-btn" id="jsonToggle" onclick="toggleJSON()">JSON</button>
-      </div>
+      <div class="topbar-right"><button class="topbar-btn" id="jsonToggle" onclick="toggleJSON()">JSON</button></div>
     </div>
     <div class="content" id="content"></div>
   </div>
@@ -365,43 +330,62 @@ document.getElementById('globalSearch').addEventListener('input',function(){
 function toggleJSON(){showJSON=!showJSON;document.getElementById('jsonToggle').classList.toggle('active',showJSON);if(lastData)renderResult(lastData)}
 
 const P={
-  username:{title:'Username Search',badge:'160+ PLATFORMS',placeholder:'target username',btn:'Run',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame'],api:'/api/scan/'},
-  name:{title:'Name Search',badge:'CROSS-PLATFORM',placeholder:'first last',btn:'Run',examples:['John Doe','Elon Musk','Linus Torvalds'],api:'/api/name/'},
-  person:{title:'Person Search',badge:'AUTO-DETECT',placeholder:'email, phone, or username',btn:'Run',examples:['test@gmail.com','+14155552671','torvalds'],api:'/api/person/'},
-  email:{title:'Email Lookup',badge:'FULL INTEL',placeholder:'target@domain.com',btn:'Run',examples:['test@gmail.com','admin@github.com','john@protonmail.com'],api:'/api/email/',holehe:false},
-  emailholehe:{title:'Email → Accounts',badge:'HOLEHE ENGINE',placeholder:'target@domain.com',btn:'Run',examples:['test@gmail.com','user@outlook.com','info@protonmail.com'],api:'/api/email/',holehe:true},
-  breach:{title:'Breach Check',badge:'LEAKED / HACKED',placeholder:'email or username',btn:'Run',examples:['test@gmail.com','admin','elonmusk','johndoe'],api:'/api/breach/'},
-  ip:{title:'IP Lookup',badge:'GEO + ASN',placeholder:'192.168.1.1',btn:'Run',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/'},
-  reverseip:{title:'Reverse IP',badge:'DOMAINS',placeholder:'ip address',btn:'Run',examples:['8.8.8.8','1.1.1.1'],api:'/api/reverseip/'},
-  domain:{title:'Domain Lookup',badge:'DNS + SSL + TECH',placeholder:'example.com',btn:'Run',examples:['github.com','google.com','discord.com'],api:'/api/domain/'},
-  whois:{title:'WHOIS',badge:'RDAP',placeholder:'example.com',btn:'Run',examples:['github.com','google.com'],api:'/api/whois/'},
-  subdomains:{title:'Subdomains',badge:'cTLD + DNS',placeholder:'example.com',btn:'Run',examples:['github.com','google.com','discord.com'],api:'/api/subdomains/'},
-  ports:{title:'Port Scanner',badge:'25 PORTS',placeholder:'ip address',btn:'Run',examples:['8.8.8.8','1.1.1.1'],api:'/api/ports/'},
-  ssl:{title:'SSL/TLS',badge:'CERT + CIPHER',placeholder:'example.com',btn:'Run',examples:['github.com','google.com'],api:'/api/ssl/'},
-  waf:{title:'WAF/CDN',badge:'FIREWALL',placeholder:'example.com',btn:'Run',examples:['github.com','cloudflare.com'],api:'/api/waf/'},
-  dorks:{title:'Google Dorks',badge:'25+ DORKS',placeholder:'target domain',btn:'Run',examples:['github.com','target.com'],api:'/api/dorks/'},
-  pastes:{title:'Paste Search',badge:'BREACH + PASTE',placeholder:'email, username, or domain',btn:'Run',examples:['test@gmail.com','admin'],api:'/api/pastes/'},
-  shodan:{title:'Shodan',badge:'PORTS + SERVICES',placeholder:'ip address',btn:'Run',examples:['8.8.8.8','1.1.1.1'],api:'/api/shodan/'},
-  url:{title:'URL Unfurl',badge:'METADATA',placeholder:'https://example.com',btn:'Run',examples:['https://github.com','https://google.com'],api:'/api/url/'},
-  wayback:{title:'Wayback Machine',badge:'ARCHIVE',placeholder:'example.com',btn:'Run',examples:['google.com','myspace.com'],api:'/api/wayback/'},
-  phone:{title:'Phone Lookup',badge:'CARRIER + LOCATION',placeholder:'+1 415 555 2671',btn:'Run',examples:['+14155552671','+447911123456'],api:'/api/phone/'},
-  discord:{title:'Discord ID',badge:'SNOWFLAKE',placeholder:'discord id',btn:'Run',examples:['535045342098489344','804296431879045141'],api:'/api/discord/'},
-  social:{title:'Social Scan',badge:'160+ PLATFORMS',placeholder:'target username',btn:'Run',examples:['torvalds','elonmusk','nasa'],api:'/api/scan/'},
-  steam:{title:'Steam',badge:'GAMING',placeholder:'steam username',btn:'Run',examples:['gaben'],api:'/api/gaming/steam/'},
-  roblox:{title:'Roblox',badge:'GAMING',placeholder:'roblox username',btn:'Run',examples:['Roblox'],api:'/api/gaming/roblox/'},
-  xbox:{title:'Xbox',badge:'GAMING',placeholder:'gamertag',btn:'Run',examples:['Major Nelson'],api:'/api/gaming/xbox/'},
-  playstation:{title:'PlayStation',badge:'GAMING',placeholder:'psn id',btn:'Run',examples:['PlayStation'],api:'/api/gaming/playstation/'},
-  crypto:{title:'Crypto Wallet',badge:'BLOCKCHAIN',placeholder:'wallet address',btn:'Run',examples:['0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'],api:'/api/crypto/'},
+  username:{title:'Username Search',badge:'160+ PLATFORMS',placeholder:'target username',btn:'INVESTIGATE',examples:['torvalds','elonmusk','nasa','pewdiepie','khaby.lame','xxdarklordxx'],api:'/api/scan/',modules:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries','FootprintIQ','GitFive']},
+  email:{title:'Email Lookup',badge:'FULL INTEL',placeholder:'target@domain.com',btn:'INVESTIGATE',examples:['test@gmail.com','admin@github.com','john@protonmail.com','ceo@company.it'],api:'/api/email/',modules:['Holehe','Hunter','GHunt','EmailRep','HaveIBeenPwned','breach.vip','theHarvester','Epieos']},
+  phone:{title:'Phone Lookup',badge:'CARRIER + LOCATION',placeholder:'+1 415 555 2671',btn:'INVESTIGATE',examples:['+14155552671','+447911123456','+393331234567'],api:'/api/phone/',modules:['PhoneIntel','NumVerify','OpenCNAM','TrueCaller','CallerID']},
+  person:{title:'Person Search',badge:'AUTO-DETECT',placeholder:'email, phone, or username',btn:'INVESTIGATE',examples:['test@gmail.com','+14155552671','torvalds'],api:'/api/person/',modules:['Auto-detect','Email\u2192Accounts','Username\u2192Profiles','Phone\u2192Carrier','Breach Correlation']},
+  discord:{title:'Discord ID',badge:'SNOWFLAKE',placeholder:'discord id',btn:'INVESTIGATE',examples:['535045342098489344','804296431879045141'],api:'/api/discord/',modules:['CordCat','DiscordGrave','Snowflake Decoder','Breach Exposure','Profile Lookup']},
+  telegram:{title:'Telegram Lookup',badge:'TELEGRAM INTEL',placeholder:'@username or phone',btn:'INVESTIGATE',examples:['@durov','@username','123456789'],api:'/api/telegram/',modules:['Profile Lookup','Group Scan','Message Intel','Phone Link']},
+  doxbin:{title:'Doxbin Lookup',badge:'DOX DATABASE',placeholder:'target username',btn:'SEARCH',examples:['targetuser','john_doe','someone_special'],api:'/api/doxbin/',modules:['Doxbin Scraper','Pastebin Scan','Dark Archive']},
+  doxsearch:{title:'Dox Search',badge:'CROSS-PLATFORM',placeholder:'full name or alias',btn:'SEARCH',examples:['John Smith','DarkHacker42','xXx_user'],api:'/api/doxsearch/',modules:['Web Scraper','Forum Index','Paste Search']},
+  shadowleak:{title:'Shadow Leak',badge:'DEEP WEB',placeholder:'email, phone, or username',btn:'SEARCH',examples:['test@gmail.com','+393331234567','shadowuser'],api:'/api/shadowleak/',modules:['Leak Aggregator','Dark Monitor','Forum Crawl']},
+  discordgrave:{title:'Discord Grave',badge:'DELETED ACCOUNTS',placeholder:'email or username',btn:'SEARCH',examples:['deleteduser','test@gmail.com'],api:'/api/discordgrave/',modules:['Grave Index','Breach Cross-Ref','Profile Cache']},
+  folder:{title:'Folder Intel',badge:'FILE INTEL',placeholder:'folder path or keyword',btn:'SEARCH',examples:['breach/2024','leaks/collection'],api:'/api/folder/',modules:['Indexer','Archive Crawler','Content Scanner']},
+  intelx:{title:'IntelX',badge:'INTELLIGENCE X',placeholder:'domain or email',btn:'SEARCH',examples:['example.com','target@gmail.com'],api:'/api/intelx/',modules:['Intelligence X','Paste Monitor','Breach Archive']},
+  partialrecovery:{title:'Partial Recovery',badge:'ACCOUNT RECOVERY',placeholder:'email or phone',btn:'RECOVER',examples:['test@gmail.com','+393331234567'],api:'/api/partialrecovery/',modules:['Service Probe','Token Check','Recovery Vector']},
+  phonetoemail:{title:'Phone \u2192 Email',badge:'REVERSE LOOKUP',placeholder:'phone number',btn:'DECODE',examples:['+393331234567','+14155552671'],api:'/api/phonetoemail/',modules:['Carrier Check','Breach Match','Social Probe']},
+  emailtophone:{title:'Email \u2192 Phone',badge:'REVERSE LOOKUP',placeholder:'email address',btn:'DECODE',examples:['test@gmail.com','admin@company.com'],api:'/api/emailtophone/',modules:['Breach Match','Service Probe','Phone Database']},
+  doordash:{title:'DoorDash Lookup',badge:'FOOD DELIVERY',placeholder:'email address',btn:'INVESTIGATE',examples:['test@gmail.com'],api:'/api/partialrecovery/',modules:['Account Check','Order History','Payment Intel']},
+  paypal:{title:'PayPal Lookup',badge:'PAYMENT INTEL',placeholder:'email address',btn:'INVESTIGATE',examples:['test@gmail.com'],api:'/api/partialrecovery/',modules:['Account Status','Transaction Probe','Merchant Check']},
+  dataavoid:{title:'DataAvoid',badge:'PRIVACY CHECK',placeholder:'email or phone',btn:'INVESTIGATE',examples:['test@gmail.com'],api:'/api/partialrecovery/',modules:['Data Broker Scan','Opt-Out Check','Privacy Score']},
+  stripe:{title:'Stripe Lookup',badge:'PAYMENT GATEWAY',placeholder:'email or domain',btn:'INVESTIGATE',examples:['shop@store.com'],api:'/api/partialrecovery/',modules:['Merchant Probe','API Check','Payment Intel']},
+  fiscalcode:{title:'Fiscal Code',badge:'ITALIAN ID',placeholder:'fiscal code',btn:'DECODE',examples:['RSSMRA85M01H501Z','BNCLRD85M15F205X'],api:'/api/fiscalcode/',modules:['Parser','Validator','Person Extract']},
+  vat:{title:'VAT Search',badge:'EU VAT',placeholder:'VAT number',btn:'SEARCH',examples:['IT02999910018','DE123456789','FR12345678901'],api:'/api/vat/',modules:['VIES Validator','Company Lookup','Cross-Border']},
+  iban:{title:'IBAN Intel',badge:'BANKING',placeholder:'IBAN number',btn:'DECODE',examples:['IT60X0542811101000000123456','DE89370400440532013000','GB29NWBK60161331926819'],api:'/api/iban/',modules:['IBAN Parser','Bank Lookup','Country Check']},
+  vin:{title:'VIN Lookup',badge:'VEHICLE',placeholder:'VIN number',btn:'DECODE',examples:['1HGCM82633A004352','JTDKN3DU5A0123456'],api:'/api/vin/',modules:['NHTSA Decoder','Recall Check','Vehicle History']},
+  taxid:{title:'Tax ID Search',badge:'TAX INTEL',placeholder:'tax ID or fiscal code',btn:'SEARCH',examples:['RSSMRA85M01H501Z','IT02999910018','12-3456789'],api:'/api/taxid/',modules:['Validator','Country Matcher','Entity Lookup']},
+  business:{title:'Business Search',badge:'CORPORATE',placeholder:'company name',btn:'SEARCH',examples:['Acme Srl','Meta Platforms Inc'],api:'/api/business/',modules:['Company Registry','Officer Check','Domain Match']},
+  paypaltrace:{title:'PayPal Trace',badge:'PAYMENT TRACE',placeholder:'email or username',btn:'TRACE',examples:['test@gmail.com','user123'],api:'/api/paypaltrace/',modules:['Account Probe','Transaction Scan','Merchant Link']},
+  ip:{title:'IP Lookup',badge:'GEO + ASN',placeholder:'192.168.1.1',btn:'INVESTIGATE',examples:['8.8.8.8','1.1.1.1','203.0.113.50'],api:'/api/ip/',modules:['IPInfo','MaxMind','AbuseIPDB','Shodan']},
+  reverseip:{title:'Reverse IP',badge:'DOMAINS',placeholder:'ip address',btn:'INVESTIGATE',examples:['8.8.8.8','1.1.1.1'],api:'/api/reverseip/',modules:['Reverse DNS','Virtual Hosts','Certificate Transparency']},
+  domain:{title:'Domain Lookup',badge:'DNS + SSL + TECH',placeholder:'example.com',btn:'INVESTIGATE',examples:['github.com','google.com','discord.com'],api:'/api/domain/',modules:['DNS Scan','SSL Check','Tech Detect']},
+  whois:{title:'WHOIS',badge:'RDAP',placeholder:'example.com',btn:'INVESTIGATE',examples:['github.com','google.com'],api:'/api/whois/',modules:['WHOIS','RDAP','Registration']},
+  subdomains:{title:'Subdomains',badge:'cTLD + DNS',placeholder:'example.com',btn:'INVESTIGATE',examples:['github.com','google.com','discord.com'],api:'/api/subdomains/',modules:['Certificate Transparency','DNS Brute','Passive']},
+  ports:{title:'Port Scanner',badge:'25 PORTS',placeholder:'ip address',btn:'INVESTIGATE',examples:['8.8.8.8','1.1.1.1'],api:'/api/ports/',modules:['Top 25','Service Detect','Banner Grab']},
+  ssl:{title:'SSL/TLS',badge:'CERT + CIPHER',placeholder:'example.com',btn:'INVESTIGATE',examples:['github.com','google.com'],api:'/api/ssl/',modules:['Certificate','Cipher Suite','HSTS']},
+  waf:{title:'WAF/CDN',badge:'FIREWALL',placeholder:'example.com',btn:'INVESTIGATE',examples:['github.com','cloudflare.com'],api:'/api/waf/',modules:['WAF Detect','CDN Check','Fingerprint']},
+  shodan:{title:'Shodan',badge:'PORTS + SERVICES',placeholder:'ip address',btn:'INVESTIGATE',examples:['8.8.8.8','1.1.1.1'],api:'/api/shodan/',modules:['Host Info','Ports','Services','Vulns']},
+  url:{title:'URL Unfurl',badge:'METADATA',placeholder:'https://example.com',btn:'INVESTIGATE',examples:['https://github.com','https://google.com'],api:'/api/url/',modules:['Metadata','Redirect Chain','Screenshot']},
+  wayback:{title:'Wayback Machine',badge:'ARCHIVE',placeholder:'example.com',btn:'INVESTIGATE',examples:['google.com','myspace.com'],api:'/api/wayback/',modules:['Snapshots','Changes','Compare']},
+  github:{title:'GitHub Lookup',badge:'DEVELOPER',placeholder:'github username',btn:'INVESTIGATE',examples:['torvalds','octocat','golang'],api:'/api/github/',modules:['Profile','Repos','Contributions']},
+  minecraft:{title:'Minecraft Lookup',badge:'GAMING',placeholder:'minecraft username',btn:'INVESTIGATE',examples:['Notch','Dream','Herobrine'],api:'/api/minecraft/',modules:['Profile','Skin','Server']},
+  fivem:{title:'FiveM Lookup',badge:'GAMING',placeholder:'license or username',btn:'INVESTIGATE',examples:['license:abc123','fivemuser'],api:'/api/fivem/',modules:['License Check','Player Intel','Server Link']},
+  fivemhunter:{title:'FiveM Hunter',badge:'PLAYER TRACK',placeholder:'username or steam id',btn:'INVESTIGATE',examples:['fivemuser','steam:123456789'],api:'/api/fivemhunter/',modules:['Hunter','Cross-Server','Identity']},
+  steam:{title:'Steam Lookup',badge:'GAMING',placeholder:'steam username',btn:'INVESTIGATE',examples:['gaben'],api:'/api/gaming/steam/',modules:['Profile','Games','Inventory']},
+  xbox:{title:'Xbox Lookup',badge:'GAMING',placeholder:'gamertag',btn:'INVESTIGATE',examples:['Major Nelson'],api:'/api/gaming/xbox/',modules:['Profile','Games','Achievements']},
+  playstation:{title:'PlayStation Lookup',badge:'GAMING',placeholder:'psn id',btn:'INVESTIGATE',examples:['PlayStation'],api:'/api/gaming/playstation/',modules:['Profile','Trophies','Friends']},
+  crypto:{title:'Crypto Wallet',badge:'BLOCKCHAIN',placeholder:'wallet address',btn:'INVESTIGATE',examples:['0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'],api:'/api/crypto/',modules:['Balance','Transactions','Token Analysis']},
+  breach:{title:'Breach Check',badge:'LEAKED / HACKED',placeholder:'email or username',btn:'INVESTIGATE',examples:['test@gmail.com','admin','elonmusk','johndoe'],api:'/api/breach/',modules:['HaveIBeenPwned','breach.vip','DeHashed','Hudson Rock']},
 };
+
+function isLookupPage(){return['username','email','phone','person','discord','telegram','breach','doxbin','doxsearch','shadowleak','discordgrave','intelx','partialrecovery','phonetoemail','emailtophone','doordash','paypal','dataavoid','stripe','fiscalcode','vat','iban','vin','taxid','business','paypaltrace','github','minecraft','fivem','fivemhunter','steam','xbox','playstation','crypto'].includes(currentPage)}
 
 function renderPage(){
   if(currentPage==='directory'){renderDirPage();return}
   const p=P[currentPage]||P.username;
   pageTitle.textContent=p.title;
   pageBadge.textContent=p.badge;
-
-  const isLookup=['username','email','phone','person','discord','social','emailholehe','breach'].includes(currentPage);
-
+  const isLookup=isLookupPage();
   if(isLookup){
     content.innerHTML=`
       <div class="hero">
@@ -439,17 +423,8 @@ function renderPage(){
 
 function renderModules(page){
   const el=document.getElementById('moduleRow');if(!el)return;
-  const modMap={
-    username:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries','FootprintIQ','GitFive'],
-    email:['Holehe','Hunter','GHunt','EmailRep','HaveIBeenPwned','breach.vip','theHarvester','Epieos'],
-    phone:['PhoneIntel','NumVerify','OpenCNAM','TrueCaller','CallerID'],
-    person:['Auto-detect','Email→Accounts','Username→Profiles','Phone→Carrier','Breach Correlation'],
-    discord:['CordCat','DiscordGrave','Snowflake Decoder','Breach Exposure','Profile Lookup'],
-    social:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries'],
-    emailholehe:['GitHub','Twitter','Instagram','Discord','Spotify','Reddit','Steam','Roblox','Twitch','Pinterest'],
-    breach:['HaveIBeenPwned','breach.vip','DeHashed','Hudson Rock','Intelligence X','Paste Search'],
-  };
-  const mods=modMap[page]||[];
+  const p=P[page];
+  const mods=p?.modules||[];
   el.innerHTML=mods.map(m=>`<div class="mod-pill active">${m}</div>`).join('');
 }
 
@@ -462,9 +437,7 @@ async function doLookup(){
   const ra=document.getElementById('resultArea');
   const prog=document.getElementById('progress');
   btn.disabled=true;ra.innerHTML='';
-
-  const isLookup=['username','email','phone','person','discord','social','emailholehe','breach'].includes(currentPage);
-
+  const isLookup=isLookupPage();
   if(isLookup){
     const pipeline=document.getElementById('pipelineRow');
     const statsRow=document.getElementById('statsRow');
@@ -474,8 +447,7 @@ async function doLookup(){
     if(caseView)caseView.style.display='grid';
     renderPipeline(currentPage,'running');
   }
-
-  if(currentPage==='username'||currentPage==='social'){
+  if(currentPage==='username'){
     if(prog){prog.classList.add('active');let c=0;const t=160;
     animInt=setInterval(()=>{c=Math.min(c+Math.random()*15,t);document.getElementById('progressFill').style.width=Math.min((c/t)*100,95)+'%';document.getElementById('progressCount').textContent=Math.floor(c)+'/'+t;},200);
     document.getElementById('progressLabel').textContent='Scanning 160+ platforms...';}
@@ -484,7 +456,6 @@ async function doLookup(){
     animInt=setInterval(()=>{c=Math.min(c+Math.random()*10,t);document.getElementById('progressFill').style.width=Math.min((c/t)*100,95)+'%';document.getElementById('progressCount').textContent=Math.floor(c)+'/'+t;},200);
     document.getElementById('progressLabel').textContent='Searching paste sites and breach DBs...';}
   }
-
   try{
     const r=await fetch(p.api+encodeURIComponent(val));
     const data=await r.json();
@@ -503,32 +474,23 @@ async function doLookup(){
 
 function renderPipeline(page,status){
   const el=document.getElementById('pipelineRow');if(!el)return;
-  const pipes={
-    username:['Sherlock','WhatsMyName','Maigret','Namechk','Lullar','OSINT Industries'],
-    email:['Holehe','EmailRep','HaveIBeenPwned','breach.vip','Gravatar','MX Check'],
-    phone:['PhoneIntel','NumVerify','OpenCNAM','Carrier Detect'],
-    person:['Auto-detect','Email→Accounts','Username→Profiles','Phone→Carrier'],
-    discord:['CordCat','Snowflake','Breach Exposure','Profile'],
-    social:['Sherlock','WhatsMyName','Maigret','Namechk'],
-    emailholehe:['GitHub','Twitter','Instagram','Discord','Spotify','Reddit','Steam'],
-    breach:['HaveIBeenPwned','breach.vip','Paste Search','GitHub Gists'],
-  };
-  const mods=pipes[page]||[];
+  const p=P[page];
+  const mods=p?.modules||[];
   el.innerHTML=mods.map((m,i)=>{
     const cls=status==='done'?'done':status==='error'&&(i===mods.length-1)?'error':'running';
-    return `<span class="pipe-chip ${cls}">${m}</span>${i<mods.length-1?'<span class="pipe-arrow">→</span>':''}`;
+    return `<span class="pipe-chip ${cls}">${m}</span>${i<mods.length-1?'<span class="pipe-arrow">\u2192</span>':''}`;
   }).join('');
 }
 
 function renderResult(d){
   const ra=document.getElementById('resultArea');
   if(showJSON){ra.innerHTML=`<pre style="font-size:.55rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;overflow:auto;max-height:calc(100vh - 200px);font-family:'JetBrains Mono',monospace;color:var(--green)">${JSON.stringify(d,null,2)}</pre>`;return}
-
-  if(currentPage==='username'||currentPage==='social')renderUsername(d,ra);
-  else if(currentPage==='name')renderName(d,ra);
-  else if(currentPage==='person')renderPerson(d,ra);
+  if(currentPage==='username')renderUsername(d,ra);
   else if(currentPage==='email')renderEmail(d,ra);
-  else if(currentPage==='emailholehe')renderHolehe(d,ra);
+  else if(currentPage==='phone')renderPhone(d,ra);
+  else if(currentPage==='person')renderPerson(d,ra);
+  else if(currentPage==='discord')renderDiscord(d,ra);
+  else if(currentPage==='telegram')renderTelegram(d,ra);
   else if(currentPage==='breach')renderBreach(d,ra);
   else if(currentPage==='ip')renderIP(d,ra);
   else if(currentPage==='reverseip')renderReverseIP(d,ra);
@@ -538,236 +500,96 @@ function renderResult(d){
   else if(currentPage==='ports')renderPorts(d,ra);
   else if(currentPage==='ssl')renderSSL(d,ra);
   else if(currentPage==='waf')renderWAF(d,ra);
-  else if(currentPage==='dorks')renderDorks(d,ra);
-  else if(currentPage==='pastes')renderPastes(d,ra);
   else if(currentPage==='shodan')renderShodan(d,ra);
   else if(currentPage==='url')renderURL(d,ra);
   else if(currentPage==='wayback')renderWayback(d,ra);
-  else if(currentPage==='phone')renderPhone(d,ra);
-  else if(currentPage==='discord')renderDiscord(d,ra);
+  else if(currentPage==='github')renderGitHub(d,ra);
+  else if(currentPage==='minecraft')renderMinecraft(d,ra);
+  else if(currentPage==='doxbin')renderDoxbin(d,ra);
+  else if(currentPage==='doxsearch')renderDoxSearch(d,ra);
+  else if(currentPage==='shadowleak')renderShadowLeak(d,ra);
+  else if(currentPage==='discordgrave')renderDiscordGrave(d,ra);
+  else if(currentPage==='folder')renderFolder(d,ra);
+  else if(currentPage==='intelx')renderIntelX(d,ra);
+  else if(currentPage==='partialrecovery'||currentPage==='doordash'||currentPage==='paypal'||currentPage==='dataavoid'||currentPage==='stripe')renderPartialRecovery(d,ra);
+  else if(currentPage==='phonetoemail')renderPhoneToEmail(d,ra);
+  else if(currentPage==='emailtophone')renderEmailToPhone(d,ra);
+  else if(currentPage==='fiscalcode')renderFiscalCode(d,ra);
+  else if(currentPage==='vat')renderVAT(d,ra);
+  else if(currentPage==='iban')renderIBAN(d,ra);
+  else if(currentPage==='vin')renderVIN(d,ra);
+  else if(currentPage==='taxid')renderTaxID(d,ra);
+  else if(currentPage==='business')renderBusiness(d,ra);
+  else if(currentPage==='paypaltrace')renderPayPalTrace(d,ra);
+  else if(currentPage==='fivem'||currentPage==='fivemhunter')renderGenericList(d,ra);
+  else if(currentPage==='steam'||currentPage==='xbox'||currentPage==='playstation')renderGenericList(d,ra);
   else if(currentPage==='crypto')renderCrypto(d,ra);
   else renderGeneric(d,ra);
-
-  if(['username','email','phone','person','discord','social','emailholehe','breach'].includes(currentPage)){
-    renderCaseView(d);
-  }
+  if(isLookupPage())renderCaseView(d);
 }
 
 function renderCaseView(d){
   const cv=document.getElementById('caseView');if(!cv)return;
-  const query=d.username||d.email||d.phone||d.query||d.discord_id||'';
   let registered=[],breached=[];
-
-  if(d.found){registered=d.found.map(p=>({name:p.platform,status:p.breach?.breached?'leaked':'registered',detail:p.url?.replace('https://','').substring(0,35)}));breached=(d.found||[]).filter(p=>p.breach?.breached).map(p=>({name:p.platform,year:p.breach.date||'—',detail:`${p.breach.severity} . ${p.breach.records} records`,badge:p.breach.severity}))}
+  if(d.found){registered=d.found.map(p=>({name:p.platform,status:p.breach?.breached?'leaked':'registered',detail:p.url?.replace('https://','').substring(0,35)}));breached=(d.found||[]).filter(p=>p.breach?.breached).map(p=>({name:p.platform,year:p.breach.date||'\u2014',detail:`${p.breach.severity} \u00b7 ${p.breach.records} records`,badge:p.breach.severity}))}
   else if(d.registered_on){registered=d.registered_on.map(s=>({name:s,status:'registered',detail:'Account exists'}))}
-  else if(d.leaks){breached=d.leaks.slice(0,10).map(l=>({name:l.source||l.host,year:'—',detail:l.email||l.username||'Leaked',badge:'high'}))}
+  else if(d.leaks){breached=d.leaks.slice(0,10).map(l=>({name:l.source||l.host,year:'\u2014',detail:l.email||l.username||'Leaked',badge:'high'}))}
   else if(d.hacked_platforms){breached=d.hacked_platforms.map(p=>({name:p.platform,year:p.date,detail:`${p.records} records`,badge:p.severity}))}
-
   const regCount=registered.length;const breachCount=breached.length;const totalHits=regCount+breachCount;
-
   let h=`<div class="case">`;
   h+=`<div class="case-panel"><div class="case-panel-head"><span class="case-panel-title">Registered Accounts</span><span class="case-panel-count">${regCount}</span></div><div class="case-panel-body">`;
-  registered.slice(0,12).forEach(r=>{
-    const statusClass=r.status==='leaked'?'leaked':r.status==='linked'?'linked':'registered';
-    h+=`<div class="acc-card"><div class="acc-head"><span class="acc-name">${r.name}</span><span class="acc-status ${statusClass}">${r.status}</span></div>${r.detail?`<div class="acc-detail">${r.detail}</div>`:''}</div>`;
-  });
+  registered.slice(0,12).forEach(r=>{const sc=r.status==='leaked'?'leaked':'registered';h+=`<div class="acc-card"><div class="acc-head"><span class="acc-name">${r.name}</span><span class="acc-status ${sc}">${r.status}</span></div>${r.detail?`<div class="acc-detail">${r.detail}</div>`:''}</div>`});
   if(!registered.length)h+=`<div class="empty" style="padding:20px"><p>No registered accounts found</p></div>`;
   h+=`</div></div>`;
-
   h+=`<div class="case-panel"><div class="case-panel-head"><span class="case-panel-title">Breach Exposure</span><span class="case-panel-count">${breachCount}</span></div><div class="case-panel-body">`;
-  breached.slice(0,10).forEach(b=>{
-    const bc=b.badge==='critical'?'critical':b.badge==='high'?'high':b.badge==='medium'?'medium':'low';
-    h+=`<div class="breach-card"><div class="breach-head"><span class="breach-name">${b.name}</span><span class="breach-year">${b.year}</span></div><div class="breach-detail">${b.detail}</div></div>`;
-  });
+  breached.slice(0,10).forEach(b=>{h+=`<div class="breach-card"><div class="breach-head"><span class="breach-name">${b.name}</span><span class="breach-year">${b.year}</span></div><div class="breach-detail">${b.detail}</div></div>`});
   if(!breached.length)h+=`<div class="empty" style="padding:20px"><p>No breach exposure detected</p></div>`;
-  h+=`</div></div>`;
-  h+=`</div>`;
-
+  h+=`</div></div></div>`;
   if(totalHits>0){
-    const categories=['Rec','Breach','Prof','Geo','Sec','Net','Enrich'];
-    const values=categories.map(()=>Math.floor(Math.random()*totalHits*0.6)+1);
-    const maxV=Math.max(...values);
-    h+=`<div class="hits-chart"><div class="hits-head"><span class="hits-title">Hits by Lane</span><span class="hits-live">this case . live</span></div><div class="hits-body">`;
-    categories.forEach((c,i)=>{
-      const pct=maxV>0?(values[i]/maxV)*100:0;
-      const colors=['var(--blue)','var(--red)','var(--green)','var(--cyan)','var(--yellow)','var(--purple)','var(--orange)'];
-      h+=`<div class="hit-bar" style="height:${Math.max(pct,4)}%;background:${colors[i]}30;border:1px solid ${colors[i]}20"><div class="hit-bar-value">${values[i]}</div><div class="hit-bar-label">${c}</div></div>`;
-    });
+    const cats=['Rec','Breach','Prof','Geo','Sec','Net','Enrich'];
+    const vals=cats.map(()=>Math.floor(Math.random()*totalHits*0.6)+1);const mx=Math.max(...vals);
+    h+=`<div class="hits-chart"><div class="hits-head"><span class="hits-title">Hits by Lane</span><span class="hits-live">this case \u00b7 live</span></div><div class="hits-body">`;
+    cats.forEach((c,i)=>{const pct=mx>0?(vals[i]/mx)*100:0;const cols=['var(--accent)','var(--red)','var(--green)','var(--cyan)','var(--yellow)','var(--purple)','var(--orange)'];h+=`<div class="hit-bar" style="height:${Math.max(pct,4)}%;background:${cols[i]}30;border:1px solid ${cols[i]}20"><div class="hit-bar-value">${vals[i]}</div><div class="hit-bar-label">${c}</div></div>`});
     h+=`</div></div>`;
   }
-
   cv.innerHTML=h;
 }
 
+<script>
 function renderUsername(d,el){
   const IC={github:'GH',twitter:'TW',instagram:'IG',tiktok:'TK',youtube:'YT',discord:'DC',reddit:'RD',twitch:'TV',linkedin:'LI',snapchat:'SC',pinterest:'PI',spotify:'SP',soundcloud:'SC',medium:'MD',npm:'NP',steam:'ST',roblox:'RB',xbox:'XB',playstation:'PS',gitlab:'GL',keybase:'KB',aboutme:'AM',behance:'BE',dribbble:'DR',replit:'RE',kaggle:'KG',hackernews:'HN',strava:'SV',lastfm:'LF',venmo:'VN',patreon:'PT',flickr:'FL',deviantart:'DA',tumblr:'TM',quora:'QA',wattpad:'WP',myanimelist:'MA',letterboxd:'LD',duolingo:'DL'};
   const CAT={social:'Social Media',dev:'Development',gaming:'Gaming',creative:'Creative',professional:'Professional',fitness:'Fitness',music:'Music',security:'Security',blog:'Blogging',community:'Community',chinese:'Chinese Platforms',finance:'Finance',shopping:'Shopping',cloud:'Cloud',video:'Video'};
-  const breached=(d.found||[]).filter(p=>p.breach&&p.breach.breached);
-  const safe=(d.found||[]).filter(p=>!p.breach||!p.breach.breached);
-
   let h=`<div class="res-head"><h2>Results for <span class="res-query">@${d.username}</span></h2><div class="pills"><span class="pill g">${d.found_count} found</span><span class="pill gray">${d.not_found_count} not found</span></div></div>`;
-
   if(d.paste_leaks?.length){
     h+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-skull-crossbones" style="margin-right:3px"></i>Paste Leaks (${d.paste_leak_count})</div>`;
-    d.paste_leaks.forEach(leak=>{
-      h+=`<div class="det-card" style="border-left:2px solid var(--red);margin-bottom:3px;padding:8px 10px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.65rem;font-weight:600;color:var(--red)">${leak.source}</div><div style="font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-top:1px">${leak.snippet?.substring(0,100)||'Match'}</div></div><a href="${leak.url}" target="_blank" style="font-size:.48rem;color:var(--blue);text-decoration:none;font-family:'JetBrains Mono',monospace">VIEW</a></div></div>`;
-    });
+    d.paste_leaks.forEach(leak=>{h+=`<div class="det-card" style="border-left:2px solid var(--red);margin-bottom:3px;padding:8px 10px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.65rem;font-weight:600;color:var(--red)">${leak.source}</div><div style="font-size:.48rem;color:var(--text5);font-family:'JetBrains Mono',monospace;margin-top:1px">${leak.snippet?.substring(0,100)||'Match'}</div></div><a href="${leak.url}" target="_blank" style="font-size:.48rem;color:var(--accent);text-decoration:none;font-family:'JetBrains Mono',monospace">VIEW</a></div></div>`});
     h+=`</div>`;
   }
-
   for(const[cat,platforms] of Object.entries(d.categories||{})){
     const catB=platforms.filter(p=>p.breach&&p.breach.breached);
-    h+=`<div style="margin-bottom:10px"><div style="font-size:.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text5);margin-bottom:5px">${CAT[cat]||cat} (${platforms.length})${catB.length?` <span style="color:var(--red)">— ${catB.length} breached</span>`:''}</div><div class="found-grid">`;
-    for(const p of platforms){
-      const b=p.breach||{};const sev={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',none:'var(--green)'};
-      h+=`<a href="${p.url}" target="_blank" class="found-card ${b.breached?'breach':''}"><div class="found-top"><div class="found-icon" style="background:${b.breached?sev[b.severity]+'10':'rgba(113,113,122,.06)'};color:${b.breached?sev[b.severity]:'var(--text4)'}">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="found-name">${p.platform}</div></div><div class="found-url">${p.url.replace('https://','').substring(0,30)}</div>${b.breached?`<div style="font-size:.42rem;font-weight:700;color:${sev[b.severity]};font-family:'JetBrains Mono',monospace;margin-top:2px">${b.severity?.toUpperCase()} BREACH</div>`:`<div class="found-status">EXISTS</div>`}</a>`;
-    }
+    h+=`<div style="margin-bottom:10px"><div style="font-size:.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text5);margin-bottom:5px">${CAT[cat]||cat} (${platforms.length})${catB.length?` <span style="color:var(--red)">\u2014 ${catB.length} breached</span>`:''}</div><div class="found-grid">`;
+    for(const p of platforms){const b=p.breach||{};const sev={critical:'var(--red)',high:'var(--red)',medium:'var(--yellow)',none:'var(--green)'};h+=`<a href="${p.url}" target="_blank" class="found-card ${b.breached?'breach':''}"><div class="found-top"><div class="found-icon" style="background:${b.breached?sev[b.severity]+'10':'rgba(113,113,122,.06)'};color:${b.breached?sev[b.severity]:'var(--text4)'}">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="found-name">${p.platform}</div></div><div class="found-url">${p.url.replace('https://','').substring(0,30)}</div>${b.breached?`<div style="font-size:.42rem;font-weight:700;color:${sev[b.severity]};font-family:'JetBrains Mono',monospace;margin-top:2px">${b.severity?.toUpperCase()} BREACH</div>`:`<div class="found-status">EXISTS</div>`}</a>`}
     h+=`</div></div>`;
   }
-
   if(d.not_found?.length){h+=`<div class="nf"><div class="nf-title">Not found (${d.not_found.length})</div><div class="nf-grid">${d.not_found.map(p=>`<div class="nf-chip">${p.platform}</div>`).join('')}</div></div>`}
   el.innerHTML=h;
 }
-
 function renderEmail(d,el){
-  let h=`<div class="res-head"><h2>Email: <span class="res-query">${d.email}</span></h2></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  h+=`<div class="det-card"><h3><i class="fa-solid fa-server" style="color:var(--blue)"></i>MX Records</h3>`;
-  (d.mx_records||[]).forEach(mx=>{h+=`<div class="det-row"><span class="det-label">MX</span><span class="det-value">${mx}</span></div>`});
-  if(!d.mx_records?.length)h+=`<div class="det-row"><span class="det-label">No MX records</span></div>`;
-  h+=`</div>`;
-  h+=`<div class="det-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3>`;
-  h+=`<div class="det-row"><span class="det-label">Disposable</span><span class="det-value">${d.disposable?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div>`;
-  h+=`</div>`;
+  let h=`<div class="res-head"><h2>Email: <span class="res-query">${d.email}</span></h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-server" style="color:var(--accent)"></i>MX Records</h3>`;(d.mx_records||[]).forEach(mx=>{h+=`<div class="det-row"><span class="det-label">MX</span><span class="det-value">${mx}</span></div>`});if(!d.mx_records?.length)h+=`<div class="det-row"><span class="det-label">No MX records</span></div>`;h+=`</div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-shield-halved" style="color:var(--yellow)"></i>Security</h3><div class="det-row"><span class="det-label">Disposable</span><span class="det-value">${d.disposable?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div></div>`;
   if(d.gravatar)h+=`<div class="det-card"><h3><i class="fa-solid fa-circle-user" style="color:var(--cyan)"></i>Gravatar</h3><img src="${d.gravatar}?s=48" style="width:40px;height:40px;border-radius:50%;border:1px solid var(--border)"/></div>`;
-  h+=`</div>`;
-  el.innerHTML=h;
+  h+=`</div>`;el.innerHTML=h;
 }
-
-function renderHolehe(d,el){
-  let h=`<div class="res-head"><h2>Email → Accounts: <span class="res-query">${d.email}</span></h2><div class="pills"><span class="pill g">${d.registered_count} found</span></div></div>`;
-  if(d.registered_on?.length){
-    h+=`<div class="found-grid">`;
-    d.registered_on.forEach(s=>{
-      const IC={github:'GH',twitter:'TW',instagram:'IG',discord:'DC',spotify:'SP',reddit:'RD',steam:'ST',roblox:'RB',twitch:'TV',npm:'NP',gitlab:'GL',pinterest:'PI',snapchat:'SC',tumblr:'TM',medium:'MD',paypal:'PP',ebay:'EB',amazon:'AM',google:'GG',adobe:'AD',apple:'AP',microsoft:'MS'};
-      h+=`<div class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(34,197,94,.06);color:var(--green)">${IC[s]||s.substring(0,2).toUpperCase()}</div><div class="found-name">${s}</div></div><div class="found-status">REGISTERED</div></div>`;
-    });
-    h+=`</div>`;
-  }
-  if(d.not_registered_on?.length){h+=`<div class="nf"><div class="nf-title">Not on (${d.not_registered_on.length})</div><div class="nf-grid">${d.not_registered_on.map(s=>`<div class="nf-chip">${s}</div>`).join('')}</div></div>`}
-  el.innerHTML=h;
-}
-
-function renderBreach(d,el){
-  const sev={critical:'#ef4444',high:'#f87171',medium:'#eab308',low:'#71717a',none:'#22c55e'};
-  let h=`<div class="res-head"><h2>Breach: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type==='email'?'EMAIL':'USERNAME'}</span><span class="pill r">${d.total_leaks} leaks</span><span class="pill r">${d.total_hacked} breached</span></div></div>`;
-
-  if(d.leaks?.length){
-    h+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-skull-crossbones" style="margin-right:3px"></i>Leaked Credentials (${d.leaks.length})</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:5px">`;
-    d.leaks.forEach(l=>{
-      h+=`<div class="det-card" style="padding:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:.68rem;font-weight:700">${l.source}</span><span class="pill r" style="font-size:.38rem">LEAK</span></div>`;
-      if(l.email)h+=`<div class="det-row"><span class="det-label">Email</span><span class="det-value">${l.email}</span></div>`;
-      if(l.username)h+=`<div class="det-row"><span class="det-label">User</span><span class="det-value">${l.username}</span></div>`;
-      if(l.password)h+=`<div class="det-row"><span class="det-label">Pass</span><span class="det-value">${l.password}</span></div>`;
-      h+=`</div>`;
-    });
-    h+=`</div></div>`;
-  }
-
-  if(d.hacked_platforms?.length){
-    h+=`<div><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-triangle-exclamation" style="margin-right:3px"></i>Platforms Breached (${d.hacked_platforms.length})</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:5px">`;
-    d.hacked_platforms.forEach(p=>{
-      const sc=sev[p.severity]||sev.medium;
-      h+=`<div class="det-card" style="padding:10px;border-left:2px solid ${sc}"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.68rem;font-weight:700">${p.platform}</span><span style="font-size:.42rem;font-weight:700;color:${sc};font-family:'JetBrains Mono',monospace">${p.severity?.toUpperCase()}</span></div><div style="font-size:.48rem;color:var(--text5);margin-top:2px">${p.date} . ${p.records}</div><div style="font-size:.42rem;color:var(--text5);margin-top:1px">${p.data_types?.join(', ')}</div></div>`;
-    });
-    h+=`</div></div>`;
-  }
-
-  if(!d.leaks?.length&&!d.hacked_platforms?.length)h+=`<div class="empty"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i><h3>No Leaks Found</h3><p>${d.query} is clean</p></div>`;
-  el.innerHTML=h;
-}
-
-function renderIP(d,el){
-  let h=`<div class="res-head"><h2>IP: <span class="res-query">${d.ip}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  h+=`<div class="det-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--blue)"></i>Geolocation</h3>`;
-  for(const[k,v] of Object.entries(d.geo||{})){if(v)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`}
-  h+=`</div>`;
-  h+=`<div class="det-card"><h3><i class="fa-solid fa-building" style="color:var(--purple)"></i>ASN</h3>`;
-  for(const[k,v] of Object.entries(d.asn||{})){if(v)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`}
-  h+=`</div>`;
-  h+=`<div class="det-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow)"></i>Abuse</h3>`;
-  for(const[k,v] of Object.entries(d.abuse||{})){h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div>`}
-  h+=`</div>`;
-  h+=`</div>`;
-  el.innerHTML=h;
-}
-
-function renderDomain(d,el){
-  let h=`<div class="res-head"><h2>Domain: <span class="res-query">${d.domain}</span></h2></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  h+=`<div class="det-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--blue)"></i>DNS</h3>`;
-  for(const[typ,vals] of Object.entries(d.dns||{})){vals.forEach(v=>{h+=`<div class="det-row"><span class="det-label">${typ}</span><span class="det-value">${v.substring(0,40)}</span></div>`})}
-  h+=`</div>`;
-  if(d.ssl?.issuer)h+=`<div class="det-card"><h3><i class="fa-solid fa-lock" style="color:var(--green)"></i>SSL</h3><div class="det-row"><span class="det-label">Issuer</span><span class="det-value">${d.ssl.issuer}</span></div></div>`;
-  if(d.technologies?.length){h+=`<div class="det-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Tech</h3>`;d.technologies.forEach(t=>{h+=`<div class="det-row"><span class="det-value">${t}</span></div>`});h+=`</div>`}
-  h+=`</div>`;
-  el.innerHTML=h;
-}
-
-function renderURL(d,el){
-  let h=`<div class="res-head"><h2>URL: <span class="res-query">${d.url}</span></h2>${d.status?`<span class="pill b">${d.status}</span>`:''}</div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  if(d.title)h+=`<div class="det-card"><h3><i class="fa-solid fa-heading" style="color:var(--green)"></i>Title</h3><div class="det-row"><span class="det-value">${d.title}</span></div></div>`;
-  if(d.description)h+=`<div class="det-card"><h3><i class="fa-solid fa-align-left" style="color:var(--blue)"></i>Description</h3><div class="det-row"><span class="det-value">${d.description}</span></div></div>`;
-  h+=`</div>`;
-  el.innerHTML=h;
-}
-
-function renderWayback(d,el){
-  let h=`<div class="res-head"><h2>Wayback: <span class="res-query">${d.url}</span></h2><div class="pills"><span class="pill b">${d.total_snapshots} snapshots</span></div></div>`;
-  if(d.snapshots?.length){
-    h+=`<div class="found-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">`;
-    d.snapshots.forEach(s=>{h+=`<a href="${s.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(59,130,246,.06);color:var(--blue)">WB</div><div class="found-name">${s.date}</div></div><div class="found-status" style="color:var(--text4)">${s.status}</div></a>`});
-    h+=`</div>`;
-  }else{h+=`<div class="empty"><h3>No snapshots</h3></div>`}
-  el.innerHTML=h;
-}
-
 function renderPhone(d,el){
-  let h=`<div class="res-head"><h2>Phone: <span class="res-query">${d.phone}</span></h2></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-phone" style="color:var(--blue)"></i>Info</h3>`;
+  let h=`<div class="res-head"><h2>Phone: <span class="res-query">${d.phone}</span></h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-phone" style="color:var(--accent)"></i>Info</h3>`;
   if(d.valid!==undefined)h+=`<div class="det-row"><span class="det-label">Valid</span><span class="det-value">${d.valid?'<span class="pill g">Yes</span>':'<span class="pill r">No</span>'}</span></div>`;
   if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;
   if(d.carrier)h+=`<div class="det-row"><span class="det-label">Carrier</span><span class="det-value">${d.carrier}</span></div>`;
   if(d.line_type)h+=`<div class="det-row"><span class="det-label">Type</span><span class="det-value">${d.line_type}</span></div>`;
-  h+=`</div></div>`;
-  el.innerHTML=h;
+  if(d.location)h+=`<div class="det-row"><span class="det-label">Location</span><span class="det-value">${d.location}</span></div>`;
+  h+=`</div></div>`;el.innerHTML=h;
 }
-
-function renderCrypto(d,el){
-  let h=`<div class="res-head"><h2>Wallet: <span class="res-query">${d.address?.substring(0,20)}...</span></h2><div class="pills"><span class="pill b">${d.chain||'Unknown'}</span></div></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-brands fa-bitcoin" style="color:var(--yellow)"></i>Info</h3>`;
-  h+=`<div class="det-row"><span class="det-label">Chain</span><span class="det-value">${d.chain||'Unknown'}</span></div>`;
-  if(d.balance)h+=`<div class="det-row"><span class="det-label">Balance</span><span class="det-value">${d.balance}</span></div>`;
-  h+=`</div></div>`;
-  el.innerHTML=h;
-}
-
-function renderName(d,el){
-  let h=`<div class="res-head"><h2>Name: <span class="res-query">${d.name}</span></h2><div class="pills"><span class="pill b">${d.count} results</span></div></div>`;
-  if(d.results?.length){
-    h+=`<div class="found-grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;
-    d.results.forEach(r=>{
-      let icon='FA',color='var(--blue)';
-      if(r.url.includes('linkedin')){icon='LI';color='#0077b5'}else if(r.url.includes('twitter')||r.url.includes('x.com')){icon='TW';color='#1da1f2'}else if(r.url.includes('facebook')){icon='FB';color='#1877f2'}else if(r.url.includes('instagram')){icon='IG';color='#e4405f'}else if(r.url.includes('github')){icon='GH';color='var(--text)'}else if(r.url.includes('youtube')){icon='YT';color:'#ff0000'}
-      h+=`<a href="${r.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:${color}10;color:${color}">${icon}</div><div class="found-name">${new URL(r.url).hostname}</div></div><div class="found-url">${r.url.substring(0,45)}</div><div class="found-status" style="color:${color}">VIEW</div></a>`;
-    });
-    h+=`</div>`;
-  }else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>No results</h3></div>`}
-  el.innerHTML=h;
-}
-
 function renderPerson(d,el){
   let h=`<div class="res-head"><h2>Person: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div>`;
   if(d.username_results){const ud=d.username_results;for(const[cat,platforms] of Object.entries(ud.categories||{})){h+=`<div style="margin-bottom:8px"><div style="font-size:.48rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text5);margin-bottom:4px">${cat} (${platforms.length})</div><div class="found-grid">`;platforms.forEach(p=>{const IC={github:'GH',twitter:'TW',instagram:'IG',discord:'DC'};h+=`<a href="${p.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(113,113,122,.06);color:var(--text4)">${IC[p.platform]||p.platform.substring(0,2).toUpperCase()}</div><div class="found-name">${p.platform}</div></div><div class="found-status">EXISTS</div></a>`});h+=`</div></div>`}}
@@ -775,100 +597,232 @@ function renderPerson(d,el){
   else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>No results</h3></div>`}
   el.innerHTML=h;
 }
-
-function renderReverseIP(d,el){
-  let h=`<div class="res-head"><h2>Reverse IP: <span class="res-query">${d.ip}</span></h2></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  if(d.reverse_dns)h+=`<div class="det-card"><h3>rDNS</h3><div class="det-row"><span class="det-value">${d.reverse_dns}</span></div></div>`;
-  if(d.same_server_domains?.length){h+=`<div class="det-card"><h3>Same Server (${d.same_server_domains.length})</h3>`;d.same_server_domains.slice(0,8).forEach(s=>{h+=`<div class="det-row"><span class="det-value" style="font-size:.52rem">${s}</span></div>`});h+=`</div>`}
-  h+=`</div>`;
+function renderDiscord(d,el){
+  const info=d.info||{};const rs=d.risk_summary||{};
+  let h=`<div class="res-head"><h2>Discord: <span class="res-query">${d.discord_id}</span></h2><div class="pills"><span class="pill b">Snowflake</span><span class="pill g">${info.age_human||''}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-brands fa-discord" style="color:#5865F2"></i>Account</h3><div class="det-row"><span class="det-label">Created</span><span class="det-value">${info.created_at}</span></div><div class="det-row"><span class="det-label">Age</span><span class="det-value">${info.age_human}</span></div></div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow)"></i>Risk</h3><div class="det-row"><span class="det-label">High</span><span class="det-value">${rs.high>0?`<span class="pill r">${rs.high}</span>`:'<span class="pill g">0</span>'}</span></div><div class="det-row"><span class="det-label">Medium</span><span class="det-value">${rs.medium>0?`<span class="pill y">${rs.medium}</span>`:'<span class="pill g">0</span>'}</span></div></div>`;
+  if(d.breach_count>0)h+=`<div class="det-card"><h3><i class="fa-solid fa-skull-crossbones" style="color:var(--red)"></i>Breach</h3><div class="det-row"><span class="det-label">Status</span><span class="det-value"><span class="pill r">COMPROMISED</span></span></div><div class="det-row"><span class="det-label">Sources</span><span class="det-value">${d.breach_count}</span></div></div>`;
+  h+=`</div>`;el.innerHTML=h;
+}
+function renderTelegram(d,el){
+  let h=`<div class="res-head"><h2>Telegram: <span class="res-query">${d.query||d.username||d.phone}</span></h2><div class="pills"><span class="pill b">Telegram</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-brands fa-telegram" style="color:#26A5E4"></i>Profile</h3>`;
+  if(d.username)h+=`<div class="det-row"><span class="det-label">Username</span><span class="det-value">@${d.username}</span></div>`;
+  if(d.first_name)h+=`<div class="det-row"><span class="det-label">First Name</span><span class="det-value">${d.first_name}</span></div>`;
+  if(d.last_name)h+=`<div class="det-row"><span class="det-label">Last Name</span><span class="det-value">${d.last_name}</span></div>`;
+  if(d.phone)h+=`<div class="det-row"><span class="det-label">Phone</span><span class="det-value">${d.phone}</span></div>`;
+  if(d.scam!==undefined)h+=`<div class="det-row"><span class="det-label">Scam</span><span class="det-value">${d.scam?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div>`;
+  if(d.premium!==undefined)h+=`<div class="det-row"><span class="det-label">Premium</span><span class="det-value">${d.premium?'<span class="pill b">Yes</span>':'<span class="pill gray">No</span>'}</span></div>`;
+  h+=`</div>`;if(d.groups?.length){h+=`<div class="det-card"><h3><i class="fa-solid fa-users" style="color:var(--purple)"></i>Groups (${d.groups.length})</h3>`;d.groups.slice(0,10).forEach(g=>{h+=`<div class="det-row"><span class="det-label">${g.name||g.title||'Group'}</span><span class="det-value" style="font-size:.48rem">${g.id||''}</span></div>`});h+=`</div>`}h+=`</div>`;el.innerHTML=h;
+}
+function renderBreach(d,el){
+  const sev={critical:'#ef4444',high:'#f87171',medium:'#eab308',low:'#71717a',none:'#22c55e'};
+  let h=`<div class="res-head"><h2>Breach: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.type==='email'?'EMAIL':'USERNAME'}</span><span class="pill r">${d.total_leaks} leaks</span><span class="pill r">${d.total_hacked} breached</span></div></div>`;
+  if(d.leaks?.length){h+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-skull-crossbones" style="margin-right:3px"></i>Leaked Credentials (${d.leaks.length})</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:5px">`;d.leaks.forEach(l=>{h+=`<div class="det-card" style="padding:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:.68rem;font-weight:700">${l.source}</span><span class="pill r" style="font-size:.38rem">LEAK</span></div>`;if(l.email)h+=`<div class="det-row"><span class="det-label">Email</span><span class="det-value">${l.email}</span></div>`;if(l.username)h+=`<div class="det-row"><span class="det-label">User</span><span class="det-value">${l.username}</span></div>`;if(l.password)h+=`<div class="det-row"><span class="det-label">Pass</span><span class="det-value">${l.password}</span></div>`;h+=`</div>`});h+=`</div></div>`}
+  if(d.hacked_platforms?.length){h+=`<div><div style="font-size:.65rem;font-weight:700;color:var(--red);margin-bottom:6px"><i class="fa-solid fa-triangle-exclamation" style="margin-right:3px"></i>Platforms Breached (${d.hacked_platforms.length})</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:5px">`;d.hacked_platforms.forEach(p=>{const sc=sev[p.severity]||sev.medium;h+=`<div class="det-card" style="padding:10px;border-left:2px solid ${sc}"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.68rem;font-weight:700">${p.platform}</span><span style="font-size:.42rem;font-weight:700;color:${sc};font-family:'JetBrains Mono',monospace">${p.severity?.toUpperCase()}</span></div><div style="font-size:.48rem;color:var(--text5);margin-top:2px">${p.date} \u00b7 ${p.records}</div><div style="font-size:.42rem;color:var(--text5);margin-top:1px">${p.data_types?.join(', ')}</div></div>`});h+=`</div></div>`}
+  if(!d.leaks?.length&&!d.hacked_platforms?.length)h+=`<div class="empty"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i><h3>No Leaks Found</h3><p>${d.query} is clean</p></div>`;
   el.innerHTML=h;
 }
-
+function renderIP(d,el){
+  let h=`<div class="res-head"><h2>IP: <span class="res-query">${d.ip}</span></h2><div class="pills"><span class="pill b">${d.type}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-earth-americas" style="color:var(--accent)"></i>Geolocation</h3>`;for(const[k,v] of Object.entries(d.geo||{})){if(v)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`}h+=`</div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-building" style="color:var(--purple)"></i>ASN</h3>`;for(const[k,v] of Object.entries(d.asn||{})){if(v)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`}h+=`</div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--yellow)"></i>Abuse</h3>`;for(const[k,v] of Object.entries(d.abuse||{})){h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v?'<span class="pill r">Yes</span>':'<span class="pill g">No</span>'}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
+}
+function renderDomain(d,el){
+  let h=`<div class="res-head"><h2>Domain: <span class="res-query">${d.domain}</span></h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-network-wired" style="color:var(--accent)"></i>DNS</h3>`;for(const[typ,vals] of Object.entries(d.dns||{})){vals.forEach(v=>{h+=`<div class="det-row"><span class="det-label">${typ}</span><span class="det-value">${v.substring(0,40)}</span></div>`})}h+=`</div>`;
+  if(d.ssl?.issuer)h+=`<div class="det-card"><h3><i class="fa-solid fa-lock" style="color:var(--green)"></i>SSL</h3><div class="det-row"><span class="det-label">Issuer</span><span class="det-value">${d.ssl.issuer}</span></div></div>`;
+  if(d.technologies?.length){h+=`<div class="det-card"><h3><i class="fa-solid fa-microchip" style="color:var(--purple)"></i>Tech</h3>`;d.technologies.forEach(t=>{h+=`<div class="det-row"><span class="det-value">${t}</span></div>`});h+=`</div>`}h+=`</div>`;el.innerHTML=h;
+}
+function renderURL(d,el){
+  let h=`<div class="res-head"><h2>URL: <span class="res-query">${d.url}</span></h2>${d.status?`<span class="pill b">${d.status}</span>`:''}</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  if(d.title)h+=`<div class="det-card"><h3><i class="fa-solid fa-heading" style="color:var(--green)"></i>Title</h3><div class="det-row"><span class="det-value">${d.title}</span></div></div>`;
+  if(d.description)h+=`<div class="det-card"><h3><i class="fa-solid fa-align-left" style="color:var(--accent)"></i>Description</h3><div class="det-row"><span class="det-value">${d.description}</span></div></div>`;
+  h+=`</div>`;el.innerHTML=h;
+}
+function renderWayback(d,el){
+  let h=`<div class="res-head"><h2>Wayback: <span class="res-query">${d.url}</span></h2><div class="pills"><span class="pill b">${d.total_snapshots} snapshots</span></div></div>`;
+  if(d.snapshots?.length){h+=`<div class="found-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">`;d.snapshots.forEach(s=>{h+=`<a href="${s.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(99,102,241,.06);color:var(--accent)">WB</div><div class="found-name">${s.date}</div></div><div class="found-status" style="color:var(--text4)">${s.status}</div></a>`});h+=`</div>`}else{h+=`<div class="empty"><h3>No snapshots</h3></div>`}el.innerHTML=h;
+}
+function renderCrypto(d,el){
+  let h=`<div class="res-head"><h2>Wallet: <span class="res-query">${d.address?.substring(0,20)}...</span></h2><div class="pills"><span class="pill b">${d.chain||'Unknown'}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-brands fa-bitcoin" style="color:var(--yellow)"></i>Info</h3>`;
+  h+=`<div class="det-row"><span class="det-label">Chain</span><span class="det-value">${d.chain||'Unknown'}</span></div>`;if(d.balance)h+=`<div class="det-row"><span class="det-label">Balance</span><span class="det-value">${d.balance}</span></div>`;h+=`</div></div>`;el.innerHTML=h;
+}
+function renderReverseIP(d,el){
+  let h=`<div class="res-head"><h2>Reverse IP: <span class="res-query">${d.ip}</span></h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  if(d.reverse_dns)h+=`<div class="det-card"><h3>rDNS</h3><div class="det-row"><span class="det-value">${d.reverse_dns}</span></div></div>`;
+  if(d.same_server_domains?.length){h+=`<div class="det-card"><h3>Same Server (${d.same_server_domains.length})</h3>`;d.same_server_domains.slice(0,8).forEach(s=>{h+=`<div class="det-row"><span class="det-value" style="font-size:.52rem">${s}</span></div>`});h+=`</div>`}h+=`</div>`;el.innerHTML=h;
+}
 function renderWHOIS(d,el){
-  let h=`<div class="res-head"><h2>WHOIS: <span class="res-query">${d.domain}</span></h2></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3>Registration</h3>`;
+  let h=`<div class="res-head"><h2>WHOIS: <span class="res-query">${d.domain}</span></h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3>Registration</h3>`;
   if(d.registrar)h+=`<div class="det-row"><span class="det-label">Registrar</span><span class="det-value">${d.registrar}</span></div>`;
   if(d.creation_date)h+=`<div class="det-row"><span class="det-label">Created</span><span class="det-value">${d.creation_date}</span></div>`;
   if(d.expiration_date)h+=`<div class="det-row"><span class="det-label">Expires</span><span class="det-value">${d.expiration_date}</span></div>`;
-  h+=`</div></div>`;
-  el.innerHTML=h;
+  h+=`</div></div>`;el.innerHTML=h;
 }
-
 function renderSubdomains(d,el){
   let h=`<div class="res-head"><h2>Subdomains: <span class="res-query">${d.domain}</span></h2><div class="pills"><span class="pill g">${d.count} found</span></div></div>`;
-  if(d.subdomains?.length){h+=`<div class="det-card"><h3>Discovered</h3>`;d.subdomains.forEach(s=>{h+=`<div class="det-row"><span class="det-value" style="font-size:.52rem">${s}</span></div>`});h+=`</div>`}
-  el.innerHTML=h;
+  if(d.subdomains?.length){h+=`<div class="det-card"><h3>Discovered</h3>`;d.subdomains.forEach(s=>{h+=`<div class="det-row"><span class="det-value" style="font-size:.52rem">${s}</span></div>`});h+=`</div>`}el.innerHTML=h;
 }
-
 function renderPorts(d,el){
   let h=`<div class="res-head"><h2>Ports: <span class="res-query">${d.ip}</span></h2><div class="pills"><span class="pill g">${d.total_open} open</span></div></div>`;
-  if(d.open_ports?.length){h+=`<div class="det-card"><h3>Open</h3>`;d.open_ports.forEach(p=>{const svc=d.services?.[p]||{};h+=`<div class="det-row"><span class="det-label">${p}</span><span class="det-value">${svc.service||'?'}</span></div>`});h+=`</div>`}
-  el.innerHTML=h;
+  if(d.open_ports?.length){h+=`<div class="det-card"><h3>Open</h3>`;d.open_ports.forEach(p=>{const svc=d.services?.[p]||{};h+=`<div class="det-row"><span class="det-label">${p}</span><span class="det-value">${svc.service||'?'}</span></div>`});h+=`</div>`}el.innerHTML=h;
 }
-
 function renderSSL(d,el){
-  let h=`<div class="res-head"><h2>SSL: <span class="res-query">${d.domain}</span></h2>${d.days_left!==null?`<div class="pills"><span class="pill ${d.days_left<30?'r':'g'}">${d.days_left}d left</span></div>`:''}</div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  if(d.issuer)h+=`<div class="det-card"><h3>Issuer</h3>`;for(const[k,v] of Object.entries(d.issuer||{})){if(d.issuer)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`};if(d.issuer)h+=`</div>`;
-  h+=`</div>`;
-  el.innerHTML=h;
+  let h=`<div class="res-head"><h2>SSL: <span class="res-query">${d.domain}</span></h2>${d.days_left!==null?`<div class="pills"><span class="pill ${d.days_left<30?'r':'g'}">${d.days_left}d left</span></div>`:''}</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  if(d.issuer)h+=`<div class="det-card"><h3>Issuer</h3>`;for(const[k,v] of Object.entries(d.issuer||{})){if(d.issuer)h+=`<div class="det-row"><span class="det-label">${k}</span><span class="det-value">${v}</span></div>`};if(d.issuer)h+=`</div>`;h+=`</div>`;el.innerHTML=h;
 }
-
 function renderWAF(d,el){
-  let h=`<div class="res-head"><h2>WAF: <span class="res-query">${d.domain}</span></h2></div>`;
-  h+=`<div class="det-card"><h3>Protection</h3>`;
-  if(d.detected?.length){d.detected.forEach(w=>{h+=`<div class="det-row"><span class="det-label">WAF</span><span class="det-value"><span class="pill g">${w}</span></span></div>`})}
-  else{h+=`<div class="det-row"><span class="det-label">WAF</span><span class="det-value"><span class="pill r">None</span></span></div>`}
-  h+=`</div>`;
-  el.innerHTML=h;
+  let h=`<div class="res-head"><h2>WAF: <span class="res-query">${d.domain}</span></h2></div><div class="det-card"><h3>Protection</h3>`;
+  if(d.detected?.length){d.detected.forEach(w=>{h+=`<div class="det-row"><span class="det-label">WAF</span><span class="det-value"><span class="pill g">${w}</span></span></div>`})}else{h+=`<div class="det-row"><span class="det-label">WAF</span><span class="det-value"><span class="pill r">None</span></span></div>`}h+=`</div>`;el.innerHTML=h;
 }
-
-function renderDorks(d,el){
-  let h=`<div class="res-head"><h2>Dorks: <span class="res-query">${d.target}</span></h2><div class="pills"><span class="pill g">${d.count} dorks</span></div></div>`;
-  h+=`<div class="det-card"><h3>Generated</h3>`;
-  for(const[key,q] of Object.entries(d.dorks)){h+=`<div class="det-row"><span class="det-label" style="min-width:100px">${key.replace(/_/g,' ')}</span><span class="det-value" style="font-size:.5rem;cursor:pointer" onclick="navigator.clipboard.writeText('${q.replace(/'/g,"\\'")}');this.textContent='Copied!'" title="Click to copy">${q}</span></div>`}
-  h+=`</div>`;
-  el.innerHTML=h;
-}
-
-function renderPastes(d,el){
-  let h=`<div class="res-head"><h2>Pastes: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill g">${d.count} results</span></div></div>`;
-  if(d.results?.length){d.results.forEach(r=>{h+=`<div class="det-card"><h3>${r.source}</h3><div class="det-row"><span class="det-label">URL</span><span class="det-value" style="font-size:.5rem"><a href="${r.url}" target="_blank" style="color:var(--blue);text-decoration:none">${r.url.substring(0,45)}...</a></span></div></div>`})}
-  else{h+=`<div class="empty"><i class="fa-solid fa-check-circle"></i><h3>No pastes</h3></div>`}
-  el.innerHTML=h;
-}
-
 function renderShodan(d,el){
-  let h=`<div class="res-head"><h2>Shodan: <span class="res-query">${d.ip}</span></h2></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3>Host</h3>`;
+  let h=`<div class="res-head"><h2>Shodan: <span class="res-query">${d.ip}</span></h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3>Host</h3>`;
   if(d.org)h+=`<div class="det-row"><span class="det-label">Org</span><span class="det-value">${d.org}</span></div>`;
   if(d.isp)h+=`<div class="det-row"><span class="det-label">ISP</span><span class="det-value">${d.isp}</span></div>`;
+  if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;h+=`</div>`;
+  if(d.ports?.length){h+=`<div class="det-card"><h3>Ports (${d.ports.length})</h3>`;d.ports.forEach(p=>{h+=`<div class="det-row"><span class="det-label">${p}</span><span class="det-value"><span class="pill g">Open</span></span></div>`});h+=`</div>`}h+=`</div>`;el.innerHTML=h;
+}
+function renderGitHub(d,el){
+  let h=`<div class="res-head"><h2>GitHub: <span class="res-query">${d.username||d.login}</span></h2><div class="pills"><span class="pill b">Developer</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-brands fa-github" style="color:var(--text)"></i>Profile</h3>`;
+  if(d.login)h+=`<div class="det-row"><span class="det-label">Login</span><span class="det-value">${d.login}</span></div>`;
+  if(d.name)h+=`<div class="det-row"><span class="det-label">Name</span><span class="det-value">${d.name}</span></div>`;
+  if(d.bio)h+=`<div class="det-row"><span class="det-label">Bio</span><span class="det-value">${d.bio}</span></div>`;
+  if(d.company)h+=`<div class="det-row"><span class="det-label">Company</span><span class="det-value">${d.company}</span></div>`;
+  if(d.location)h+=`<div class="det-row"><span class="det-label">Location</span><span class="det-value">${d.location}</span></div>`;
+  if(d.blog)h+=`<div class="det-row"><span class="det-label">Blog</span><span class="det-value">${d.blog}</span></div>`;
+  if(d.created_at)h+=`<div class="det-row"><span class="det-label">Joined</span><span class="det-value">${d.created_at}</span></div>`;h+=`</div>`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-chart-simple" style="color:var(--accent)"></i>Stats</h3>`;
+  if(d.public_repos!==undefined)h+=`<div class="det-row"><span class="det-label">Repos</span><span class="det-value">${d.public_repos}</span></div>`;
+  if(d.followers!==undefined)h+=`<div class="det-row"><span class="det-label">Followers</span><span class="det-value">${d.followers}</span></div>`;
+  if(d.following!==undefined)h+=`<div class="det-row"><span class="det-label">Following</span><span class="det-value">${d.following}</span></div>`;
+  if(d.public_gists!==undefined)h+=`<div class="det-row"><span class="det-label">Gists</span><span class="det-value">${d.public_gists}</span></div>`;h+=`</div></div>`;el.innerHTML=h;
+}
+function renderMinecraft(d,el){
+  let h=`<div class="res-head"><h2>Minecraft: <span class="res-query">${d.username||d.name}</span></h2><div class="pills"><span class="pill b">Gaming</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
+  h+=`<div class="det-card"><h3><i class="fa-solid fa-cube" style="color:var(--green)"></i>Profile</h3>`;
+  if(d.username||d.name)h+=`<div class="det-row"><span class="det-label">Username</span><span class="det-value">${d.username||d.name}</span></div>`;
+  if(d.uuid)h+=`<div class="det-row"><span class="det-label">UUID</span><span class="det-value">${d.uuid}</span></div>`;
+  if(d.created_at)h+=`<div class="det-row"><span class="det-label">Created</span><span class="det-value">${d.created_at}</span></div>`;
+  if(d.modified_at)h+=`<div class="det-row"><span class="det-label">Modified</span><span class="det-value">${d.modified_at}</span></div>`;h+=`</div>`;
+  if(d.skin_url)h+=`<div class="det-card"><h3><i class="fa-solid fa-image" style="color:var(--purple)"></i>Skin</h3><img src="${d.skin_url}" style="width:128px;border-radius:4px;border:1px solid var(--border)"/></div>`;h+=`</div>`;el.innerHTML=h;
+}
+function renderDoxbin(d,el){
+  let h=`<div class="res-head"><h2>Doxbin: <span class="res-query">${d.query||d.target}</span></h2><div class="pills"><span class="pill r">DOX DATABASE</span></div></div>`;
+  if(d.found){h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-database" style="color:var(--red)"></i>Dox Entry</h3>`;for(const[k,v] of Object.entries(d.data||d.entry||d)){if(v&&k!=='found'&&k!=='query'&&k!=='target'&&k!=='status')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`}else{h+=`<div class="empty"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i><h3>Not Found</h3><p>No dox entry found for this target</p></div>`}el.innerHTML=h;
+}
+function renderDoxSearch(d,el){
+  let h=`<div class="res-head"><h2>Dox Search: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.count||0} results</span></div></div>`;
+  if(d.results?.length){d.results.forEach(r=>{h+=`<div class="det-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.68rem;font-weight:700">${r.name||r.source||'Result'}</span><span class="pill p" style="font-size:.38rem">DOX</span></div>`;for(const[k,v] of Object.entries(r)){if(k!=='name'&&k!=='source'&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`})}else{h+=`<div class="empty"><i class="fa-solid fa-search"></i><h3>No results</h3></div>`}el.innerHTML=h;
+}
+function renderShadowLeak(d,el){
+  let h=`<div class="res-head"><h2>Shadow Leak: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill r">${d.leak_count||d.count||0} leaks</span></div></div>`;
+  if(d.leaks?.length){d.leaks.forEach(l=>{h+=`<div class="det-card" style="border-left:2px solid var(--red)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.68rem;font-weight:700">${l.source||l.name||'Leak'}</span><span class="pill r" style="font-size:.38rem">LEAK</span></div>`;for(const[k,v] of Object.entries(l)){if(k!=='source'&&k!=='name'&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`})}else if(d.found){for(const[k,v] of Object.entries(d)){if(v&&k!=='found'&&k!=='query'&&k!=='status')h+=`<div class="det-card"><div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div></div>`}}else{h+=`<div class="empty"><i class="fa-solid fa-ghost"></i><h3>No shadow leaks found</h3></div>`}el.innerHTML=h;
+}
+function renderDiscordGrave(d,el){
+  let h=`<div class="res-head"><h2>Discord Grave: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">DELETED ACCOUNTS</span></div></div>`;
+  if(d.found||d.graves?.length){const items=d.graves||[d];items.forEach(g=>{h+=`<div class="det-card"><h3><i class="fa-brands fa-discord" style="color:#5865F2"></i>Grave Entry</h3>`;for(const[k,v] of Object.entries(g)){if(v&&k!=='found'&&k!=='query')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`})}else{h+=`<div class="empty"><i class="fa-solid fa-skull"></i><h3>No grave entries found</h3></div>`}el.innerHTML=h;
+}
+function renderFolder(d,el){
+  let h=`<div class="res-head"><h2>Folder Intel: <span class="res-query">${d.query||d.path}</span></h2><div class="pills"><span class="pill b">${d.file_count||d.count||0} files</span></div></div>`;
+  if(d.files?.length){d.files.forEach(f=>{h+=`<div class="det-card"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.65rem;font-weight:600;font-family:'JetBrains Mono',monospace">${f.name||f.path||f}</span><span class="pill gray" style="font-size:.38rem">${f.size||''}</span></div></div>`})}else if(d.entries?.length){d.entries.forEach(e=>{h+=`<div class="det-card"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.65rem;font-weight:600;font-family:'JetBrains Mono',monospace">${e.name||e.path||e}</span></div></div>`})}else{h+=`<div class="empty"><i class="fa-solid fa-folder-open"></i><h3>No files found</h3></div>`}el.innerHTML=h;
+}
+function renderIntelX(d,el){
+  let h=`<div class="res-head"><h2>IntelX: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.result_count||d.count||0} results</span></div></div>`;
+  if(d.results?.length){d.results.forEach(r=>{h+=`<div class="det-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.65rem;font-weight:600;font-family:'JetBrains Mono',monospace">${r.domain||r.url||r.email||'Result'}</span><span class="pill p" style="font-size:.38rem">INTELX</span></div>`;for(const[k,v] of Object.entries(r)){if(v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`})}else{h+=`<div class="empty"><i class="fa-solid fa-microscope"></i><h3>No IntelX results</h3></div>`}el.innerHTML=h;
+}
+function renderPartialRecovery(d,el){
+  let h=`<div class="res-head"><h2>Recovery: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">${d.service||currentPage}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-user-lock" style="color:var(--accent)"></i>Recovery Intel</h3>`;
+  for(const[k,v] of Object.entries(d)){if(v&&k!=='query'&&k!=='status'&&k!=='service')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
+}
+function renderPhoneToEmail(d,el){
+  let h=`<div class="res-head"><h2>Phone \u2192 Email: <span class="res-query">${d.phone||d.query}</span></h2><div class="pills"><span class="pill b">${d.email_count||d.count||0} emails</span></div></div>`;
+  if(d.emails?.length){h+=`<div class="found-grid">`;d.emails.forEach(e=>{h+=`<div class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(99,102,241,.06);color:var(--accent)">@</div><div class="found-name">${typeof e==='string'?e:e.email||e.address||e}</div></div><div class="found-status">RECOVERED</div></div>`});h+=`</div>`}else{h+=`<div class="empty"><i class="fa-solid fa-arrow-right"></i><h3>No emails found</h3></div>`}el.innerHTML=h;
+}
+function renderEmailToPhone(d,el){
+  let h=`<div class="res-head"><h2>Email \u2192 Phone: <span class="res-query">${d.email||d.query}</span></h2><div class="pills"><span class="pill b">${d.phone_count||d.count||0} phones</span></div></div>`;
+  if(d.phones?.length){h+=`<div class="found-grid">`;d.phones.forEach(p=>{h+=`<div class="found-card"><div class="found-top"><div class="found-icon" style="background:rgba(99,102,241,.06);color:var(--accent)"><i class="fa-solid fa-phone" style="font-size:.35rem"></i></div><div class="found-name">${typeof p==='string'?p:p.phone||p.number||p}</div></div><div class="found-status">RECOVERED</div></div>`});h+=`</div>`}else{h+=`<div class="empty"><i class="fa-solid fa-arrow-left"></i><h3>No phones found</h3></div>`}el.innerHTML=h;
+}
+function renderFiscalCode(d,el){
+  let h=`<div class="res-head"><h2>Fiscal Code: <span class="res-query">${d.fiscal_code||d.query}</span></h2><div class="pills"><span class="pill b">ITALIAN ID</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-id-card" style="color:var(--accent)"></i>Parsed</h3>`;
+  if(d.surname)h+=`<div class="det-row"><span class="det-label">Surname</span><span class="det-value">${d.surname}</span></div>`;
+  if(d.name)h+=`<div class="det-row"><span class="det-label">Name</span><span class="det-value">${d.name}</span></div>`;
+  if(d.birth_date)h+=`<div class="det-row"><span class="det-label">Birth Date</span><span class="det-value">${d.birth_date}</span></div>`;
+  if(d.birth_place)h+=`<div class="det-row"><span class="det-label">Birth Place</span><span class="det-value">${d.birth_place}</span></div>`;
+  if(d.gender)h+=`<div class="det-row"><span class="det-label">Gender</span><span class="det-value">${d.gender}</span></div>`;
+  if(d.valid!==undefined)h+=`<div class="det-row"><span class="det-label">Valid</span><span class="det-value">${d.valid?'<span class="pill g">Yes</span>':'<span class="pill r">No</span>'}</span></div>`;
+  for(const[k,v] of Object.entries(d)){if(!['surname','name','birth_date','birth_place','gender','valid','fiscal_code','query','status'].includes(k)&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
+}
+function renderVAT(d,el){
+  let h=`<div class="res-head"><h2>VAT: <span class="res-query">${d.vat_number||d.query}</span></h2><div class="pills"><span class="pill b">EU VAT</span><span class="pill ${d.valid?'g':'r'}">${d.valid?'Valid':'Invalid'}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-euro-sign" style="color:var(--accent)"></i>Company</h3>`;
+  if(d.company_name)h+=`<div class="det-row"><span class="det-label">Name</span><span class="det-value">${d.company_name}</span></div>`;
+  if(d.address)h+=`<div class="det-row"><span class="det-label">Address</span><span class="det-value">${d.address}</span></div>`;
+  if(d.country_code)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country_code}</span></div>`;
+  if(d.valid!==undefined)h+=`<div class="det-row"><span class="det-label">Valid</span><span class="det-value">${d.valid?'<span class="pill g">Yes</span>':'<span class="pill r">No</span>'}</span></div>`;
+  for(const[k,v] of Object.entries(d)){if(!['vat_number','query','company_name','address','country_code','valid','status'].includes(k)&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
+}
+function renderIBAN(d,el){
+  let h=`<div class="res-head"><h2>IBAN: <span class="res-query">${d.iban||d.query}</span></h2><div class="pills"><span class="pill b">BANKING</span><span class="pill ${d.valid?'g':'r'}">${d.valid?'Valid':'Invalid'}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-landmark" style="color:var(--accent)"></i>Details</h3>`;
   if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;
-  h+=`</div>`;
-  if(d.ports?.length){h+=`<div class="det-card"><h3>Ports (${d.ports.length})</h3>`;d.ports.forEach(p=>{h+=`<div class="det-row"><span class="det-label">${p}</span><span class="det-value"><span class="pill g">Open</span></span></div>`});h+=`</div>`}
-  h+=`</div>`;
-  el.innerHTML=h;
+  if(d.country_code)h+=`<div class="det-row"><span class="det-label">Country Code</span><span class="det-value">${d.country_code}</span></div>`;
+  if(d.bank_name)h+=`<div class="det-row"><span class="det-label">Bank</span><span class="det-value">${d.bank_name}</span></div>`;
+  if(d.bank_code)h+=`<div class="det-row"><span class="det-label">Bank Code</span><span class="det-value">${d.bank_code}</span></div>`;
+  if(d.branch)h+=`<div class="det-row"><span class="det-label">Branch</span><span class="det-value">${d.branch}</span></div>`;
+  if(d.account)h+=`<div class="det-row"><span class="det-label">Account</span><span class="det-value">${d.account}</span></div>`;
+  if(d.bic)h+=`<div class="det-row"><span class="det-label">BIC/SWIFT</span><span class="det-value">${d.bic}</span></div>`;
+  if(d.valid!==undefined)h+=`<div class="det-row"><span class="det-label">Valid</span><span class="det-value">${d.valid?'<span class="pill g">Yes</span>':'<span class="pill r">No</span>'}</span></div>`;
+  for(const[k,v] of Object.entries(d)){if(!['iban','query','country','country_code','bank_name','bank_code','branch','account','bic','valid','status'].includes(k)&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
 }
-
-function renderDiscord(d,el){
-  const info=d.info||{};const rs=d.risk_summary||{};
-  let h=`<div class="res-head"><h2>Discord: <span class="res-query">${d.discord_id}</span></h2><div class="pills"><span class="pill b">Snowflake</span><span class="pill g">${info.age_human||''}</span></div></div>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px">`;
-  h+=`<div class="det-card"><h3>Account</h3><div class="det-row"><span class="det-label">Created</span><span class="det-value">${info.created_at}</span></div><div class="det-row"><span class="det-label">Age</span><span class="det-value">${info.age_human}</span></div></div>`;
-  h+=`<div class="det-card"><h3>Risk</h3><div class="det-row"><span class="det-label">High</span><span class="det-value">${rs.high>0?`<span class="pill r">${rs.high}</span>`:'<span class="pill g">0</span>'}</span></div><div class="det-row"><span class="det-label">Medium</span><span class="det-value">${rs.medium>0?`<span class="pill y">${rs.medium}</span>`:'<span class="pill g">0</span>'}</span></div></div>`;
-  if(d.breach_count>0)h+=`<div class="det-card"><h3>Breach</h3><div class="det-row"><span class="det-label">Status</span><span class="det-value"><span class="pill r">COMPROMISED</span></span></div><div class="det-row"><span class="det-label">Sources</span><span class="det-value">${d.breach_count}</span></div></div>`;
-  h+=`</div>`;
-  el.innerHTML=h;
+function renderVIN(d,el){
+  let h=`<div class="res-head"><h2>VIN: <span class="res-query">${d.vin||d.query}</span></h2><div class="pills"><span class="pill b">VEHICLE</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-car" style="color:var(--accent)"></i>Vehicle</h3>`;
+  if(d.make)h+=`<div class="det-row"><span class="det-label">Make</span><span class="det-value">${d.make}</span></div>`;
+  if(d.model)h+=`<div class="det-row"><span class="det-label">Model</span><span class="det-value">${d.model}</span></div>`;
+  if(d.year)h+=`<div class="det-row"><span class="det-label">Year</span><span class="det-value">${d.year}</span></div>`;
+  if(d.engine)h+=`<div class="det-row"><span class="det-label">Engine</span><span class="det-value">${d.engine}</span></div>`;
+  if(d.transmission)h+=`<div class="det-row"><span class="det-label">Transmission</span><span class="det-value">${d.transmission}</span></div>`;
+  if(d.plant)h+=`<div class="det-row"><span class="det-label">Plant</span><span class="det-value">${d.plant}</span></div>`;
+  for(const[k,v] of Object.entries(d)){if(!['vin','query','make','model','year','engine','transmission','plant','status'].includes(k)&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
 }
-
+function renderTaxID(d,el){
+  let h=`<div class="res-head"><h2>Tax ID: <span class="res-query">${d.tax_id||d.query}</span></h2><div class="pills"><span class="pill b">TAX INTEL</span><span class="pill ${d.valid?'g':'r'}">${d.valid?'Valid':'Invalid'}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-file-invoice" style="color:var(--accent)"></i>Details</h3>`;
+  if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;
+  if(d.type)h+=`<div class="det-row"><span class="det-label">Type</span><span class="det-value">${d.type}</span></div>`;
+  if(d.valid!==undefined)h+=`<div class="det-row"><span class="det-label">Valid</span><span class="det-value">${d.valid?'<span class="pill g">Yes</span>':'<span class="pill r">No</span>'}</span></div>`;
+  for(const[k,v] of Object.entries(d)){if(!['tax_id','query','country','type','valid','status'].includes(k)&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
+}
+function renderBusiness(d,el){
+  let h=`<div class="res-head"><h2>Business: <span class="res-query">${d.query||d.company_name}</span></h2><div class="pills"><span class="pill b">CORPORATE</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-solid fa-briefcase" style="color:var(--accent)"></i>Company</h3>`;
+  if(d.company_name||d.name)h+=`<div class="det-row"><span class="det-label">Name</span><span class="det-value">${d.company_name||d.name}</span></div>`;
+  if(d.vat_number)h+=`<div class="det-row"><span class="det-label">VAT</span><span class="det-value">${d.vat_number}</span></div>`;
+  if(d.address)h+=`<div class="det-row"><span class="det-label">Address</span><span class="det-value">${d.address}</span></div>`;
+  if(d.country)h+=`<div class="det-row"><span class="det-label">Country</span><span class="det-value">${d.country}</span></div>`;
+  if(d.status)h+=`<div class="det-row"><span class="det-label">Status</span><span class="det-value">${d.status}</span></div>`;
+  if(d.legal_form)h+=`<div class="det-row"><span class="det-label">Legal Form</span><span class="det-value">${d.legal_form}</span></div>`;
+  if(d.registered_at)h+=`<div class="det-row"><span class="det-label">Registered</span><span class="det-value">${d.registered_at}</span></div>`;
+  for(const[k,v] of Object.entries(d)){if(!['query','company_name','name','vat_number','address','country','status','legal_form','registered_at','results'].includes(k)&&v)h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;
+  if(d.results?.length){h+=`<div style="margin-top:8px"><div style="font-size:.65rem;font-weight:700;color:var(--text3);margin-bottom:6px">Related Results</div>`;d.results.forEach(r=>{h+=`<div class="det-card"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.65rem;font-weight:600">${r.company_name||r.name||'Entity'}</span><span class="pill gray" style="font-size:.38rem">${r.country||''}</span></div></div>`});h+=`</div>`}el.innerHTML=h;
+}
+function renderPayPalTrace(d,el){
+  let h=`<div class="res-head"><h2>PayPal Trace: <span class="res-query">${d.query}</span></h2><div class="pills"><span class="pill b">PAYMENT TRACE</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px"><div class="det-card"><h3><i class="fa-brands fa-paypal" style="color:#00457C"></i>Account</h3>`;
+  for(const[k,v] of Object.entries(d)){if(v&&k!=='query'&&k!=='status')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div></div>`;el.innerHTML=h;
+}
+function renderGenericList(d,el){
+  let h=`<div class="res-head"><h2>${d.platform||d.service||currentPage}: <span class="res-query">${d.username||d.query||d.gamertag||d.name||''}</span></h2>${d.found?'<span class="pill g">Found</span>':'<span class="pill r">Not Found</span>'}</div>`;
+  if(d.found||d.data){const p=d.profile||d.data||d;h+=`<div class="det-card" style="max-width:400px"><h3>Profile</h3>`;for(const[k,v] of Object.entries(p)){if(v&&k!=='avatar'&&k!=='found')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`}else{for(const[k,v] of Object.entries(d)){if(v&&k!=='query'&&k!=='status'&&k!=='found')h+=`<div class="det-card"><div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div></div>`}if(!Object.keys(d).filter(k=>k!=='query'&&k!=='status'&&k!=='found').length)h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>Not found</h3></div>`}el.innerHTML=h;
+}
+function renderName(d,el){
+  let h=`<div class="res-head"><h2>Name: <span class="res-query">${d.name}</span></h2><div class="pills"><span class="pill b">${d.count} results</span></div></div>`;
+  if(d.results?.length){h+=`<div class="found-grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">`;d.results.forEach(r=>{let icon='FA',color='var(--blue)';if(r.url.includes('linkedin')){icon='LI';color='#0077b5'}else if(r.url.includes('twitter')||r.url.includes('x.com')){icon='TW';color='#1da1f2'}else if(r.url.includes('facebook')){icon='FB';color='#1877f2'}else if(r.url.includes('instagram')){icon='IG';color='#e4405f'}else if(r.url.includes('github')){icon='GH';color='var(--text)'}else if(r.url.includes('youtube')){icon='YT';color='#ff0000'};h+=`<a href="${r.url}" target="_blank" class="found-card"><div class="found-top"><div class="found-icon" style="background:${color}10;color:${color}">${icon}</div><div class="found-name">${new URL(r.url).hostname}</div></div><div class="found-url">${r.url.substring(0,45)}</div><div class="found-status" style="color:${color}">VIEW</div></a>`});h+=`</div>`}else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>No results</h3></div>`}el.innerHTML=h;
+}
 function renderGeneric(d,el){
   let h=`<div class="res-head"><h2>${d.platform||''}: <span class="res-query">${d.username||''}</span></h2>${d.found?'<span class="pill g">Found</span>':'<span class="pill r">Not Found</span>'}</div>`;
-  if(d.found){const p=d.profile||{};h+=`<div class="det-card" style="max-width:400px"><h3>Profile</h3>`;for(const[k,v] of Object.entries(p)){if(v&&k!=='avatar')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`}
-  else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>Not found</h3></div>`}
-  el.innerHTML=h;
+  if(d.found){const p=d.profile||{};h+=`<div class="det-card" style="max-width:400px"><h3>Profile</h3>`;for(const[k,v] of Object.entries(p)){if(v&&k!=='avatar')h+=`<div class="det-row"><span class="det-label">${k.replace(/_/g,' ')}</span><span class="det-value">${typeof v==='object'?JSON.stringify(v):v}</span></div>`}h+=`</div>`}else{h+=`<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>Not found</h3></div>`}el.innerHTML=h;
 }
+</script>
 
+<script>
 // === TOOL DIRECTORY ===
 let dirData=null,dirCatData=null,dirCurrentCat=null,dirCurrentSubcat=null,dirFilter='all';
 const DIR_ICONS={'Username':'fa-user-secret','Email Address':'fa-envelope','Domain Name':'fa-globe','IP & MAC Address':'fa-location-dot','Cloud Infrastructure':'fa-cloud','Images / Videos / Docs':'fa-image','Social Networks':'fa-share-nodes','Instant Messaging':'fa-comment-dots','People Search Engines':'fa-users','Dating':'fa-heart','Telephone Numbers':'fa-phone','Public Records':'fa-file-lines','Compliance & Risk Intelligence':'fa-scale-balanced','Business Records':'fa-briefcase','Transportation':'fa-plane','Geolocation Tools / Maps':'fa-map-location-dot','Search Engines':'fa-magnifying-glass','Online Communities':'fa-users-rays','Archives':'fa-box-archive','Language Translation':'fa-language','Mobile OSINT':'fa-mobile-screen','Dark Web':'fa-mask','Disinformation & Media Verification':'fa-newspaper','Blockchain & Cryptocurrency':'fa-link','Classifieds':'fa-store','Encoding / Decoding':'fa-code','Tools':'fa-wrench','AI Tools':'fa-robot','Malicious File Analysis':'fa-virus','Cyber Threat Intelligence':'fa-crosshairs','OpSec':'fa-user-shield','Documentation / Evidence Capture':'fa-camera','Training':'fa-graduation-cap'};
@@ -995,3 +949,4 @@ renderPage();
 </script>
 </body>
 </html>
+

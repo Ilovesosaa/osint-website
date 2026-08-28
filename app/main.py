@@ -6,16 +6,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from .scan import router as scan_router
 from .tools import router as tools_router
 from .directory import router as directory_router
+from .doxtools import router as doxtools_router
 
-app = FastAPI(title="OSINT Hub", version="2.0.0")
+app = FastAPI(title="Error404 DOXNOSINT", version="5.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(scan_router)
 app.include_router(tools_router)
 app.include_router(directory_router)
+app.include_router(doxtools_router)
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "version": "2.0.0"}
+    return {"status": "ok", "version": "5.0.0", "name": "Error404 DOXNOSINT"}
 
 static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "static"))
 if os.path.exists(static_dir):
